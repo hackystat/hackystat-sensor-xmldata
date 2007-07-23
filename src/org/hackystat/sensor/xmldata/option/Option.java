@@ -1,8 +1,9 @@
 
 package org.hackystat.sensor.xmldata.option;
 
-import org.hackystat.sensor.xmldata.XmlDataOutputParser;
-import org.hackystat.sensor.xmldata.XmlSensorException;
+import java.util.List;
+
+import org.hackystat.sensorshell.SensorShell;
 
 /**
  * Interface that provides a template for the methods that are need to set an
@@ -18,14 +19,11 @@ public interface Option {
    * 
    * @return true if valid, false if not.
    */
-  public boolean validate ();
-
-  /**
-   * Sets this option.
-   * 
-   * @param parser the <code>XmlDataOutputParser</code> that processes the xml output files.
-   * @param object the object that contains information that this class needs.
-   * @throws XmlSensorException thrown if there is an error while executing.
-   */
-  public void set (XmlDataOutputParser parser, Object object) throws XmlSensorException;
+  public boolean isValid ();
+  
+  public String getName();
+  
+  public List<String> getParameters();
+  
+  public void execute(SensorShell shell);
 }

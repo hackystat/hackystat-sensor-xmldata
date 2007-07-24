@@ -2,34 +2,56 @@ package org.hackystat.sensor.xmldata.option;
 
 import java.util.List;
 
-import org.hackystat.sensorshell.SensorShell;
+import org.hackystat.sensor.xmldata.XmlDataController;
 
 /**
- * Implements the "-sdt" option. Sets the sdt to be what the user specifies, but does not override
- * the sdt definition in output files.
+ * The option that wraps the sensor data type information specified by the user.
  * 
  * @author Austen Ito
  * 
  */
-public class SdtOption extends  AbstractOption {
+public class SdtOption extends AbstractOption {
+  /** This option's name, which is "-sdt". */
   public static final String OPTION_NAME = "-sdt";
-  
-  private SdtOption(String name, List<String> parameters){
-    super(name, parameters);
+
+  /**
+   * Constructs this option with the specified controller, name, and parameters.
+   * @param controller the specified controller.
+   * @param name the specified name.
+   * @param parameters the specified parameters.
+   */
+  private SdtOption(XmlDataController controller, String name, List<String> parameters) {
+    super(controller, name, parameters);
   }
-  
-  public static Option createSdtOption(String name, List<String> parameters){
-    Option option = new SdtOption(name, parameters);
+
+  /**
+   * Static factory method that creates an option with the specified controller
+   * and parameters. The name of this option is set to "-sdt".
+   * @param controller the specified controller.
+   * @param parameters the specified parameters.
+   * @return the option instance.
+   */
+  public static Option createSdtOption(XmlDataController controller, List<String> parameters) {
+    Option option = new SdtOption(controller, OPTION_NAME, parameters);
     return option;
   }
-  
+
+  /**
+   * Returns true if the list of parameters contains only one element.
+   * @return true if the parameters are valid, false if not.
+   */
   @Override
   public boolean isValid() {
+    if (this.getParameters().size() != 1) {
+      return false;
+    }
     return true;
   }
 
-  public void execute(SensorShell shell) {
-    // TODO Auto-generated method stub
-    
+  /**
+   * This class does not perform operations over it's parameters. Therefore,
+   * this method does nothing.
+   */
+  public void execute() {
   }
 }

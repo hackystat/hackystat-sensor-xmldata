@@ -4,15 +4,13 @@ import java.util.Arrays;
 import java.util.Observable;
 
 /**
- * Allows the XmlDataSensor to invoked from a command-line interface.
+ * The entry point into the XmlDataSensor. This class allows command-line
+ * arguments to be specified by the user to perform actions based on the options and their parameters.
  * 
  * @author Austen Ito
- * @version $Id:$
  * 
  */
 public class XmlDataCliSensor {
-  // /** SensorProperties instance */
-  // private SensorProperties sensorProps;
   /** A summary usage message. */
   static final String[] USAGE_MSG = { "\nUsage:\n " + "[-verbose <true|false> "
       + "[-createRunTime <name>] [-sdt <name>]"
@@ -46,7 +44,7 @@ public class XmlDataCliSensor {
     // this.sensorProps = new SensorProperties("XmlData-Cli");
     // this.isEnabled = this.sensorProps.isSensorEnabled();
   }
-  
+
   /**
    * Helper method that prints an error message and exits if it is a fatal
    * error.

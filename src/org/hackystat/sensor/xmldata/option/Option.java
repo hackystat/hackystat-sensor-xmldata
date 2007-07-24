@@ -1,29 +1,34 @@
-
 package org.hackystat.sensor.xmldata.option;
 
 import java.util.List;
 
-import org.hackystat.sensorshell.SensorShell;
-
 /**
- * Interface that provides a template for the methods that are need to set an
- * <code>Option</code>.
- * 
+ * The command interface between objects that wrap the options and parameters
+ * specified via command-line arguments. Options provide the capability to store
+ * the passed options and arguments, validate the parameters, and execute an
+ * action over the parameters.
  * @author Austen Ito
- * @version $Id:$
  * 
  */
 public interface Option {
   /**
-   * Validates the object that the <code>Option</code> requires.
-   * 
-   * @return true if valid, false if not.
+   * Returns true if this option's parameters are valid.
+   * @return true if all parameters are valid.
    */
-  public boolean isValid ();
-  
+  public boolean isValid();
+
+  /**
+   * Returns the name of this option.
+   * @return the option name.
+   */
   public String getName();
-  
+
+  /**
+   * Returns a list of parameters used to execute this option.
+   * @return the list of parameters.
+   */
   public List<String> getParameters();
-  
-  public void execute(SensorShell shell);
+
+  /** Executes this option based on the option name and parameters. */
+  public void execute();
 }

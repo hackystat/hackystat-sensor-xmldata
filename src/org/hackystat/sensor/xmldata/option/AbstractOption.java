@@ -1,0 +1,53 @@
+package org.hackystat.sensor.xmldata.option;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.hackystat.sensor.xmldata.XmlDataController;
+
+/**
+ * The skeletal implementation of an option, which provides default
+ * implementations for the basic accessor methods. Sub-classes must override the
+ * abstract methods to provide functionality specific to their class type.
+ * @author aito
+ * 
+ */
+public abstract class AbstractOption implements Option {
+  /** The name of this option. */
+  private String name = "";
+  /** The list of parameters used to execute this option. */
+  private List<String> parameters = new ArrayList<String>();
+  /** The controller containing additional information to execute this option. */
+  private XmlDataController controller = null;
+
+  /**
+   * Constructs this option with a controller, option name, and a list of
+   * parameters used to execute this option.
+   * @param controller the specified controller.
+   * @param name the specified option name.
+   * @param parameters the specified parameters.
+   */
+  public AbstractOption(XmlDataController controller, String name, List<String> parameters) {
+    this.controller = controller;
+    this.name = name;
+    this.parameters = parameters;
+  }
+
+  /** {@inheritDoc} */
+  public String getName() {
+    return this.name;
+  }
+
+  /** {@inheritDoc} */
+  public List<String> getParameters() {
+    return this.parameters;
+  }
+
+  /** {@inheritDoc} */
+  public abstract boolean isValid();
+
+  /** {@inheritDoc} */
+  public XmlDataController getController() {
+    return this.controller;
+  }
+}

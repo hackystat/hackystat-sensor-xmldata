@@ -11,29 +11,33 @@ import org.hackystat.sensor.xmldata.option.Option;
 import org.hackystat.sensor.xmldata.option.SdtOption;
 
 /**
- * The entry point for the command-line interface sensor and the "middle-man"
- * between the user interfaces and the <code>Command</code>s.
- * 
+ * The class which parses the command-line arguments specified by the user,
+ * validates the created options and their parameters, and executes the options.
  * @author Austen Ito
- * @version $Id:$
  * 
  */
 public class XmlDataController {
   /** True if the verbose mode is on, false if verbose mode is turned off. */
   private static boolean isVerbose = false;
+  /** The list of options to execute. */
   private List<Option> options = new ArrayList<Option>();
+  /** The sensor data type name used by all data sent to the sensorbase. */
+  private String sdtName = "";
 
   /**
    * Constructs this controller with a list of arguments to process.
    * 
    * @param arguments the list of arguments.
-   * @param observer the object that invokes this class. Usually the entry point
-   * of the sensor.
    */
   public XmlDataController(List<String> arguments) {
     this.processCommands(arguments);
   }
 
+  /**
+   * This method parses the specified command-line arguments and creates
+   * options, which can be validated and executed.
+   * @param arguments the list of arguments to parse.
+   */
   private void processCommands(List<String> arguments) {
     Map<String, List<String>> optionToArgs = new HashMap<String, List<String>>();
     String currentOption = "";
@@ -57,14 +61,22 @@ public class XmlDataController {
     // Next, let's create the options using the command-line information.
     for (Entry<String, List<String>> entry : optionToArgs.entrySet()) {
       if (SdtOption.OPTION_NAME.equals(entry.getKey())) {
-        this.options.add(SdtOption.createSdtOption(entry.getKey(), entry.getValue()));
+        Option sdtOption = SdtOption.createSdtOption(this, entry.getValue());
+        if (sdtOption.isValid()) {
+          this.sdtName = entry.getValue().get(0);
+        }
       }
       else if (FileOption.OPTION_NAME.equals(entry.getKey())) {
-        this.options.add(FileOption.createSdtOption(entry.getKey(), entry.getValue()));
+        this.options.add(FileOption.createOption(this, entry.getValue()));
       }
     }
   }
 
+  /**
+   * A helper method that returns true if the specified string is an option.
+   * @param argument the string to test.
+   * @return true if the string is an option, false if not.
+   */
   private boolean isOption(String argument) {
     if (argument.length() > 0) {
       String firstChar = argument.substring(0, 1);
@@ -75,14 +87,20 @@ public class XmlDataController {
     return false;
   }
 
-  /** Executes the command entered by the user */
-  public boolean execute() {
-    if(this.isAllOptionsValid()){
-        return true;
+  /** Executes all of the options specified by the user */
+  public void execute() {
+    if (this.isAllOptionsValid()) {
+      for (Option option : this.options) {
+        option.execute();
+      }
     }
-    return false;
   }
 
+  /**
+   * Returns true if all of the options to execute are valid. False is returned
+   * if any option is not valid.
+   * @return true if all options are valid, false if not.
+   */
   private boolean isAllOptionsValid() {
     for (Option option : this.options) {
       if (!option.isValid()) {
@@ -110,5 +128,14 @@ public class XmlDataController {
    */
   public static boolean isVerbose() {
     return XmlDataController.isVerbose;
+  }
+
+  /**
+   * Returns the sensor data type name that is associated with all data sent via
+   * sensorshell to the sensorbase.
+   * @return the sensor data type name.
+   */
+  public String getSdtName() {
+    return this.sdtName;
   }
 }

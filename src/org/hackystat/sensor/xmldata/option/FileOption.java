@@ -9,6 +9,8 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
 import javax.xml.namespace.QName;
+import javax.xml.validation.Schema;
+import javax.xml.validation.SchemaFactory;
 
 import org.hackystat.sensor.xmldata.XmlDataController;
 import org.hackystat.sensor.xmldata.devevent.jaxb.Entries;
@@ -17,6 +19,7 @@ import org.hackystat.sensor.xmldata.devevent.jaxb.XmlData;
 import org.hackystat.sensorbase.resource.sensordata.Tstamp;
 import org.hackystat.sensorshell.SensorProperties;
 import org.hackystat.sensorshell.SensorShell;
+import org.xml.sax.SAXException;
 
 /**
  * The option used to send generic sensor data, via the sensorshell, to the
@@ -89,8 +92,14 @@ public class FileOption extends AbstractOption {
         JAXBContext context = JAXBContext
             .newInstance("org.hackystat.sensor.xmldata.devevent.jaxb");
         Unmarshaller unmarshaller = context.createUnmarshaller();
+        
+        // Adds schema validation to the unmarshelled file.
+        SchemaFactory schemaFactory=SchemaFactory.newInstance
+        ("http://www.w3.org/2001/XMLSchema");
+         Schema schema=schemaFactory.newSchema(new File("xml/schema/xmldata.xsd"));
+         unmarshaller.setSchema(schema);
+         
         XmlData xmlData = (XmlData) unmarshaller.unmarshal(file);
-
         Entries entries = xmlData.getEntries();
         for (Entry entry : entries.getEntry()) {
           // Then, lets set the required attributes.
@@ -116,7 +125,12 @@ public class FileOption extends AbstractOption {
     catch (JAXBException e) {
       e.printStackTrace();
     }
+    catch (SAXException e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+    }
     catch (Exception e) {
+      // TODO Auto-generated catch block
       e.printStackTrace();
     }
   }

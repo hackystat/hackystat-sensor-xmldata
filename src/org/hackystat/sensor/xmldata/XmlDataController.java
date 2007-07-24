@@ -101,7 +101,7 @@ public class XmlDataController {
    * if any option is not valid.
    * @return true if all options are valid, false if not.
    */
-  private boolean isAllOptionsValid() {
+  public boolean isAllOptionsValid() {
     for (Option option : this.options) {
       if (!option.isValid()) {
         return false;

@@ -23,8 +23,8 @@ public class OptionHandlerTest {
   /** Sets up each test case. */
   @Before
   public void setup() {
-    this.handler = new OptionHandler();
     this.controller = new XmlDataController(new ArrayList<String>());
+    this.handler = new OptionHandler(this.controller);
   }
 
   /** Tests if the options are validated correctly. */

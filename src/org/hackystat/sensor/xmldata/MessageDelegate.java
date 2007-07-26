@@ -9,15 +9,15 @@ package org.hackystat.sensor.xmldata;
  * 
  */
 public class MessageDelegate {
-  /** The controller used to get user specific information such as verbosity. */
-  private XmlDataController controller = null;
+  /** True if the verbose mode is on, false if not. */
+  private boolean isVerbose = false;
 
   /**
-   * Constructs this delegate class with the specified controller.
-   * @param controller the specified controller.
+   * Constructs this delegate class with the specified verbosity.
+   * @param isVerbose true if verbose mode is on, false if not.
    */
-  public MessageDelegate(XmlDataController controller) {
-    this.controller = controller;
+  public MessageDelegate(boolean isVerbose) {
+    this.isVerbose = isVerbose;
   }
 
   /**
@@ -25,18 +25,26 @@ public class MessageDelegate {
    * verbose option is enabled.
    * @param message the specified message to display.
    */
-  public void displayMessage(String message) {
+  public void fireMessage(String message) {
     System.out.println(message);
   }
 
+  /**
+   * Displays the specified message if verbose mode is enabled.
+   * @param message the specified message to display.
+   */
+  public void fireVerboseMessage(String message){
+    System.out.println(message);
+  }
+  
   /**
    * Displays the specified message is verbose mode is disabled or the verbose
    * message if verbose mode is enabled.
    * @param message the specified message.
    * @param verboseMessage the specified verbose message.
    */
-  public void displayMessage(String message, String verboseMessage) {
-    if (this.controller.isVerbose()) {
+  public void fireMessage(String message, String verboseMessage) {
+    if (this.isVerbose) {
       System.out.println(verboseMessage);
     }
     else {

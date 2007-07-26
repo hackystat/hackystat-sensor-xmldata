@@ -43,6 +43,9 @@ public class SdtOption extends AbstractOption {
   @Override
   public boolean isValid() {
     if (this.getParameters().size() != 1) {
+      String msg = "The " + OPTION_NAME
+          + " option must have only one argument.  Ex: -sdt DevEvent.";
+      this.getController().fireMessage(msg);
       return false;
     }
     return true;

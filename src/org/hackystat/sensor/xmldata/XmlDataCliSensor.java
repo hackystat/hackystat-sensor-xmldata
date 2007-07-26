@@ -36,6 +36,7 @@ public class XmlDataCliSensor {
       }
     }
     catch (Exception e) {
+      e.printStackTrace();
       System.out.println("A fatal error has occured.  Please contact "
           + "your hackystat administrator.");
     }

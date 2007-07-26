@@ -3,6 +3,8 @@ package org.hackystat.sensor.xmldata.option;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.hackystat.sensor.xmldata.XmlDataController;
+
 /**
  * The class that handles the options created by the XmlDataController. This
  * class stores, validates, and executes the options.
@@ -12,6 +14,11 @@ import java.util.List;
 public class OptionHandler {
   /** The list of options managed by this class. */
   private List<Option> options = new ArrayList<Option>();
+  private XmlDataController controller = null;
+
+  public OptionHandler(XmlDataController controller) {
+    this.controller = controller;
+  }
 
   /**
    * Adds the specified option to this class. Note that no error checking is
@@ -25,7 +32,7 @@ public class OptionHandler {
   /**
    * Returns true if all of the options stored in this class are valid and
    * contain no duplicate options. If an option is invalid, an error message is
-   * fired by this method.
+   * fired by the invalid option.
    * @return true if the option is valid, false if not.
    */
   public boolean isOptionsValid() {
@@ -58,11 +65,19 @@ public class OptionHandler {
    * @return true if all required options exist.
    */
   public boolean hasRequiredOptions() {
-    if (this.hasOptionWithName(SdtOption.OPTION_NAME)
-        && this.hasOptionWithName(FileOption.OPTION_NAME)) {
-      return true;
+    boolean hasSdtOption = this.hasOptionWithName(SdtOption.OPTION_NAME);
+    boolean hasFileOption = this.hasOptionWithName(FileOption.OPTION_NAME);
+    if (!hasSdtOption) {
+      String msg = "The -sdt <sdt name> option is required.";
+      this.controller.fireMessage(msg);
+      return false;
     }
-    return false;
+    else if (!hasFileOption) {
+      String msg = "The -file <files...> option is required.";
+      this.controller.fireMessage(msg);
+      return false;
+    }
+    return true;
   }
 
   /**

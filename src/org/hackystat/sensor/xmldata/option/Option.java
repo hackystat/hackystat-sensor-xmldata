@@ -28,7 +28,4 @@ public interface Option {
    * @return the list of parameters.
    */
   public List<String> getParameters();
-
-  /** Executes this option based on the option name and parameters. */
-  public void execute();
 }

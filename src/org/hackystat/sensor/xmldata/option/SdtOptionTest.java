@@ -23,11 +23,11 @@ public class SdtOptionTest {
     // Tests a valid sdt option.
     List<String> arguments = new ArrayList<String>();
     arguments.add("DevEvent");
-    Option sdtOption = SdtOption.createSdtOption(controller, arguments);
+    Option sdtOption = SdtOption.createOption(controller, arguments);
     Assert.assertTrue("SdtOptions accept only 1 argument.", sdtOption.isValid());
 
     // Tests an invalid sdt option.
-    sdtOption = SdtOption.createSdtOption(controller, new ArrayList<String>());
+    sdtOption = SdtOption.createOption(controller, new ArrayList<String>());
     Assert.assertFalse("SdtOptions must have 1 argument.", sdtOption.isValid());
   }
 }

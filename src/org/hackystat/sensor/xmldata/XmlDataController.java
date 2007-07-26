@@ -8,6 +8,7 @@ import java.util.Map.Entry;
 
 import org.hackystat.sensor.xmldata.option.FileOption;
 import org.hackystat.sensor.xmldata.option.Option;
+import org.hackystat.sensor.xmldata.option.OptionHandler;
 import org.hackystat.sensor.xmldata.option.SdtOption;
 
 /**
@@ -19,10 +20,10 @@ import org.hackystat.sensor.xmldata.option.SdtOption;
 public class XmlDataController {
   /** True if the verbose mode is on, false if verbose mode is turned off. */
   private static boolean isVerbose = false;
-  /** The list of options to execute. */
-  private List<Option> options = new ArrayList<Option>();
   /** The sensor data type name used by all data sent to the sensorbase. */
   private String sdtName = "";
+  /** The class that manages the options created from the user's arguments. */
+  private OptionHandler optionHandler = new OptionHandler();
 
   /**
    * Constructs this controller with a list of arguments to process.
@@ -46,7 +47,7 @@ public class XmlDataController {
     // option -> arguments.
     for (String argument : arguments) {
       // If the current string is an option flag, create a new mapping.
-      if (this.isOption(argument)) {
+      if (this.optionHandler.isOption(argument)) {
         optionToArgs.put(argument, new ArrayList<String>());
         currentOption = argument;
       }
@@ -61,72 +62,29 @@ public class XmlDataController {
     // Next, let's create the options using the command-line information.
     for (Entry<String, List<String>> entry : optionToArgs.entrySet()) {
       if (SdtOption.OPTION_NAME.equals(entry.getKey())) {
-        Option sdtOption = SdtOption.createSdtOption(this, entry.getValue());
+        Option sdtOption = SdtOption.createOption(this, entry.getValue());
+        this.optionHandler.addOption(sdtOption);
         if (sdtOption.isValid()) {
           this.sdtName = entry.getValue().get(0);
         }
       }
       else if (FileOption.OPTION_NAME.equals(entry.getKey())) {
-        this.options.add(FileOption.createOption(this, entry.getValue()));
+        this.optionHandler.addOption(FileOption.createOption(this, entry.getValue()));
       }
     }
-  }
-
-  /**
-   * A helper method that returns true if the specified string is an option.
-   * @param argument the string to test.
-   * @return true if the string is an option, false if not.
-   */
-  private boolean isOption(String argument) {
-    if (argument.length() > 0) {
-      String firstChar = argument.substring(0, 1);
-      if ("-".equals(firstChar)) {
-        return true;
-      }
-    }
-    return false;
   }
 
   /** Executes all of the options specified by the user */
   public void execute() {
-    if (this.isAllOptionsValid()) {
-      for (Option option : this.options) {
-        option.execute();
-      }
-    }
   }
-
-  /**
-   * Returns true if all of the options to execute are valid. False is returned
-   * if any option is not valid.
-   * @return true if all options are valid, false if not.
-   */
-  public boolean isAllOptionsValid() {
-    for (Option option : this.options) {
-      if (!option.isValid()) {
-        return false;
-      }
-    }
-    return true;
-  }
-
-  /**
-   * Sets if verbose mode is on. True sets verbose mode on, false turns verbose
-   * mode off.
-   * 
-   * @param isVerbose true if verbose mode is on, false if not.
-   */
-  public static void setVerbose(boolean isVerbose) {
-    XmlDataController.isVerbose = isVerbose;
-  }
-
+  
   /**
    * Returns if verbose mode is on. True means that verbose mode is on or false
    * means verbose mode is off.
    * 
    * @return True if verbose mode is on, false if not.
    */
-  public static boolean isVerbose() {
+  public boolean isVerbose() {
     return XmlDataController.isVerbose;
   }
 

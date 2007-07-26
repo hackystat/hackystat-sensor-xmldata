@@ -31,7 +31,7 @@ public class SdtOption extends AbstractOption {
    * @param parameters the specified parameters.
    * @return the option instance.
    */
-  public static Option createSdtOption(XmlDataController controller, List<String> parameters) {
+  public static Option createOption(XmlDataController controller, List<String> parameters) {
     Option option = new SdtOption(controller, OPTION_NAME, parameters);
     return option;
   }
@@ -46,12 +46,5 @@ public class SdtOption extends AbstractOption {
       return false;
     }
     return true;
-  }
-
-  /**
-   * This class does not perform operations over it's parameters. Therefore,
-   * this method does nothing.
-   */
-  public void execute() {
   }
 }

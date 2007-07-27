@@ -14,8 +14,13 @@ import org.hackystat.sensor.xmldata.XmlDataController;
 public class OptionHandler {
   /** The list of options managed by this class. */
   private List<Option> options = new ArrayList<Option>();
+  /** The controller which loads this handler. */
   private XmlDataController controller = null;
 
+  /**
+   * Constructs this handler with the specified controller.
+   * @param controller the specified controller.
+   */
   public OptionHandler(XmlDataController controller) {
     this.controller = controller;
   }
@@ -107,5 +112,18 @@ public class OptionHandler {
       }
     }
     return false;
+  }
+
+  /**
+   * Executes all of the stored options that have operations to execute on their
+   * wrapped parameters.
+   */
+  public void execute() {
+    for (Option option : this.options) {
+      if (option instanceof Executable) {
+        Executable executable = (Executable) option;
+        executable.execute();
+      }
+    }
   }
 }

@@ -33,10 +33,12 @@ public class MessageDelegate {
    * Displays the specified message if verbose mode is enabled.
    * @param message the specified message to display.
    */
-  public void fireVerboseMessage(String message){
-    System.out.println(message);
+  public void fireVerboseMessage(String message) {
+    if (this.isVerbose) {
+      System.out.println(message);
+    }
   }
-  
+
   /**
    * Displays the specified message is verbose mode is disabled or the verbose
    * message if verbose mode is enabled.

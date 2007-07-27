@@ -86,9 +86,10 @@ public class FileOption extends AbstractOption implements Executable {
   public void execute() {
     SensorProperties properties = new SensorProperties();
     SensorShell shell = new SensorShell(properties, false, "XmlData");
-
+    int entryCount = 0;
     try {
       for (String filePath : this.getParameters()) {
+        this.getController().fireVerboseMessage("Sending data from: " + filePath);
         // First, let's unmarshall the current file.
         File file = new File(filePath);
         JAXBContext context = JAXBContext
@@ -119,21 +120,25 @@ public class FileOption extends AbstractOption implements Executable {
           }
           // Finally, add the mapping and send the data.
           shell.add(keyValMap);
-          shell.send();
+          entryCount += shell.send();
         }
       }
       shell.quit();
+      this.getController().fireMessage(
+          entryCount + " entries sent to " + this.getController().getHost());
     }
     catch (JAXBException e) {
-      e.printStackTrace();
+      String msg = "There was a problem unmarshalling the data.  File(s) "
+          + "may not conform to the xmldata schema.";
+      this.getController().fireMessage(msg, e.toString());
     }
     catch (SAXException e) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
+      String msg = "The specified file(s) could not be parsed.";
+      this.getController().fireMessage(msg, e.toString());
     }
     catch (Exception e) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
+      String msg = "The specified file(s) failed to load.";
+      this.getController().fireMessage(msg, e.toString());
     }
   }
 }

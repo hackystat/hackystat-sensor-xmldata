@@ -43,15 +43,6 @@ public class XmlDataCliSensor {
   }
 
   /**
-   * Constructs an XmlDataCliSensor object, initialzing sensor properties.
-   * 
-   */
-  public XmlDataCliSensor() {
-    // this.sensorProps = new SensorProperties("XmlData-Cli");
-    // this.isEnabled = this.sensorProps.isSensorEnabled();
-  }
-
-  /**
    * Display a usage summary message on System.err and exit.
    */
   private void usage() {

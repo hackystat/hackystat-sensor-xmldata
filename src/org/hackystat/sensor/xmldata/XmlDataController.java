@@ -93,9 +93,9 @@ public class XmlDataController {
 
   /** Executes all of the options specified by the user */
   public void execute() {
-    SensorProperties properties = new SensorProperties();
-    this.fireVerboseMessage("Hackystat Host: " + properties.getHackystatHost());
+    this.fireVerboseMessage("Hackystat Host: " + this.getHost());
     if (this.optionHandler.isOptionsValid() && this.optionHandler.hasRequiredOptions()) {
+      this.optionHandler.execute();
     }
   }
 
@@ -133,5 +133,14 @@ public class XmlDataController {
    */
   public String getSdtName() {
     return this.sdtName;
+  }
+
+  /**
+   * Returns the hackystat host stored in the sensor properties file.
+   * @return the hackystat host string.
+   */
+  public String getHost() {
+    SensorProperties properties = new SensorProperties();
+    return properties.getHackystatHost();
   }
 }

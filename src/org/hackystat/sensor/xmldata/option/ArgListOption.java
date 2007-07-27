@@ -12,6 +12,11 @@ import java.util.StringTokenizer;
 
 import org.hackystat.sensor.xmldata.XmlDataController;
 
+/**
+ * The option used when specifying the command-line arguments via a text file.
+ * @author aito
+ * 
+ */
 public class ArgListOption extends AbstractOption {
   /** The name of this option, which is "-file". */
   public static final String OPTION_NAME = "-argList";
@@ -29,7 +34,7 @@ public class ArgListOption extends AbstractOption {
 
   /**
    * Constructs this option with the specified controller and parameters.
-   * "-file" is used as the name of this option.
+   * "-argList" is used as the name of this option.
    * @param controller the specified controller.
    * @param parameters the specified parameters.
    * @return the option instance.
@@ -62,6 +67,7 @@ public class ArgListOption extends AbstractOption {
     return true;
   }
 
+  /** Executes this option using the specified argument list file. */
   @Override
   public void execute() {
     List<String> arguments = new ArrayList<String>();
@@ -70,7 +76,7 @@ public class ArgListOption extends AbstractOption {
       BufferedReader bufferedReader = new BufferedReader(fileReader);
       String argumentLine = bufferedReader.readLine();
       String argumentString = "";
-      // compiles a string of the entire file.
+      // Compiles a string of the entire file.
       while (argumentLine != null) {
         argumentString = argumentString.concat(argumentLine + " ");
         argumentLine = bufferedReader.readLine();
@@ -81,6 +87,8 @@ public class ArgListOption extends AbstractOption {
         arguments.add(tokenizer.nextToken());
       }
       bufferedReader.close();
+
+      // Then, process the args string and execute the new list of arguments.
       this.getController().processArguments(arguments);
       this.getController().execute();
     }

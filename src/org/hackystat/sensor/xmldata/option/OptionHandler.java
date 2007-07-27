@@ -70,14 +70,8 @@ public class OptionHandler {
    * @return true if all required options exist.
    */
   public boolean hasRequiredOptions() {
-    boolean hasSdtOption = this.hasOptionWithName(SdtOption.OPTION_NAME);
     boolean hasFileOption = this.hasOptionWithName(FileOption.OPTION_NAME);
-    if (!hasSdtOption) {
-      String msg = "The -sdt <sdt name> option is required.";
-      this.controller.fireMessage(msg);
-      return false;
-    }
-    else if (!hasFileOption) {
+    if (!hasFileOption) {
       String msg = "The -file <files...> option is required.";
       this.controller.fireMessage(msg);
       return false;

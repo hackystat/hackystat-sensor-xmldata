@@ -81,7 +81,10 @@ public class FileOption extends AbstractOption implements Executable {
 
   /**
    * Executes this option by grabbing all information stored in the specified
-   * files, and sending them to the sensorbase.
+   * files, and sending them to the sensorbase. Note that this method will send
+   * data after the data from each file is retrieved. This means that if file
+   * foo.xml has valid data and file foo2.xml does not, foo.xml's data will be
+   * sent and then this method will fail on foo2.xml's data.
    */
   public void execute() {
     SensorProperties properties = new SensorProperties();
@@ -104,28 +107,34 @@ public class FileOption extends AbstractOption implements Executable {
 
         XmlData xmlData = (XmlData) unmarshaller.unmarshal(file);
         Entries entries = xmlData.getEntries();
-        for (Entry entry : entries.getEntry()) {
-          // Then, lets set the required attributes.
-          Map<String, String> keyValMap = new HashMap<String, String>();
-          keyValMap.put("Tool", entry.getTool());
-          keyValMap.put("Resource", entry.getResource());
-          keyValMap.put("SensorDataType", this.getController().getSdtName());
-          keyValMap.put("Runtime", Tstamp.makeTimestamp().toString());
 
-          // Next, add the optional attributes.
-          Map<QName, String> map = entry.getOtherAttributes();
-          for (Map.Entry<QName, String> attributeEntry : map.entrySet()) {
-            keyValMap.put(attributeEntry.getKey().toString(), attributeEntry.getValue());
+        // Only send data if the sdt is set or all entries have sdt attributes.
+        if (!"".equals(this.getController().getSdtName())
+            || this.hasSdtAttributes(entries.getEntry())) {
+          for (Entry entry : entries.getEntry()) {
+            // Then, lets set the required attributes.
+            Map<String, String> keyValMap = new HashMap<String, String>();
+            keyValMap.put("Tool", entry.getTool());
+            keyValMap.put("Resource", entry.getResource());
+            keyValMap.put("SensorDataType", this.getController().getSdtName());
+            keyValMap.put("Runtime", Tstamp.makeTimestamp().toString());
 
+            // Next, add the optional attributes.
+            Map<QName, String> map = entry.getOtherAttributes();
+            for (Map.Entry<QName, String> attributeEntry : map.entrySet()) {
+              keyValMap.put(attributeEntry.getKey().toString(), attributeEntry.getValue());
+            }
+            // Finally, add the mapping and send the data.
+            shell.add(keyValMap);
+            entryCount += shell.send();
           }
-          // Finally, add the mapping and send the data.
-          shell.add(keyValMap);
-          entryCount += shell.send();
+        }
+        else {
+          String msg = "The -sdt flag must be specified for all entries or each "
+              + "xml entry must have the 'SensorDataType' attribute.";
+          throw new Exception(msg);
         }
       }
-      shell.quit();
-      this.getController().fireMessage(
-          entryCount + " entries sent to " + this.getController().getHost());
     }
     catch (JAXBException e) {
       String msg = "There was a problem unmarshalling the data.  File(s) "
@@ -140,5 +149,40 @@ public class FileOption extends AbstractOption implements Executable {
       String msg = "The specified file(s) failed to load.";
       this.getController().fireMessage(msg, e.toString());
     }
+    finally {
+      shell.quit();
+      this.getController().fireMessage(
+          entryCount + " entries sent to " + this.getController().getHost());
+    }
+  }
+
+  /**
+   * Returns true if the list of JAXB Entry object's each contain the sensor
+   * data type attribute.
+   * @param entries the list of entries to search.
+   * @return true if each entry has the sdt attribute, false if not.
+   */
+  private boolean hasSdtAttributes(List<Entry> entries) {
+    for (Entry entry : entries) {
+      if (!this.hasSdtInAttributes(entry.getOtherAttributes())) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  /**
+   * Returns true if the specified map contains the sensor data type attribute.
+   * If the mapping does not have the sdt attribute, false is returned.
+   * @param attributeMap the map to search.
+   * @return true if the map has the sdt attribute, false if not.
+   */
+  private boolean hasSdtInAttributes(Map<QName, String> attributeMap) {
+    for (QName name : attributeMap.keySet()) {
+      if ("SensorDataType".equals(name.toString())) {
+        return true;
+      }
+    }
+    return false;
   }
 }

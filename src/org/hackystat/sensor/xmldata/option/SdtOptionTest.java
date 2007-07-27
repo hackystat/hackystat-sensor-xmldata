@@ -19,7 +19,7 @@ public class SdtOptionTest {
    */
   @Test
   public void testIsValid() {
-    XmlDataController controller = new XmlDataController(new ArrayList<String>());
+    XmlDataController controller = new XmlDataController();
     // Tests a valid sdt option.
     List<String> arguments = new ArrayList<String>();
     arguments.add("DevEvent");

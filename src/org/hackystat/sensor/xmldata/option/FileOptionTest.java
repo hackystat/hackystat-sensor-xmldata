@@ -17,7 +17,7 @@ public class FileOptionTest {
   /** Tests if isValid returns false when no arguments are specified. */
   @Test
   public void testNoFileArguments() {
-    XmlDataController controller = new XmlDataController(new ArrayList<String>());
+    XmlDataController controller = new XmlDataController();
     Option fileOption = FileOption.createOption(controller, new ArrayList<String>());
     Assert.assertFalse("A file option should have at least 1 file argument.", fileOption
         .isValid());
@@ -26,7 +26,7 @@ public class FileOptionTest {
   /** Tests if isValid returns true if one file is specified. */
   @Test
   public void testOneFileArgument() {
-    XmlDataController controller = new XmlDataController(new ArrayList<String>());
+    XmlDataController controller = new XmlDataController();
     URL testUrl = XmlDataController.class.getResource("testdataset/testdata.xml");
     List<String> parameters = new ArrayList<String>();
     parameters.add(testUrl.getPath());
@@ -37,7 +37,7 @@ public class FileOptionTest {
   /** Tests if isValid returns true if more than one file is specified. */
   @Test
   public void testMultipleFileArguments() {
-    XmlDataController controller = new XmlDataController(new ArrayList<String>());
+    XmlDataController controller = new XmlDataController();
     URL testUrl = XmlDataController.class.getResource("testdataset/testdata.xml");
     URL testUrl2 = XmlDataController.class.getResource("testdataset/testdata2.xml");
     List<String> parameters = new ArrayList<String>();
@@ -51,7 +51,7 @@ public class FileOptionTest {
   /** Tests if isValid returns false if a non-existant file is specified. */
   @Test
   public void testNonExistantFile() {
-    XmlDataController controller = new XmlDataController(new ArrayList<String>());
+    XmlDataController controller = new XmlDataController();
     List<String> parameters = new ArrayList<String>();
     parameters.add("Test.xml");
     Option fileOption = FileOption.createOption(controller, parameters);

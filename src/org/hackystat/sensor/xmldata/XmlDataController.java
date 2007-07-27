@@ -25,32 +25,39 @@ public class XmlDataController {
   private OptionHandler optionHandler = null;
   /** The class which encapsulates the firing of messages. */
   private MessageDelegate messageDelegate = null;
+  /** The list of command-line arguments. */
+  private List<String> arguments = new ArrayList<String>();
+  /** True if all command-line arguments have been parsed correctly. */
+  private boolean hasParsed = true;
 
   /**
-   * Constructs this controller with a list of arguments to process.
-   * 
-   * @param arguments the list of arguments.
+   * Constructs this controller with the classes that help manage the
+   * command-line arguments and message capabilities.
    */
-  public XmlDataController(List<String> arguments) {
+  public XmlDataController() {
     this.optionHandler = new OptionHandler(this);
-    this.messageDelegate = new MessageDelegate(this.isVerbose);
-    this.processCommands(arguments);
+    this.messageDelegate = new MessageDelegate(this);
   }
 
   /**
    * This method parses the specified command-line arguments and creates
    * options, which can be validated and executed.
-   * @param arguments the list of arguments to parse.
    */
-  private void processCommands(List<String> arguments) {
+  private void processArguments() {
     Map<String, List<String>> optionToArgs = new HashMap<String, List<String>>();
     String currentOption = "";
 
     // Iterate through all -option <arguments>... pairings to build a mapping of
     // option -> arguments.
-    for (String argument : arguments) {
+    for (String argument : this.arguments) {
       // If the current string is an option flag, create a new mapping.
       if (this.optionHandler.isOption(argument)) {
+        if (optionToArgs.containsKey(argument)) {
+          String msg = "The option, " + argument + ", may not have duplicates.";
+          this.fireMessage(msg);
+          this.hasParsed = false;
+          break;
+        }
         optionToArgs.put(argument, new ArrayList<String>());
         currentOption = argument;
       }
@@ -71,13 +78,23 @@ public class XmlDataController {
 
     // Finally, process the options, which set's instance variables.
     this.optionHandler.processOptions();
-    this.messageDelegate = new MessageDelegate(this.isVerbose);
+  }
+
+  /**
+   * Processes the command-line arguments and creates the objects that can be
+   * executed.
+   * @param arguments the specified list of command-line arguments.
+   */
+  public void processArguments(List<String> arguments) {
+    this.arguments = arguments;
+    this.optionHandler.clearOptions();
+    this.processArguments();
   }
 
   /** Executes all of the options specified by the user */
   public void execute() {
-    this.fireVerboseMessage("Hackystat Host: " + this.getHost());
-    if (this.optionHandler.isOptionsValid() && this.optionHandler.hasRequiredOptions()) {
+    if (this.hasParsed && this.optionHandler.isOptionsValid()
+        && this.optionHandler.hasRequiredOptions()) {
       this.optionHandler.execute();
     }
   }
@@ -126,6 +143,14 @@ public class XmlDataController {
    */
   public String getSdtName() {
     return this.sdtName;
+  }
+
+  /**
+   * Returns true if verbose mode is enabled, false if not.
+   * @return true if verbose mode is on, false if not.
+   */
+  public boolean isVerbose() {
+    return this.isVerbose;
   }
 
   /**

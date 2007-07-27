@@ -9,15 +9,15 @@ package org.hackystat.sensor.xmldata;
  * 
  */
 public class MessageDelegate {
-  /** True if the verbose mode is on, false if not. */
-  private boolean isVerbose = false;
+  /** The controller which stores this message delegate. */
+  private XmlDataController controller = null;
 
   /**
-   * Constructs this delegate class with the specified verbosity.
-   * @param isVerbose true if verbose mode is on, false if not.
+   * Constructs this delegate class with the specified controller.
+   * @param controller the controller that delegates to this class.
    */
-  public MessageDelegate(boolean isVerbose) {
-    this.isVerbose = isVerbose;
+  public MessageDelegate(XmlDataController controller) {
+    this.controller = controller;
   }
 
   /**
@@ -34,7 +34,7 @@ public class MessageDelegate {
    * @param message the specified message to display.
    */
   public void fireVerboseMessage(String message) {
-    if (this.isVerbose) {
+    if (this.controller.isVerbose()) {
       System.out.println(message);
     }
   }
@@ -46,7 +46,7 @@ public class MessageDelegate {
    * @param verboseMessage the specified verbose message.
    */
   public void fireMessage(String message, String verboseMessage) {
-    if (this.isVerbose) {
+    if (this.controller.isVerbose()) {
       System.out.println(verboseMessage);
     }
     else {

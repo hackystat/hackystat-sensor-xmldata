@@ -12,10 +12,8 @@ import java.util.Arrays;
  */
 public class XmlDataCliSensor {
   /** A summary usage message. */
-  static final String[] USAGE_MSG = { "\nUsage:\n " + "[-verbose <true|false> "
-      + "[-createRunTime <name>] [-sdt <name>]"
-      + " [-nameMap <oldAttribute> <newAttribute>]\n"
-      + "  -file <filename> [filename]... or -argList <filename>\n"
+  static final String[] USAGE_MSG = { "\nUsage:\n " + "[-verbose]\n " + "[-sdt <name>]\n"
+      + " -file <filename> [filename]... or -argList <filename>\n"
       + "\n\nNote: optional arguments are within square brackets. "
       + "Arguments can be used in any order." };
 
@@ -31,7 +29,8 @@ public class XmlDataCliSensor {
         sensor.usage();
       }
       else {
-        XmlDataController controller = new XmlDataController(Arrays.asList(args));
+        XmlDataController controller = new XmlDataController();
+        controller.processArguments(Arrays.asList(args));
         controller.execute();
       }
     }

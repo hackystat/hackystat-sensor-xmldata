@@ -34,6 +34,11 @@ public class OptionHandler {
     this.options.add(option);
   }
 
+  /** Clears all of the options managed by this class. */
+  public void clearOptions() {
+    this.options.clear();
+  }
+
   /**
    * Returns true if all of the options stored in this class are valid and
    * contain no duplicate options. If an option is invalid, an error message is
@@ -71,12 +76,19 @@ public class OptionHandler {
    */
   public boolean hasRequiredOptions() {
     boolean hasFileOption = this.hasOptionWithName(FileOption.OPTION_NAME);
-    if (!hasFileOption) {
-      String msg = "The -file <files...> option is required.";
+    boolean hasArgListOption = this.hasOptionWithName(ArgListOption.OPTION_NAME);
+    // Return false if any of the required options are used together.
+    if (hasFileOption && hasArgListOption) {
+      String msg = "Only one option, -file or -argList, can be used at the same time.";
       this.controller.fireMessage(msg);
       return false;
     }
-    return true;
+    else if (hasFileOption || hasArgListOption) {
+      return true;
+    }
+    String msg = "The -file <files...> or the -argList <argList.txt> " + "option is required.";
+    this.controller.fireMessage(msg);
+    return false;
   }
 
   /**
@@ -110,7 +122,8 @@ public class OptionHandler {
 
   /** Processes all of the options wrapped in this object. */
   public void processOptions() {
-    for (Option option : this.options) {
+    List<Option> options = new ArrayList<Option>(this.options);
+    for (Option option : options) {
       if (option != null) {
         option.process();
       }
@@ -122,7 +135,8 @@ public class OptionHandler {
    * wrapped parameters.
    */
   public void execute() {
-    for (Option option : this.options) {
+    List<Option> options = new ArrayList<Option>(this.options);
+    for (Option option : options) {
       option.execute();
     }
   }

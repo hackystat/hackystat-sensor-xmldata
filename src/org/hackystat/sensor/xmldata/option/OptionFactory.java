@@ -36,6 +36,9 @@ public class OptionFactory {
     else if (VerboseOption.OPTION_NAME.equals(optionName)) {
       return VerboseOption.createOption(controller);
     }
+    else if (ArgListOption.OPTION_NAME.equals(optionName)) {
+      return ArgListOption.createOption(controller, parameters);
+    }
     else {
       controller.fireMessage("The '" + optionName + "' option is not supported.");
     }

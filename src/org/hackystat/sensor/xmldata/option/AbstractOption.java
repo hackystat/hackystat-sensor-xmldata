@@ -44,10 +44,18 @@ public abstract class AbstractOption implements Option {
   }
 
   /** {@inheritDoc} */
+  public void process() {
+  }
+
+  /** {@inheritDoc} */
   public abstract boolean isValid();
 
   /** {@inheritDoc} */
   public XmlDataController getController() {
     return this.controller;
+  }
+
+  /** {@inheritDoc} */
+  public void execute() {
   }
 }

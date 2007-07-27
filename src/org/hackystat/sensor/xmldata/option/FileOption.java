@@ -28,7 +28,7 @@ import org.xml.sax.SAXException;
  * @author aito
  * 
  */
-public class FileOption extends AbstractOption implements Executable {
+public class FileOption extends AbstractOption {
   /** The name of this option, which is "-file". */
   public static final String OPTION_NAME = "-file";
 

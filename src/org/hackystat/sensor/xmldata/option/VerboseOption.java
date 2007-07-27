@@ -37,6 +37,14 @@ public class VerboseOption extends AbstractOption {
     return option;
   }
 
+  /** Processes this option by setting the verbose mode to true. */
+  @Override
+  public void process() {
+    if (this.isValid()) {
+      this.getController().setVerbose(true);
+    }
+  }
+
   /**
    * Always returns true because this options does not have an parameters.
    * @return always returns true.

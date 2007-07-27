@@ -24,8 +24,20 @@ public interface Option {
   public String getName();
 
   /**
+   * Processes the parameters found in this option. The default behavior is
+   * perform no parameter processing.
+   */
+  public void process();
+
+  /**
    * Returns a list of parameters used to execute this option.
    * @return the list of parameters.
    */
   public List<String> getParameters();
+
+  /**
+   * Executes this option based on the option name and parameters. The default
+   * behavior is perform no execution behavior.
+   */
+  public void execute();
 }

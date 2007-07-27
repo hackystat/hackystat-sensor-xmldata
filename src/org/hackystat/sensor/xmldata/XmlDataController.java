@@ -6,11 +6,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import org.hackystat.sensor.xmldata.option.FileOption;
-import org.hackystat.sensor.xmldata.option.Option;
+import org.hackystat.sensor.xmldata.option.OptionFactory;
 import org.hackystat.sensor.xmldata.option.OptionHandler;
-import org.hackystat.sensor.xmldata.option.SdtOption;
-import org.hackystat.sensor.xmldata.option.VerboseOption;
 import org.hackystat.sensorshell.SensorProperties;
 
 /**
@@ -69,25 +66,11 @@ public class XmlDataController {
     for (Entry<String, List<String>> entry : optionToArgs.entrySet()) {
       String optionName = entry.getKey();
       List<String> optionParams = entry.getValue();
-
-      if (SdtOption.OPTION_NAME.equals(optionName)) {
-        Option sdtOption = SdtOption.createOption(this, optionParams);
-        this.optionHandler.addOption(sdtOption);
-        if (!sdtOption.getParameters().isEmpty()) {
-          this.sdtName = entry.getValue().get(0);
-        }
-      }
-      else if (FileOption.OPTION_NAME.equals(optionName)) {
-        this.optionHandler.addOption(FileOption.createOption(this, optionParams));
-      }
-      else if (VerboseOption.OPTION_NAME.equals(optionName)) {
-        this.isVerbose = true;
-        this.optionHandler.addOption(VerboseOption.createOption(this));
-      }
-      else {
-        this.fireMessage("The '" + entry.getKey() + "' option is not supported.");
-      }
+      this.optionHandler.addOption(OptionFactory.getInstance(this, optionName, optionParams));
     }
+
+    // Finally, process the options, which set's instance variables.
+    this.optionHandler.processOptions();
     this.messageDelegate = new MessageDelegate(this.isVerbose);
   }
 
@@ -127,12 +110,30 @@ public class XmlDataController {
   }
 
   /**
+   * Sets the sdt name specified by the user. If this sdt string is set, all
+   * entries processed by this controller without an sdt attribute will use the
+   * specified sdt string.
+   * @param sdtName the specified sdt name.
+   */
+  public void setSdtName(String sdtName) {
+    this.sdtName = sdtName;
+  }
+
+  /**
    * Returns the sensor data type name that is associated with all data sent via
    * sensorshell to the sensorbase.
    * @return the sensor data type name.
    */
   public String getSdtName() {
     return this.sdtName;
+  }
+
+  /**
+   * Enables the verbosity of this controller if true, disables if false.
+   * @param isVerbose true to enable verbose mode, false to disable.
+   */
+  public void setVerbose(boolean isVerbose) {
+    this.isVerbose = isVerbose;
   }
 
   /**

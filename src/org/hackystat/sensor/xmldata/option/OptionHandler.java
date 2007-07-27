@@ -44,10 +44,10 @@ public class OptionHandler {
     // First, iterate through each option and validate their parameters.
     List<String> optionNames = new ArrayList<String>();
     for (Option option : this.options) {
-      optionNames.add(option.getName());
-      if (!option.isValid()) {
+      if (option == null || !option.isValid()) {
         return false;
       }
+      optionNames.add(option.getName());
     }
 
     // Second, iterate through all names to see if each option is unique.
@@ -108,16 +108,22 @@ public class OptionHandler {
     return false;
   }
 
+  /** Processes all of the options wrapped in this object. */
+  public void processOptions() {
+    for (Option option : this.options) {
+      if (option != null) {
+        option.process();
+      }
+    }
+  }
+
   /**
    * Executes all of the stored options that have operations to execute on their
    * wrapped parameters.
    */
   public void execute() {
     for (Option option : this.options) {
-      if (option instanceof Executable) {
-        Executable executable = (Executable) option;
-        executable.execute();
-      }
+      option.execute();
     }
   }
 }

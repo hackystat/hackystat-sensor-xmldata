@@ -50,7 +50,11 @@ public abstract class AbstractOption implements Option {
   /** {@inheritDoc} */
   public abstract boolean isValid();
 
-  /** {@inheritDoc} */
+  /**
+   * Returns the controller which provides access to parameters processed in
+   * other options and global sensor operations.
+   * @return the controller instance.
+   */
   public XmlDataController getController() {
     return this.controller;
   }

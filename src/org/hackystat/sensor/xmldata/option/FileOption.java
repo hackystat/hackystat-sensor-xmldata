@@ -63,7 +63,8 @@ public class FileOption extends AbstractOption {
   @Override
   public boolean isValid() {
     if (this.getParameters().size() == 0) {
-      String msg = "The number of parameters must include at least 1 file. Ex: -file foo.xml foo2.xml";
+      String msg = "The number of parameters must include at least 1 file. "
+          + "Ex: -file foo.xml foo2.xml";
       this.getController().fireMessage(msg);
       return false;
     }

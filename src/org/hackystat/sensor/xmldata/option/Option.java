@@ -3,7 +3,7 @@ package org.hackystat.sensor.xmldata.option;
 import java.util.List;
 
 /**
- * The command interface between objects that wrap the options and parameters
+ * The common interface between objects that wrap the options and parameters
  * specified via command-line arguments. Options provide the capability to store
  * the passed options and arguments, validate the parameters, and execute an
  * action over the parameters.

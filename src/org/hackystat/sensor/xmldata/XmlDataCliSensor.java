@@ -12,7 +12,7 @@ import java.util.Arrays;
  */
 public class XmlDataCliSensor {
   /** A summary usage message. */
-  static final String[] USAGE_MSG = { "\nUsage:\n " + "[-verbose]\n " + "[-sdt <name>]\n"
+  private static final String[] USAGE_MSG = { "\nUsage:\n " + "[-verbose]\n " + "[-sdt <name>]\n"
       + " -file <filename> [filename]... or -argList <filename>\n"
       + "\n\nNote: optional arguments are within square brackets. "
       + "Arguments can be used in any order." };

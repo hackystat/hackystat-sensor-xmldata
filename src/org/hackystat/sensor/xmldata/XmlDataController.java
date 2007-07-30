@@ -53,8 +53,7 @@ public class XmlDataController {
       // If the current string is an option flag, create a new mapping.
       if (this.optionHandler.isOption(argument)) {
         if (optionToArgs.containsKey(argument)) {
-          String msg = "The option, " + argument + ", may not have duplicates.";
-          this.fireMessage(msg);
+          this.fireMessage("The option, " + argument + ", may not have duplicates.");
           this.hasParsed = false;
           break;
         }
@@ -64,6 +63,11 @@ public class XmlDataController {
       // Else, add the argument to the option flag list.
       else {
         List<String> args = optionToArgs.get(currentOption);
+        if (args == null) {
+          this.fireMessage("The argument, " + argument + ", is not supported.");
+          this.hasParsed = false;
+          break;
+        }
         args.add(argument);
         optionToArgs.put(currentOption, args);
       }

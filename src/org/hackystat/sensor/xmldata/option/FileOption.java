@@ -89,8 +89,18 @@ public class FileOption extends AbstractOption {
    */
   public void execute() {
     SensorProperties properties = new SensorProperties();
-    SensorShell shell = new SensorShell(properties, false, "XmlData");
+    SensorShell shell = new SensorShell(properties, false, "XmlData", true);
     int entryCount = 0;
+
+    // Do not execute if the host cannot be reached. This check will exist until
+    // offline data storage is implemented.
+    if (!shell.ping()) {
+      String msg = "The host, " + this.getController().getHost()
+          + ", could not be reached.  No data will be sent.";
+      this.getController().fireMessage(msg);
+      return;
+    }
+
     try {
       for (String filePath : this.getParameters()) {
         this.getController().fireVerboseMessage("Sending data from: " + filePath);
@@ -108,7 +118,6 @@ public class FileOption extends AbstractOption {
 
         XmlData xmlData = (XmlData) unmarshaller.unmarshal(file);
         Entries entries = xmlData.getEntries();
-
         // Only send data if the sdt is set or all entries have sdt attributes.
         if (!"".equals(this.getController().getSdtName())
             || this.hasSdtAttributes(entries.getEntry())) {

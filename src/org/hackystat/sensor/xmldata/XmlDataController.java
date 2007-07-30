@@ -76,7 +76,7 @@ public class XmlDataController {
       this.optionHandler.addOption(OptionFactory.getInstance(this, optionName, optionParams));
     }
 
-    // Finally, process the options, which set's instance variables.
+    // Finally, process the options, which may instance variables.
     this.optionHandler.processOptions();
   }
 

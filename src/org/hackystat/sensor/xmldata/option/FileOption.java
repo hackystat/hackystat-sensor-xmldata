@@ -125,6 +125,7 @@ public class FileOption extends AbstractOption {
               keyValMap.put(attributeEntry.getKey().toString(), attributeEntry.getValue());
             }
             // Finally, add the mapping and send the data.
+            this.getController().fireVerboseMessage(this.getMapVerboseString(keyValMap));
             shell.add(keyValMap);
             entryCount += shell.send();
           }
@@ -154,6 +155,27 @@ public class FileOption extends AbstractOption {
       this.getController().fireMessage(
           entryCount + " entries sent to " + this.getController().getHost());
     }
+  }
+
+  /**
+   * Returns the string containing the information stored in the key-value
+   * mapping of sensor data. This string is helpful when running this option in
+   * verbose mode.
+   * @param keyValMap the map used to generate the returned string.
+   * @return the informative string.
+   */
+  private String getMapVerboseString(Map<String, String> keyValMap) {
+    if (keyValMap.size() > 0) {
+      String verboseString = "[";
+      for (Map.Entry<String, String> entry : keyValMap.entrySet()) {
+        verboseString = verboseString.concat(entry.getKey() + "=" + entry.getValue()) + ", ";
+      }
+
+      // Remove the last ', ' from the string.
+      verboseString = verboseString.substring(0, verboseString.length() - 2);
+      return verboseString.concat("]");
+    }
+    return "";
   }
 
   /**

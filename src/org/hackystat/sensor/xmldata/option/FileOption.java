@@ -1,6 +1,8 @@
 package org.hackystat.sensor.xmldata.option;
 
 import java.io.File;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -8,6 +10,7 @@ import java.util.Map;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
+import javax.xml.datatype.XMLGregorianCalendar;
 import javax.xml.namespace.QName;
 import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
@@ -16,9 +19,10 @@ import org.hackystat.sensor.xmldata.XmlDataController;
 import org.hackystat.sensor.xmldata.devevent.jaxb.Entries;
 import org.hackystat.sensor.xmldata.devevent.jaxb.Entry;
 import org.hackystat.sensor.xmldata.devevent.jaxb.XmlData;
-import org.hackystat.sensorbase.resource.sensordata.Tstamp;
 import org.hackystat.sensorshell.SensorProperties;
 import org.hackystat.sensorshell.SensorShell;
+import org.hackystat.utilities.tstamp.Tstamp;
+import org.hackystat.utilities.tstamp.TstampSet;
 import org.xml.sax.SAXException;
 
 /**
@@ -90,7 +94,6 @@ public class FileOption extends AbstractOption {
   public void execute() {
     SensorProperties properties = new SensorProperties();
     SensorShell shell = new SensorShell(properties, false, "XmlData", true);
-    int entryCount = 0;
 
     // Do not execute if the host cannot be reached. This check will exist until
     // offline data storage is implemented.
@@ -119,6 +122,7 @@ public class FileOption extends AbstractOption {
         XmlData xmlData = (XmlData) unmarshaller.unmarshal(file);
         Entries entries = xmlData.getEntries();
         // Only send data if the sdt is set or all entries have sdt attributes.
+        TstampSet tstampSet = new TstampSet();
         Object sdtName = this.getController().getOptionObject(Options.SDT);
         if (!"".equals(sdtName) || this.hasSdtAttributes(entries.getEntry())) {
           for (Entry entry : entries.getEntry()) {
@@ -127,7 +131,12 @@ public class FileOption extends AbstractOption {
             keyValMap.put("Tool", entry.getTool());
             keyValMap.put("Resource", entry.getResource());
             keyValMap.put("SensorDataType", (String) sdtName);
-            keyValMap.put("Runtime", Tstamp.makeTimestamp().toString());
+
+            // Creates a unique timestamp for each entry.
+            long uniqueTstamp = tstampSet.getUniqueTstamp(file.lastModified());
+            XMLGregorianCalendar gregorianTime = this.convertLongToGregorian(uniqueTstamp);
+            keyValMap.put("Runtime", gregorianTime.toString());
+            keyValMap.put("Timestamp", gregorianTime.toString());
 
             // Next, add the optional attributes.
             Map<QName, String> map = entry.getOtherAttributes();
@@ -137,7 +146,6 @@ public class FileOption extends AbstractOption {
             // Finally, add the mapping and send the data.
             this.getController().fireVerboseMessage(this.getMapVerboseString(keyValMap));
             shell.add(keyValMap);
-            entryCount += shell.send();
           }
         }
         else {
@@ -146,6 +154,9 @@ public class FileOption extends AbstractOption {
           throw new Exception(msg);
         }
       }
+      this.getController().fireMessage(
+          shell.send() + " entries sent to " + this.getController().getHost());
+      shell.quit();
     }
     catch (JAXBException e) {
       String msg = "There was a problem unmarshalling the data.  File(s) "
@@ -159,11 +170,6 @@ public class FileOption extends AbstractOption {
     catch (Exception e) {
       String msg = "The specified file(s) failed to load.";
       this.getController().fireMessage(msg, e.toString());
-    }
-    finally {
-      shell.quit();
-      this.getController().fireMessage(
-          entryCount + " entries sent to " + this.getController().getHost());
     }
   }
 
@@ -216,5 +222,31 @@ public class FileOption extends AbstractOption {
       }
     }
     return false;
+  }
+
+  /**
+   * Converts a time represented in a long to an
+   * <code>XmlGregorianCalendar</code>. Taken from the ant sensor module.
+   * 
+   * @param timeInMillis The time to convert in milliseconds.
+   * @return Returns the time passed in as a <code>XmlGregorianCalendar</code>.
+   */
+  private XMLGregorianCalendar convertLongToGregorian(long timeInMillis) {
+    // convert long time into calendar object
+    GregorianCalendar cal = new GregorianCalendar();
+    cal.setTimeInMillis(timeInMillis);
+
+    // get an instance of XMLGregorianCalendar from Tstamp
+    XMLGregorianCalendar xmlCalendar = Tstamp.makeTimestamp();
+    // modify the instance with the values from the Calendar
+    xmlCalendar.setMonth(cal.get(Calendar.MONTH));
+    xmlCalendar.setDay(cal.get(Calendar.DAY_OF_MONTH));
+    xmlCalendar.setYear(cal.get(Calendar.YEAR));
+    xmlCalendar.setHour(cal.get(Calendar.HOUR_OF_DAY));
+    xmlCalendar.setMinute(cal.get(Calendar.MINUTE));
+    xmlCalendar.setSecond(cal.get(Calendar.SECOND));
+    xmlCalendar.setMillisecond(cal.get(Calendar.MILLISECOND));
+
+    return xmlCalendar;
   }
 }

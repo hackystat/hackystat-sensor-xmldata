@@ -29,7 +29,7 @@
   <fail message="This package requires JUNIT_HOME to be defined and ${junit.jar} available" unless="junit.available"/>
 
   <!-- Make sure that the SensorShell is available . --> 
-  <available file="${env.HACKYSTAT_SENSORSHELL_HOME}/sensorshell.java5.jar" type="file" property="hackystat.sensorshell.available"/>
+  <available file="${env.HACKYSTAT_SENSORSHELL_HOME}/sensorshell.jar" type="file" property="hackystat.sensorshell.available"/>
   <fail message="This package requires the Hackystat SensorShell to be installed and HACKYSTAT_SENSORSHELL_HOME defined" unless="hackystat.sensorshell.available"/>   
         
   <!-- Basic properties for this system. --> 
@@ -54,7 +54,7 @@
     <fileset file="${env.JUNIT_HOME}/junit-${junit.version}.jar"/>
     <fileset file="${env.FINDBUGS_HOME}/lib/annotations.jar"/> 
     <!-- Use the Java 5 jar file to get JAXB files, shouldn't hurt in Java 6 --> 
-    <fileset file="${env.HACKYSTAT_SENSORSHELL_HOME}/sensorshell.java5.jar"/>  
+    <fileset file="${env.HACKYSTAT_SENSORSHELL_HOME}/sensorshell.jar"/>  
   </path> 
 
   <target name="compile" description="Compiles the code.">

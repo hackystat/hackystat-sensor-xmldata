@@ -40,7 +40,7 @@ public class SdtOption extends AbstractOption {
   @Override
   public void process() {
     if (this.isValid()) {
-      this.getController().setSdtName(this.getParameters().get(0));
+      this.getController().addOptionObject(Options.SDT, this.getParameters().get(0));
     }
   }
 

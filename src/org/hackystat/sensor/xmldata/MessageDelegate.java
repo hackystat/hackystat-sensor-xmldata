@@ -1,5 +1,7 @@
 package org.hackystat.sensor.xmldata;
 
+import org.hackystat.sensor.xmldata.option.Options;
+
 /**
  * The class which is delegated to by options and the controller when displaying
  * informative messages to the user. This class wraps the way information is
@@ -34,7 +36,7 @@ public class MessageDelegate {
    * @param message the specified message to display.
    */
   public void fireVerboseMessage(String message) {
-    if (this.controller.isVerbose()) {
+    if (new Boolean(true).equals(this.controller.getOptionObject(Options.VERBOSE))) {
       System.out.println(message);
     }
   }
@@ -46,7 +48,7 @@ public class MessageDelegate {
    * @param verboseMessage the specified verbose message.
    */
   public void fireMessage(String message, String verboseMessage) {
-    if (this.controller.isVerbose()) {
+    if (new Boolean(true).equals(this.controller.getOptionObject(Options.VERBOSE))) {
       System.out.println(verboseMessage);
     }
     else {

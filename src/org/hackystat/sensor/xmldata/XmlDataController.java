@@ -8,6 +8,7 @@ import java.util.Map.Entry;
 
 import org.hackystat.sensor.xmldata.option.OptionFactory;
 import org.hackystat.sensor.xmldata.option.OptionHandler;
+import org.hackystat.sensor.xmldata.option.Options;
 import org.hackystat.sensorshell.SensorProperties;
 
 /**
@@ -17,10 +18,6 @@ import org.hackystat.sensorshell.SensorProperties;
  * 
  */
 public class XmlDataController {
-  /** True if the verbose mode is on, false if verbose mode is turned off. */
-  private boolean isVerbose = false;
-  /** The sensor data type name used by all data sent to the sensorbase. */
-  private String sdtName = "";
   /** The class that manages the options created from the user's arguments. */
   private OptionHandler optionHandler = null;
   /** The class which encapsulates the firing of messages. */
@@ -29,6 +26,11 @@ public class XmlDataController {
   private List<String> arguments = new ArrayList<String>();
   /** True if all command-line arguments have been parsed correctly. */
   private boolean hasParsed = true;
+  /**
+   * The mapping of options -> objects that are set during each option's
+   * processing.
+   */
+  private Map<Options, Object> optionMap = new HashMap<Options, Object>();
 
   /**
    * Constructs this controller with the classes that help manage the
@@ -80,8 +82,30 @@ public class XmlDataController {
       this.optionHandler.addOption(OptionFactory.getInstance(this, optionName, optionParams));
     }
 
-    // Finally, process the options, which may instance variables.
+    // Finally, process the options, which may set variables.
     this.optionHandler.processOptions();
+  }
+
+  /**
+   * Adds a mapping of the specified option to the specified object. This allows
+   * options to use objects associated with other options during the option's
+   * execution phase.
+   * @param option the option that is associated with an object.
+   * @param object the object mapped to an option.
+   */
+  public void addOptionObject(Options option, Object object) {
+    this.optionMap.put(option, object);
+  }
+
+  /**
+   * Returns the object mapped to the specified option. If no object exists,
+   * null is returned. It is up to the calling object to determine the type of
+   * object returned.
+   * @param option the option that is the key of the requested object.
+   * @return the object mapped to the specified option.
+   */
+  public Object getOptionObject(Options option) {
+    return this.optionMap.get(option);
   }
 
   /**
@@ -128,41 +152,6 @@ public class XmlDataController {
    */
   public void fireMessage(String message, String verboseMessage) {
     this.messageDelegate.fireMessage(message, verboseMessage);
-  }
-
-  /**
-   * Sets the sdt name specified by the user. If this sdt string is set, all
-   * entries processed by this controller without an sdt attribute will use the
-   * specified sdt string.
-   * @param sdtName the specified sdt name.
-   */
-  public void setSdtName(String sdtName) {
-    this.sdtName = sdtName;
-  }
-
-  /**
-   * Returns the sensor data type name that is associated with all data sent via
-   * sensorshell to the sensorbase.
-   * @return the sensor data type name.
-   */
-  public String getSdtName() {
-    return this.sdtName;
-  }
-
-  /**
-   * Returns true if verbose mode is enabled, false if not.
-   * @return true if verbose mode is on, false if not.
-   */
-  public boolean isVerbose() {
-    return this.isVerbose;
-  }
-
-  /**
-   * Enables the verbosity of this controller if true, disables if false.
-   * @param isVerbose true to enable verbose mode, false to disable.
-   */
-  public void setVerbose(boolean isVerbose) {
-    this.isVerbose = isVerbose;
   }
 
   /**

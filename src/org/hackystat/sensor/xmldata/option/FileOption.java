@@ -119,14 +119,14 @@ public class FileOption extends AbstractOption {
         XmlData xmlData = (XmlData) unmarshaller.unmarshal(file);
         Entries entries = xmlData.getEntries();
         // Only send data if the sdt is set or all entries have sdt attributes.
-        if (!"".equals(this.getController().getSdtName())
-            || this.hasSdtAttributes(entries.getEntry())) {
+        Object sdtName = this.getController().getOptionObject(Options.SDT);
+        if (!"".equals(sdtName) || this.hasSdtAttributes(entries.getEntry())) {
           for (Entry entry : entries.getEntry()) {
             // Then, lets set the required attributes.
             Map<String, String> keyValMap = new HashMap<String, String>();
             keyValMap.put("Tool", entry.getTool());
             keyValMap.put("Resource", entry.getResource());
-            keyValMap.put("SensorDataType", this.getController().getSdtName());
+            keyValMap.put("SensorDataType", (String) sdtName);
             keyValMap.put("Runtime", Tstamp.makeTimestamp().toString());
 
             // Next, add the optional attributes.

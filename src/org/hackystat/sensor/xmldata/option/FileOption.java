@@ -16,9 +16,9 @@ import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
 
 import org.hackystat.sensor.xmldata.XmlDataController;
-import org.hackystat.sensor.xmldata.devevent.jaxb.Entries;
-import org.hackystat.sensor.xmldata.devevent.jaxb.Entry;
-import org.hackystat.sensor.xmldata.devevent.jaxb.XmlData;
+import org.hackystat.sensor.xmldata.jaxb.Entries;
+import org.hackystat.sensor.xmldata.jaxb.Entry;
+import org.hackystat.sensor.xmldata.jaxb.XmlData;
 import org.hackystat.sensorshell.SensorProperties;
 import org.hackystat.sensorshell.SensorShell;
 import org.hackystat.utilities.tstamp.Tstamp;
@@ -107,7 +107,7 @@ public class FileOption extends AbstractOption {
         // First, let's unmarshall the current file.
         File file = new File(filePath);
         JAXBContext context = JAXBContext
-            .newInstance("org.hackystat.sensor.xmldata.devevent.jaxb");
+            .newInstance("org.hackystat.sensor.xmldata.jaxb");
         Unmarshaller unmarshaller = context.createUnmarshaller();
 
         // Adds schema validation to the unmarshelled file.
@@ -121,7 +121,7 @@ public class FileOption extends AbstractOption {
         // Only send data if the sdt is set or all entries have sdt attributes.
         TstampSet tstampSet = new TstampSet();
         Object sdtName = this.getController().getOptionObject(Options.SDT);
-        if (!"".equals(sdtName) || this.hasSdtAttributes(entries.getEntry())) {
+        if (sdtName != null || this.hasSdtAttributes(entries.getEntry())) {
           for (Entry entry : entries.getEntry()) {
             // Then, lets set the required attributes.
             Map<String, String> keyValMap = new HashMap<String, String>();

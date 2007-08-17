@@ -6,7 +6,7 @@
 //
 
 
-package org.hackystat.sensor.xmldata.devevent.jaxb;
+package org.hackystat.sensor.xmldata.jaxb;
 
 import javax.xml.bind.annotation.XmlRegistry;
 

@@ -17,6 +17,10 @@ public enum Options {
    * The option set when specifying the SensorDataType. The object associated
    * with this option is a String.
    */
-  SDT;
-
+  SDT,
+  /**
+   * The options set when specifying unique timestamps found in the sensor data
+   * file. The object associated with this option is a boolean.
+   */
+  UNIQUE_TSTAMP;
 }

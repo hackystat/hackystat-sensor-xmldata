@@ -53,5 +53,4 @@ public class VerboseOption extends AbstractOption {
   public boolean isValid() {
     return true;
   }
-
 }

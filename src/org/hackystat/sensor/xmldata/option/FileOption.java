@@ -86,10 +86,7 @@ public class FileOption extends AbstractOption {
 
   /**
    * Executes this option by grabbing all information stored in the specified
-   * files, and sending them to the sensorbase. Note that this method will send
-   * data after the data from each file is retrieved. This means that if file
-   * foo.xml has valid data and file foo2.xml does not, foo.xml's data will be
-   * sent and then this method will fail on foo2.xml's data.
+   * files, and sending them to the sensorbase.
    */
   public void execute() {
     SensorProperties properties = new SensorProperties();
@@ -135,13 +132,23 @@ public class FileOption extends AbstractOption {
             // Creates a unique timestamp for each entry.
             long uniqueTstamp = tstampSet.getUniqueTstamp(file.lastModified());
             XMLGregorianCalendar gregorianTime = this.convertLongToGregorian(uniqueTstamp);
-            keyValMap.put("Runtime", gregorianTime.toString());
             keyValMap.put("Timestamp", gregorianTime.toString());
+            keyValMap.put("Runtime", Tstamp.makeTimestamp().toString());
 
             // Next, add the optional attributes.
             Map<QName, String> map = entry.getOtherAttributes();
             for (Map.Entry<QName, String> attributeEntry : map.entrySet()) {
-              keyValMap.put(attributeEntry.getKey().toString(), attributeEntry.getValue());
+              // If entries contain tstamps, and the unique flag is set.
+              if ("Timestamp".equals(attributeEntry.getKey().toString())
+                  && new Boolean(true).equals(this.getController().getOptionObject(
+                      Options.UNIQUE_TSTAMP))) {
+                gregorianTime = this
+                    .convertLongToGregorian(new Long(attributeEntry.getValue()));
+                keyValMap.put(attributeEntry.getKey().toString(), gregorianTime.toString());
+              }
+              else {
+                keyValMap.put(attributeEntry.getKey().toString(), attributeEntry.getValue());
+              }
             }
             // Finally, add the mapping and send the data.
             this.getController().fireVerboseMessage(this.getMapVerboseString(keyValMap));
@@ -246,7 +253,6 @@ public class FileOption extends AbstractOption {
     xmlCalendar.setMinute(cal.get(Calendar.MINUTE));
     xmlCalendar.setSecond(cal.get(Calendar.SECOND));
     xmlCalendar.setMillisecond(cal.get(Calendar.MILLISECOND));
-
     return xmlCalendar;
   }
 }

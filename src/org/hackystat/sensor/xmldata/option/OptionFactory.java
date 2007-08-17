@@ -39,6 +39,9 @@ public class OptionFactory {
     else if (ArgListOption.OPTION_NAME.equals(optionName)) {
       return ArgListOption.createOption(controller, parameters);
     }
+    else if (UniqueTstampOption.OPTION_NAME.equals(optionName)) {
+      return UniqueTstampOption.createOption(controller);
+    }
     else {
       controller.fireMessage("The '" + optionName + "' option is not supported.");
     }

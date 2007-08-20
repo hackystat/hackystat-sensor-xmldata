@@ -41,7 +41,7 @@ public class VerboseOption extends AbstractOption {
   @Override
   public void process() {
     if (this.isValid()) {
-      this.getController().addOptionObject(Options.VERBOSE, new Boolean(true));
+      this.getController().addOptionObject(Options.VERBOSE, Boolean.TRUE);
     }
   }
 

@@ -43,7 +43,7 @@ public class UniqueTstampOption extends AbstractOption {
   @Override
   public void process() {
     if (this.isValid()) {
-      this.getController().addOptionObject(Options.UNIQUE_TSTAMP, new Boolean(true));
+      this.getController().addOptionObject(Options.UNIQUE_TSTAMP, Boolean.TRUE);
     }
   }
 

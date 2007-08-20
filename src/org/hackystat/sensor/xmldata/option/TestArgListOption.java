@@ -1,6 +1,6 @@
 package org.hackystat.sensor.xmldata.option;
 
-import java.net.URL;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,7 +13,7 @@ import org.junit.Test;
  * @author aito
  * 
  */
-public class ArgListOptionTest {
+public class TestArgListOption {
   /**
    * Tests if isValid returns the correct value depending on the specified
    * parameters.
@@ -22,9 +22,9 @@ public class ArgListOptionTest {
   public void testIsValid() {
     XmlDataController controller = new XmlDataController();
     // Tests a valid argList parameter count, but invalid file.
-    URL testUrl = XmlDataController.class.getResource("testdataset/testArgList.txt");
     List<String> parameters = new ArrayList<String>();
-    parameters.add(testUrl.getPath());
+    String testPackage = "src/org/hackystat/sensor/xmldata/testdataset/";
+    parameters.add(new File("") + testPackage + "testArgList.txt");
     Option option = ArgListOption.createOption(controller, parameters);
     Assert.assertTrue("ArgList accept only 1 argument.", option.isValid());
     option.process();
@@ -39,6 +39,5 @@ public class ArgListOptionTest {
     parameters.add("Foo.xml");
     option = ArgListOption.createOption(controller, parameters);
     Assert.assertFalse("An invalid file should invalid this option.", option.isValid());
-
   }
 }

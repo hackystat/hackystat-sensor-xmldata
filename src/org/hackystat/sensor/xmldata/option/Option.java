@@ -24,8 +24,9 @@ public interface Option {
   public String getName();
 
   /**
-   * Processes the parameters found in this option. The default behavior is
-   * perform no parameter processing.
+   * Processes the parameters found in this option. This method is called before
+   * execution and can be used to setup options values or perform pre-execution
+   * processing.
    */
   public void process();
 
@@ -36,8 +37,7 @@ public interface Option {
   public List<String> getParameters();
 
   /**
-   * Executes this option based on the option name and parameters. The default
-   * behavior is perform no execution behavior.
+   * Executes this option based on the option name and parameters.s
    */
   public void execute();
 }

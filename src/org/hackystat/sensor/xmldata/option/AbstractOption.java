@@ -43,8 +43,12 @@ public abstract class AbstractOption implements Option {
     return this.parameters;
   }
 
-  /** {@inheritDoc} */
+  /**
+   * Implements the process method to provide the default process behavior,
+   * which is perform no parameter processing.
+   */
   public void process() {
+    // Performs no processing.
   }
 
   /** {@inheritDoc} */
@@ -59,7 +63,11 @@ public abstract class AbstractOption implements Option {
     return this.controller;
   }
 
-  /** {@inheritDoc} */
+  /**
+   * Implements the execute method with the default execute behavior, which is
+   * to do nothing.
+   */
   public void execute() {
+    // Does no execution.
   }
 }

@@ -12,7 +12,7 @@ import org.junit.Test;
  * @author aito
  * 
  */
-public class SdtOptionTest {
+public class TestSdtOption {
   /**
    * Tests if isValid returns the correct value depending on the specified
    * parameters.

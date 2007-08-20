@@ -4,6 +4,6 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="var" path="HACKYSTAT_SENSORSHELL_HOME/sensorshell.jar"/>
 	<classpathentry kind="var" path="ANT_HOME/lib/ant.jar"/>
-	<classpathentry kind="lib" path="C:/referentia/tools/apache-ant-1.7.0/lib/junit-4.3.1.jar"/>
+	<classpathentry kind="var" path="JUNIT_HOME/junit-4.3.1.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

@@ -36,7 +36,7 @@ public class MessageDelegate {
    * @param message the specified message to display.
    */
   public void fireVerboseMessage(String message) {
-    if (new Boolean(true).equals(this.controller.getOptionObject(Options.VERBOSE))) {
+    if (Boolean.TRUE.equals(this.controller.getOptionObject(Options.VERBOSE))) {
       System.out.println(message);
     }
   }
@@ -48,7 +48,7 @@ public class MessageDelegate {
    * @param verboseMessage the specified verbose message.
    */
   public void fireMessage(String message, String verboseMessage) {
-    if (new Boolean(true).equals(this.controller.getOptionObject(Options.VERBOSE))) {
+    if (Boolean.TRUE.equals(this.controller.getOptionObject(Options.VERBOSE))) {
       System.out.println(verboseMessage);
     }
     else {

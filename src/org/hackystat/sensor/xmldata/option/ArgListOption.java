@@ -51,7 +51,7 @@ public class ArgListOption extends AbstractOption {
    */
   @Override
   public boolean isValid() {
-    if (this.getParameters().size() != 1) {
+    if (this.getParameters().isEmpty() || this.getParameters().size() > 1) {
       String msg = "The -argList option only accepts one parameter, which "
           + "is the file containing the command-line arguments.";
       this.getController().fireMessage(msg);

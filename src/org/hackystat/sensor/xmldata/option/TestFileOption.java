@@ -1,6 +1,6 @@
 package org.hackystat.sensor.xmldata.option;
 
-import java.net.URL;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,7 +13,7 @@ import org.junit.Test;
  * @author aito
  * 
  */
-public class FileOptionTest {
+public class TestFileOption {
   /** Tests if isValid returns false when no arguments are specified. */
   @Test
   public void testNoFileArguments() {
@@ -27,9 +27,9 @@ public class FileOptionTest {
   @Test
   public void testOneFileArgument() {
     XmlDataController controller = new XmlDataController();
-    URL testUrl = XmlDataController.class.getResource("testdataset/testdata.xml");
     List<String> parameters = new ArrayList<String>();
-    parameters.add(testUrl.getPath());
+    String testPackage = "src/org/hackystat/sensor/xmldata/testdataset/";
+    parameters.add(new File("") + testPackage + "testdata.xml");
     Option fileOption = FileOption.createOption(controller, parameters);
     Assert.assertTrue("A file option with one file should be valid.", fileOption.isValid());
   }
@@ -38,11 +38,10 @@ public class FileOptionTest {
   @Test
   public void testMultipleFileArguments() {
     XmlDataController controller = new XmlDataController();
-    URL testUrl = XmlDataController.class.getResource("testdataset/testdata.xml");
-    URL testUrl2 = XmlDataController.class.getResource("testdataset/testdata2.xml");
     List<String> parameters = new ArrayList<String>();
-    parameters.add(testUrl.getPath());
-    parameters.add(testUrl2.getPath());
+    String testPackage = "src/org/hackystat/sensor/xmldata/testdataset/";
+    parameters.add(new File("") + testPackage + "testdata.xml");
+    parameters.add(new File("") + testPackage + "testdata2.xml");
     Option fileOption = FileOption.createOption(controller, parameters);
     Assert.assertTrue("A file option with more than one file should be valid.", fileOption
         .isValid());

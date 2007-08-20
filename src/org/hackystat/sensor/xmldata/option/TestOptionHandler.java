@@ -14,7 +14,7 @@ import org.junit.Test;
  * @author aito
  * 
  */
-public class OptionHandlerTest {
+public class TestOptionHandler {
   /** The handler class that is tested. */
   private OptionHandler handler = null;
   /** The controller instance. */

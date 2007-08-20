@@ -14,7 +14,6 @@
   </rule>
   <rule ref="rulesets/finalizers.xml"/>
   <rule ref="rulesets/imports.xml"/>
-  <rule ref="rulesets/junit.xml"/>
   <rule ref="rulesets/strings.xml"/>
 
 </ruleset>

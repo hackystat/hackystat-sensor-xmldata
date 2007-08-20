@@ -102,15 +102,18 @@ public class FileOption extends AbstractOption {
     }
 
     try {
+      // Create one runtime for the entire batch of files.
+      XMLGregorianCalendar runTime = Tstamp.makeTimestamp();
+
       for (String filePath : this.getParameters()) {
         this.getController().fireVerboseMessage("Sending data from: " + filePath);
         // First, let's unmarshall the current file.
         File file = new File(filePath);
         JAXBContext context = JAXBContext
-            .newInstance("org.hackystat.sensor.xmldata.jaxb");
+            .newInstance(org.hackystat.sensor.xmldata.jaxb.ObjectFactory.class);
         Unmarshaller unmarshaller = context.createUnmarshaller();
 
-        // Adds schema validation to the unmarshelled file.
+        // Adds schema validation to the unmarshalled file.
         SchemaFactory schemaFactory = SchemaFactory
             .newInstance("http://www.w3.org/2001/XMLSchema");
         Schema schema = schemaFactory.newSchema(new File("xml/schema/xmldata.xsd"));
@@ -133,14 +136,14 @@ public class FileOption extends AbstractOption {
             long uniqueTstamp = tstampSet.getUniqueTstamp(file.lastModified());
             XMLGregorianCalendar gregorianTime = this.convertLongToGregorian(uniqueTstamp);
             keyValMap.put("Timestamp", gregorianTime.toString());
-            keyValMap.put("Runtime", Tstamp.makeTimestamp().toString());
+            keyValMap.put("Runtime", runTime.toString());
 
             // Next, add the optional attributes.
             Map<QName, String> map = entry.getOtherAttributes();
             for (Map.Entry<QName, String> attributeEntry : map.entrySet()) {
               // If entries contain tstamps, and the unique flag is set.
               if ("Timestamp".equals(attributeEntry.getKey().toString())
-                  && new Boolean(true).equals(this.getController().getOptionObject(
+                  && Boolean.TRUE.equals(this.getController().getOptionObject(
                       Options.UNIQUE_TSTAMP))) {
                 gregorianTime = this
                     .convertLongToGregorian(new Long(attributeEntry.getValue()));
@@ -188,7 +191,7 @@ public class FileOption extends AbstractOption {
    * @return the informative string.
    */
   private String getMapVerboseString(Map<String, String> keyValMap) {
-    if (keyValMap.size() > 0) {
+    if (!keyValMap.isEmpty()) {
       String verboseString = "[";
       for (Map.Entry<String, String> entry : keyValMap.entrySet()) {
         verboseString = verboseString.concat(entry.getKey() + "=" + entry.getValue()) + ", ";

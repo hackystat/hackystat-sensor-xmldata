@@ -141,17 +141,22 @@ public class FileOption extends AbstractOption {
             // Next, add the optional attributes.
             Map<QName, String> map = entry.getOtherAttributes();
             for (Map.Entry<QName, String> attributeEntry : map.entrySet()) {
+              // TODO: when the format for timestamps is resolved,
+              // uniqueTimestamps can be handled.
               // If entries contain tstamps, and the unique flag is set.
-              if ("Timestamp".equals(attributeEntry.getKey().toString())
-                  && Boolean.TRUE.equals(this.getController().getOptionObject(
-                      Options.UNIQUE_TSTAMP))) {
-                gregorianTime = this
-                    .convertLongToGregorian(new Long(attributeEntry.getValue()));
-                keyValMap.put(attributeEntry.getKey().toString(), gregorianTime.toString());
-              }
-              else {
-                keyValMap.put(attributeEntry.getKey().toString(), attributeEntry.getValue());
-              }
+              // if ("Timestamp".equals(attributeEntry.getKey().toString())
+              // && Boolean.TRUE.equals(this.getController().getOptionObject(
+              // Options.UNIQUE_TSTAMP))) {
+              // Timestamp stamp = Timestamp.valueOf(attributeEntry.getValue());
+              // gregorianTime = this
+              // .convertLongToGregorian(new Long(attributeEntry.getValue()));
+              // System.out.println(Tstamp.makeTimestamp(attributeEntry.getValue()));
+              // keyValMap.put(attributeEntry.getKey().toString(),
+              // gregorianTime.toString());
+              // }
+              // else {
+              keyValMap.put(attributeEntry.getKey().toString(), attributeEntry.getValue());
+              // }
             }
             // Finally, add the mapping and send the data.
             this.getController().fireVerboseMessage(this.getMapVerboseString(keyValMap));

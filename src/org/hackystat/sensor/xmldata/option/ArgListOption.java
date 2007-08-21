@@ -18,7 +18,7 @@ import org.hackystat.sensor.xmldata.XmlDataController;
  * 
  */
 public class ArgListOption extends AbstractOption {
-  /** The name of this option, which is "-file". */
+  /** The name of this option, which is "-argList". */
   public static final String OPTION_NAME = "-argList";
 
   /**

@@ -1,16 +1,16 @@
 package org.hackystat.sensor.xmldata.option;
 
 import java.io.File;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
+import java.text.ParsePosition;
+import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
-import javax.xml.datatype.XMLGregorianCalendar;
 import javax.xml.namespace.QName;
 import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
@@ -102,9 +102,6 @@ public class FileOption extends AbstractOption {
     }
 
     try {
-      // Create one runtime for the entire batch of files.
-      XMLGregorianCalendar runTime = Tstamp.makeTimestamp();
-
       for (String filePath : this.getParameters()) {
         this.getController().fireVerboseMessage("Sending data from: " + filePath);
         // First, let's unmarshall the current file.
@@ -126,7 +123,7 @@ public class FileOption extends AbstractOption {
         Object sdtName = this.getController().getOptionObject(Options.SDT);
         if (sdtName != null || this.hasSdtAttributes(entries.getEntry())) {
           for (Entry entry : entries.getEntry()) {
-            // Then, lets set the required attributes.
+            // Then, lets set the "required" attributes.
             Map<String, String> keyValMap = new HashMap<String, String>();
             keyValMap.put("Tool", entry.getTool());
             keyValMap.put("Resource", entry.getResource());
@@ -134,29 +131,27 @@ public class FileOption extends AbstractOption {
 
             // Creates a unique timestamp for each entry.
             long uniqueTstamp = tstampSet.getUniqueTstamp(file.lastModified());
-            XMLGregorianCalendar gregorianTime = this.convertLongToGregorian(uniqueTstamp);
-            keyValMap.put("Timestamp", gregorianTime.toString());
-            keyValMap.put("Runtime", runTime.toString());
+            keyValMap.put("Timestamp", Tstamp.makeTimestamp(uniqueTstamp).toString());
 
             // Next, add the optional attributes.
             Map<QName, String> map = entry.getOtherAttributes();
             for (Map.Entry<QName, String> attributeEntry : map.entrySet()) {
-              // TODO: when the format for timestamps is resolved,
-              // uniqueTimestamps can be handled.
-              // If entries contain tstamps, and the unique flag is set.
-              // if ("Timestamp".equals(attributeEntry.getKey().toString())
-              // && Boolean.TRUE.equals(this.getController().getOptionObject(
-              // Options.UNIQUE_TSTAMP))) {
-              // Timestamp stamp = Timestamp.valueOf(attributeEntry.getValue());
-              // gregorianTime = this
-              // .convertLongToGregorian(new Long(attributeEntry.getValue()));
-              // System.out.println(Tstamp.makeTimestamp(attributeEntry.getValue()));
-              // keyValMap.put(attributeEntry.getKey().toString(),
-              // gregorianTime.toString());
-              // }
-              // else {
-              keyValMap.put(attributeEntry.getKey().toString(), attributeEntry.getValue());
-              // }
+              String entryName = attributeEntry.getKey().toString();
+              String entryValue = attributeEntry.getValue().toString();
+
+              // If entries contain tstamps, override the current tstamp.
+              if ("Timestamp".equals(entryName)) {
+                long timestamp = this.getTimestampInMillis(entryValue);
+                entryValue = Tstamp.makeTimestamp(timestamp).toString();
+
+                // Create a unique tstamp if the option is set.
+                if (Boolean.TRUE.equals(this.getController().getOptionObject(
+                    (Options.UNIQUE_TSTAMP)))) {
+                  entryValue = Tstamp.makeTimestamp(tstampSet.getUniqueTstamp(timestamp))
+                      .toString();
+                }
+              }
+              keyValMap.put(entryName, entryValue);
             }
             // Finally, add the mapping and send the data.
             this.getController().fireVerboseMessage(this.getMapVerboseString(keyValMap));
@@ -240,27 +235,59 @@ public class FileOption extends AbstractOption {
   }
 
   /**
-   * Converts a time represented in a long to an
-   * <code>XmlGregorianCalendar</code>. Taken from the ant sensor module.
-   * 
-   * @param timeInMillis The time to convert in milliseconds.
-   * @return Returns the time passed in as a <code>XmlGregorianCalendar</code>.
+   * Returns the long value of the specified timestamp string representation.
+   * This method expects the timstamp string to be a long or in the
+   * SimpleDateFormat: MM/dd/yyyy-hh:mm:ss. If the timestamp does not fit either
+   * specification, a runtime exception is thrown.
+   * @param timestamp the specified string representation of a timestamp.
+   * @return the long value of the specified string timestamp.
    */
-  private XMLGregorianCalendar convertLongToGregorian(long timeInMillis) {
-    // convert long time into calendar object
-    GregorianCalendar cal = new GregorianCalendar();
-    cal.setTimeInMillis(timeInMillis);
+  private long getTimestampInMillis(String timestamp) {
+    if (this.isTimestampLong(timestamp)) {
+      return Long.valueOf(timestamp);
+    }
+    else if (this.isTimestampSimpleDate(timestamp)) {
+      SimpleDateFormat format = new SimpleDateFormat("MM/dd/yyyy-hh:mm:ss", Locale.US);
+      return format.parse(timestamp, new ParsePosition(0)).getTime();
+    }
+    else {
+      String msg = "The timestamp must either be specified as a "
+          + "long or in the format: MM/dd/yyyy-hh:mm:ss";
+      throw new IllegalArgumentException(msg);
+    }
+  }
 
-    // get an instance of XMLGregorianCalendar from Tstamp
-    XMLGregorianCalendar xmlCalendar = Tstamp.makeTimestamp();
-    // modify the instance with the values from the Calendar
-    xmlCalendar.setMonth(cal.get(Calendar.MONTH));
-    xmlCalendar.setDay(cal.get(Calendar.DAY_OF_MONTH));
-    xmlCalendar.setYear(cal.get(Calendar.YEAR));
-    xmlCalendar.setHour(cal.get(Calendar.HOUR_OF_DAY));
-    xmlCalendar.setMinute(cal.get(Calendar.MINUTE));
-    xmlCalendar.setSecond(cal.get(Calendar.SECOND));
-    xmlCalendar.setMillisecond(cal.get(Calendar.MILLISECOND));
-    return xmlCalendar;
+  /**
+   * Returns true if the specified timestamp string representation is in long
+   * format.
+   * @param timestamp the string to test.
+   * @return true if the timestamp is a long, false if not.
+   */
+  public boolean isTimestampLong(String timestamp) {
+    try {
+      Long.valueOf(timestamp);
+      return true;
+    }
+    catch (NumberFormatException nfe) {
+      return false;
+    }
+  }
+
+  /**
+   * Returns true if the specified timestamp is in the SimpleDateFormat:
+   * MM/dd/yyyy-hh:mm:ss
+   * @param timestamp the timestamp to test.
+   * @return true if the timestamp is in the specified SimpleDateFormat, false
+   * if not.
+   */
+  public boolean isTimestampSimpleDate(String timestamp) {
+    try {
+      SimpleDateFormat format = new SimpleDateFormat("MM/dd/yyyy-hh:mm:ss", Locale.US);
+      format.parse(timestamp, new ParsePosition(0)).getTime();
+      return true;
+    }
+    catch (NullPointerException npe) {
+      return false;
+    }
   }
 }

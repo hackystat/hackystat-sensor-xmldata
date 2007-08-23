@@ -85,8 +85,9 @@ public class MigrationOption extends AbstractOption {
   @Override
   public boolean isValid() {
     // Check if the correct amount of parameters exist.
-    if (this.getParameters().isEmpty() || this.getParameters().size() > 4) {
-      String msg = "The -argList option only accepts four parameters, "
+    if (this.getParameters().isEmpty() || this.getParameters().size() < 4
+        || this.getParameters().size() > 4) {
+      String msg = "The -migration option only accepts four parameters, "
           + "[v7 directory] [v7 account] [v8 username] [v8 password]";
       this.getController().fireMessage(msg);
       return false;
@@ -119,12 +120,14 @@ public class MigrationOption extends AbstractOption {
   /** Sets the variables used by the execute method. */
   @Override
   public void process() {
-    File v7Dir = new File(this.getParameters().get(0));
-    String v7Account = this.getParameters().get(1);
-    this.v7DataDir = new File(v7Dir.getAbsolutePath() + "/" + v7Account + "/data");
+    if (this.isValid()) {
+      File v7Dir = new File(this.getParameters().get(0));
+      String v7Account = this.getParameters().get(1);
+      this.v7DataDir = new File(v7Dir.getAbsolutePath() + "/" + v7Account + "/data");
 
-    this.properties = new SensorProperties(this.properties.getHackystatHost(), this
-        .getParameters().get(2), this.getParameters().get(3));
+      this.properties = new SensorProperties(this.properties.getHackystatHost(), this
+          .getParameters().get(2), this.getParameters().get(3));
+    }
   }
 
   /**
@@ -138,10 +141,10 @@ public class MigrationOption extends AbstractOption {
     TstampSet tstampSet = new TstampSet();
 
     // Iterates over each file in the version 7 data directory.
-    for (File sdtDir : this.v7DataDir.listFiles()) {
-      this.getController().fireVerboseMessage("Processing " + sdtDir);
-      for (File sensorDataFile : sdtDir.listFiles()) {
-        try {
+    try {
+      for (File sdtDir : this.v7DataDir.listFiles()) {
+        this.getController().fireVerboseMessage("Processing " + sdtDir);
+        for (File sensorDataFile : sdtDir.listFiles()) {
           JAXBContext context = JAXBContext
               .newInstance(org.hackystat.sensor.xmldata.jaxb.v7.ObjectFactory.class);
           Unmarshaller unmarshaller = context.createUnmarshaller();
@@ -169,21 +172,23 @@ public class MigrationOption extends AbstractOption {
             }
           }
         }
-        catch (JAXBException e) {
-          String msg = "There was a problem unmarshalling the data.  The v7 data file(s) "
-              + "may not conform to the xmldata schema.";
-          this.getController().fireMessage(msg, e.toString());
-        }
-        catch (SAXException e) {
-          String msg = "The v7 data file(s) could not be parsed.";
-          this.getController().fireMessage(msg, e.toString());
-        }
-        catch (Exception e) {
-          String msg = "The v7 data file(s) failed to load.";
-          this.getController().fireMessage(msg, e.toString());
-        }
       }
     }
+    catch (JAXBException e) {
+      String msg = "There was a problem unmarshalling the data.  The v7 data file(s) "
+          + "may not conform to the xmldata schema.";
+      this.getController().fireMessage(msg, e.toString());
+    }
+    catch (SAXException e) {
+      String msg = "The v7 data file(s) could not be parsed.";
+      this.getController().fireMessage(msg, e.toString());
+    }
+    catch (Exception e) {
+      String msg = "The v7 data file(s) failed to load.  Please make sure the "
+          + "specified directory has version 7 data.";
+      this.getController().fireMessage(msg, e.toString());
+    }
+
     this.getController().fireMessage(
         shell.send() + " entries sent to " + this.getController().getHost());
     shell.quit();

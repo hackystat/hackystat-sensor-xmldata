@@ -81,9 +81,6 @@ public class XmlDataController {
       List<String> optionParams = entry.getValue();
       this.optionHandler.addOption(OptionFactory.getInstance(this, optionName, optionParams));
     }
-
-    // Finally, process the options, which may set variables.
-    this.optionHandler.processOptions();
   }
 
   /**
@@ -123,6 +120,7 @@ public class XmlDataController {
   public void execute() {
     if (this.hasParsed && this.optionHandler.isOptionsValid()
         && this.optionHandler.hasRequiredOptions()) {
+      this.optionHandler.processOptions();
       this.optionHandler.execute();
     }
   }

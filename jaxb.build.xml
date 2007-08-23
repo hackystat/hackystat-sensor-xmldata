@@ -13,6 +13,7 @@
   </taskdef>   
 
   <target name="jaxb" description="Runs the XJC compiler.">
-    <xjc schema="${basedir}/xml/schema/xmldata.xsd" destdir="src" package="org.hackystat.sensor.xmldata.devevent.jaxb"/>
+    <xjc schema="${basedir}/xml/schema/xmldata.xsd" destdir="src" package="org.hackystat.sensor.xmldata.jaxb"/>
+  	<xjc schema="${basedir}/xml/schema/v7data.xsd" destdir="src" package="org.hackystat.sensor.xmldata.jaxb.v7"/>
   </target>
 </project>

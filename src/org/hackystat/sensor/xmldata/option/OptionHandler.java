@@ -77,13 +77,14 @@ public class OptionHandler {
   public boolean hasRequiredOptions() {
     boolean hasFileOption = this.hasOptionWithName(FileOption.OPTION_NAME);
     boolean hasArgListOption = this.hasOptionWithName(ArgListOption.OPTION_NAME);
+    boolean hasMigrationOption = this.hasOptionWithName(MigrationOption.OPTION_NAME);
     // Return false if any of the required options are used together.
     if (hasFileOption && hasArgListOption) {
       String msg = "Only one option, -file or -argList, can be used at the same time.";
       this.controller.fireMessage(msg);
       return false;
     }
-    else if (hasFileOption || hasArgListOption) {
+    else if (hasFileOption || hasArgListOption || hasMigrationOption) {
       return true;
     }
     String msg = "The -file <files...> or the -argList <argList.txt> " + "option is required.";

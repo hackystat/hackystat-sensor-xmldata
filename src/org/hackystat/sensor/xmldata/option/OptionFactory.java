@@ -42,6 +42,9 @@ public class OptionFactory {
     else if (UniqueTstampOption.OPTION_NAME.equals(optionName)) {
       return UniqueTstampOption.createOption(controller);
     }
+    else if (MigrationOption.OPTION_NAME.equals(optionName)) {
+      return MigrationOption.createOption(controller, parameters);
+    }
     else {
       controller.fireMessage("The '" + optionName + "' option is not supported.");
     }

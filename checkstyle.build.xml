@@ -22,7 +22,7 @@
                 failOnViolation="${checkstyle.failOnViolation}" >
       <fileset dir="${src.dir}"> 
         <include name= "**/*.java" />
-        <exclude name="**/jaxb/*" />
+        <exclude name="**/jaxb/**" />
       </fileset>
       <formatter type="plain"/>
       <formatter type="xml" tofile="${checkstyle.dir}/checkstyle.xml"/>

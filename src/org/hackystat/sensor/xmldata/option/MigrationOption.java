@@ -15,6 +15,7 @@ import javax.xml.validation.SchemaFactory;
 import org.hackystat.sensor.xmldata.XmlDataController;
 import org.hackystat.sensor.xmldata.jaxb.v7.Entry;
 import org.hackystat.sensor.xmldata.jaxb.v7.Sensor;
+import org.hackystat.sensor.xmldata.util.SensorDataPropertyMap;
 import org.hackystat.sensorshell.SensorProperties;
 import org.hackystat.sensorshell.SensorPropertiesException;
 import org.hackystat.sensorshell.SensorShell;
@@ -231,6 +232,8 @@ public class MigrationOption extends AbstractOption {
       TstampSet tstampSet) {
     String entryName = entry.getKey().toString();
     String entryValue = entry.getValue();
+
+    // Handles the timestamp attribute and it's uniqueness.
     if ("tstamp".equalsIgnoreCase(entryName)) {
       entryName = "Timestamp";
       long timestamp = OptionUtil.getTimestampInMillis(entryValue);
@@ -240,10 +243,26 @@ public class MigrationOption extends AbstractOption {
       if (Boolean.TRUE.equals(this.getController().getOptionObject((Options.UNIQUE_TSTAMP)))) {
         entryValue = Tstamp.makeTimestamp(tstampSet.getUniqueTstamp(timestamp)).toString();
       }
+      keyValMap.put(entryName, entryValue);
     }
+
+    // Converts the file attribute to resource.
     else if ("file".equalsIgnoreCase(entryName) || "path".equalsIgnoreCase(entryName)) {
-      entryName = "Resource";
+      keyValMap.put("Resource", entryValue);
     }
-    keyValMap.put(entryName, entryValue);
+
+    // Converts a pMap encoded string to key-value pairs.
+    else if ("pMap".equalsIgnoreCase(entryName)) {
+      try {
+        SensorDataPropertyMap pMap = new SensorDataPropertyMap(entryValue);
+        for (Object key : pMap.keySet()) {
+          String keyName = (String) key;
+          keyValMap.put(keyName, pMap.get(keyName));
+        }
+      }
+      catch (Exception e) {
+        this.getController().fireMessage(e.getMessage());
+      }
+    }
   }
 }

@@ -16,6 +16,7 @@ import org.hackystat.sensor.xmldata.XmlDataController;
 import org.hackystat.sensor.xmldata.jaxb.v7.Entry;
 import org.hackystat.sensor.xmldata.jaxb.v7.Sensor;
 import org.hackystat.sensorshell.SensorProperties;
+import org.hackystat.sensorshell.SensorPropertiesException;
 import org.hackystat.sensorshell.SensorShell;
 import org.hackystat.utilities.tstamp.Tstamp;
 import org.hackystat.utilities.tstamp.TstampSet;
@@ -45,7 +46,7 @@ public class MigrationOption extends AbstractOption {
    * The sensor properties file containing the version 8 host and account
    * information.
    */
-  private SensorProperties properties = new SensorProperties();
+  private SensorProperties properties = null;
 
   /**
    * Private constructor that creates this option with the specified controller,
@@ -104,8 +105,19 @@ public class MigrationOption extends AbstractOption {
     }
 
     // Verify that the version 8 account and password is valid.
-    this.properties = new SensorProperties(this.properties.getHackystatHost(), this
-        .getParameters().get(2), this.getParameters().get(3));
+    SensorProperties tempProps;
+    try {
+      tempProps = new SensorProperties();
+    }
+    catch (SensorPropertiesException e) {
+      String msg = "The sensor.properties file in your userdir/.hackystat "
+          + "directory is invalid or does not exist.";
+      this.getController().fireMessage(msg);
+      return false;
+    }
+
+    this.properties = new SensorProperties(tempProps.getHackystatHost(), this.getParameters()
+        .get(2), this.getParameters().get(3));
     SensorShell shell = new SensorShell(this.properties, false, "XmlData", true);
     if (!shell.ping()) {
       String msg = "The connection or account information is incorrect: Hackystat Host="
@@ -124,7 +136,6 @@ public class MigrationOption extends AbstractOption {
       File v7Dir = new File(this.getParameters().get(0));
       String v7Account = this.getParameters().get(1);
       this.v7DataDir = new File(v7Dir.getAbsolutePath() + "/" + v7Account + "/data");
-
       this.properties = new SensorProperties(this.properties.getHackystatHost(), this
           .getParameters().get(2), this.getParameters().get(3));
     }
@@ -139,21 +150,25 @@ public class MigrationOption extends AbstractOption {
   public void execute() {
     SensorShell shell = new SensorShell(this.properties, false, "XmlData", true);
     TstampSet tstampSet = new TstampSet();
+    int totalEntriesSent = 0;
 
     // Iterates over each file in the version 7 data directory.
     try {
-      for (File sdtDir : this.v7DataDir.listFiles()) {
-        this.getController().fireVerboseMessage("Processing " + sdtDir);
-        for (File sensorDataFile : sdtDir.listFiles()) {
-          JAXBContext context = JAXBContext
-              .newInstance(org.hackystat.sensor.xmldata.jaxb.v7.ObjectFactory.class);
-          Unmarshaller unmarshaller = context.createUnmarshaller();
+      JAXBContext context = JAXBContext
+          .newInstance(org.hackystat.sensor.xmldata.jaxb.v7.ObjectFactory.class);
+      Unmarshaller unmarshaller = context.createUnmarshaller();
 
-          // Adds schema validation to the unmarshalled file.
-          SchemaFactory schemaFactory = SchemaFactory
-              .newInstance("http://www.w3.org/2001/XMLSchema");
-          Schema schema = schemaFactory.newSchema(new File("xml/schema/v7data.xsd"));
-          unmarshaller.setSchema(schema);
+      // Adds schema validation to the unmarshalled file.
+      SchemaFactory schemaFactory = SchemaFactory
+          .newInstance("http://www.w3.org/2001/XMLSchema");
+      Schema schema = schemaFactory.newSchema(new File("xml/schema/v7data.xsd"));
+      unmarshaller.setSchema(schema);
+
+      int entriesAdded = 0;
+      for (File sdtDir : this.v7DataDir.listFiles()) {
+        for (File sensorDataFile : sdtDir.listFiles()) {
+          this.getController().fireMessage(
+              Tstamp.makeTimestamp().toString() + " Processing " + sensorDataFile);
 
           Sensor sensor = (Sensor) unmarshaller.unmarshal(sensorDataFile);
           for (Entry entry : sensor.getEntry()) {
@@ -166,9 +181,16 @@ public class MigrationOption extends AbstractOption {
             // Add an entry for each key-value attribute in the data file.
             for (Map.Entry<QName, String> attribute : entry.getOtherAttributes().entrySet()) {
               this.addEntry(keyValMap, attribute, tstampSet);
-              this.getController().fireVerboseMessage(
-                  OptionUtil.getMapVerboseString(keyValMap));
-              shell.add(keyValMap);
+            }
+
+            shell.add(keyValMap);
+            this.getController().fireVerboseMessage(OptionUtil.getMapVerboseString(keyValMap));
+            entriesAdded++;
+
+            // Clears the buffer by sending the data after n-entries.
+            if (entriesAdded >= 250) {
+              totalEntriesSent += shell.send();
+              entriesAdded = 0;
             }
           }
         }
@@ -189,8 +211,9 @@ public class MigrationOption extends AbstractOption {
       this.getController().fireMessage(msg, e.toString());
     }
 
+    totalEntriesSent += shell.send();
     this.getController().fireMessage(
-        shell.send() + " entries sent to " + this.getController().getHost());
+        totalEntriesSent + " entries sent to " + this.getController().getHost());
     shell.quit();
   }
 

@@ -10,6 +10,7 @@ import org.hackystat.sensor.xmldata.option.OptionFactory;
 import org.hackystat.sensor.xmldata.option.OptionHandler;
 import org.hackystat.sensor.xmldata.option.Options;
 import org.hackystat.sensorshell.SensorProperties;
+import org.hackystat.sensorshell.SensorPropertiesException;
 
 /**
  * The class which parses the command-line arguments specified by the user,
@@ -157,7 +158,16 @@ public class XmlDataController {
    * @return the hackystat host string.
    */
   public String getHost() {
-    SensorProperties properties = new SensorProperties();
-    return properties.getHackystatHost();
+    SensorProperties properties;
+    try {
+      properties = new SensorProperties();
+      return properties.getHackystatHost();
+    }
+    catch (SensorPropertiesException e) {
+      String msg = "The sensor.properties file in your userdir/.hackystat "
+          + "directory is invalid or does not exist.";
+      this.fireMessage(msg);
+    }
+    return "";
   }
 }

@@ -17,6 +17,7 @@ import org.hackystat.sensor.xmldata.jaxb.Entries;
 import org.hackystat.sensor.xmldata.jaxb.Entry;
 import org.hackystat.sensor.xmldata.jaxb.XmlData;
 import org.hackystat.sensorshell.SensorProperties;
+import org.hackystat.sensorshell.SensorPropertiesException;
 import org.hackystat.sensorshell.SensorShell;
 import org.hackystat.utilities.tstamp.Tstamp;
 import org.hackystat.utilities.tstamp.TstampSet;
@@ -86,19 +87,20 @@ public class FileOption extends AbstractOption {
    * files, and sending them to the sensorbase.
    */
   public void execute() {
-    SensorProperties properties = new SensorProperties();
-    SensorShell shell = new SensorShell(properties, false, "XmlData", true);
-
-    // Do not execute if the host cannot be reached. This check will exist until
-    // offline data storage is implemented.
-    if (!shell.ping()) {
-      String msg = "The host, " + this.getController().getHost()
-          + ", could not be reached.  No data will be sent.";
-      this.getController().fireMessage(msg);
-      return;
-    }
-
     try {
+      SensorProperties properties = new SensorProperties();
+      SensorShell shell = new SensorShell(properties, false, "XmlData", true);
+
+      // Do not execute if the host cannot be reached. This check will exist
+      // until
+      // offline data storage is implemented.
+      if (!shell.ping()) {
+        String msg = "The host, " + this.getController().getHost()
+            + ", could not be reached.  No data will be sent.";
+        this.getController().fireMessage(msg);
+        return;
+      }
+
       for (String filePath : this.getParameters()) {
         this.getController().fireVerboseMessage("Sending data from: " + filePath);
         // First, let's unmarshall the current file.
@@ -173,6 +175,11 @@ public class FileOption extends AbstractOption {
     catch (SAXException e) {
       String msg = "The specified file(s) could not be parsed.";
       this.getController().fireMessage(msg, e.toString());
+    }
+    catch (SensorPropertiesException e) {
+      String msg = "The sensor.properties file in your userdir/.hackystat "
+          + "directory is invalid or does not exist.";
+      this.getController().fireMessage(msg);
     }
     catch (Exception e) {
       String msg = "The specified file(s) failed to load.";

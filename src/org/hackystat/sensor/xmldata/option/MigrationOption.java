@@ -17,7 +17,6 @@ import org.hackystat.sensor.xmldata.jaxb.v7.Entry;
 import org.hackystat.sensor.xmldata.jaxb.v7.Sensor;
 import org.hackystat.sensor.xmldata.util.SensorDataPropertyMap;
 import org.hackystat.sensorshell.SensorProperties;
-import org.hackystat.sensorshell.SensorPropertiesException;
 import org.hackystat.sensorshell.SensorShell;
 import org.hackystat.utilities.tstamp.Tstamp;
 import org.hackystat.utilities.tstamp.TstampSet;
@@ -76,9 +75,9 @@ public class MigrationOption extends AbstractOption {
    * Returns true if the specified option parameters follows the convention:
    * 
    * <pre>
-   * [v7 directory] [v7 account] [v8 username] [v8 password]
+   * [v7 directory] [v7 account] [v8 host] [v8 username] [v8 password]
    * 
-   * Ex:  -migration C:\foo ABCDEF austen@hawaii.edu fooPassword
+   * Ex:  -migration C:\foo ABCDEF http://localhost:9876/sensorbase austen@hawaii.edu fooPassword
    * Note that the v7 directory does not include the v7 account name.
    * </pre>
    * 
@@ -87,10 +86,10 @@ public class MigrationOption extends AbstractOption {
   @Override
   public boolean isValid() {
     // Check if the correct amount of parameters exist.
-    if (this.getParameters().isEmpty() || this.getParameters().size() < 4
-        || this.getParameters().size() > 4) {
-      String msg = "The -migration option only accepts four parameters, "
-          + "[v7 directory] [v7 account] [v8 username] [v8 password]";
+    if (this.getParameters().isEmpty() || this.getParameters().size() < 5
+        || this.getParameters().size() > 5) {
+      String msg = "The -migration option only accepts five parameters, "
+          + "[v7 directory] [v7 account] [v8 host] [v8 username] [v8 password]";
       this.getController().fireMessage(msg);
       return false;
     }
@@ -105,25 +104,14 @@ public class MigrationOption extends AbstractOption {
       return false;
     }
 
-    // Verify that the version 8 account and password is valid.
-    SensorProperties tempProps;
-    try {
-      tempProps = new SensorProperties();
-    }
-    catch (SensorPropertiesException e) {
-      String msg = "The sensor.properties file in your userdir/.hackystat "
-          + "directory is invalid or does not exist.";
-      this.getController().fireMessage(msg);
-      return false;
-    }
-
-    this.properties = new SensorProperties(tempProps.getHackystatHost(), this.getParameters()
-        .get(2), this.getParameters().get(3));
-    SensorShell shell = new SensorShell(this.properties, false, "XmlData", true);
+    // Verify that the version 8 host, account and password is valid.
+    SensorProperties props = new SensorProperties(this.getParameters().get(2), this
+        .getParameters().get(3), this.getParameters().get(4));
+    SensorShell shell = new SensorShell(props, false, "XmlData", true);
     if (!shell.ping()) {
-      String msg = "The connection or account information is incorrect: Hackystat Host="
-          + this.properties.getHackystatHost() + ", v8Account=" + this.getParameters().get(2)
-          + ", v8Password=" + this.getParameters().get(3);
+      String msg = "The host, connection or account information is incorrect: Hackystat Host="
+          + this.getParameters().get(2) + ", v8Account=" + this.getParameters().get(3)
+          + ", v8Password=" + this.getParameters().get(4);
       this.getController().fireMessage(msg);
       return false;
     }
@@ -134,11 +122,14 @@ public class MigrationOption extends AbstractOption {
   @Override
   public void process() {
     if (this.isValid()) {
+      // Sets the version 7 information.
       File v7Dir = new File(this.getParameters().get(0));
       String v7Account = this.getParameters().get(1);
       this.v7DataDir = new File(v7Dir.getAbsolutePath() + "/" + v7Account + "/data");
-      this.properties = new SensorProperties(this.properties.getHackystatHost(), this
-          .getParameters().get(2), this.getParameters().get(3));
+
+      // Sets the version 8 information.
+      this.properties = new SensorProperties(this.getParameters().get(2), this.getParameters()
+          .get(3), this.getParameters().get(4));
     }
   }
 
@@ -221,7 +212,7 @@ public class MigrationOption extends AbstractOption {
   /**
    * Adds the entry to the specified key-value mapping. This method performs
    * additional processing on the entry, such as converting the version 7
-   * timestamp to a compatiable version 8 timestamp.
+   * timestamp to a compatible version 8 timestamp.
    * @param keyValMap the map reference that is populated by this method.
    * @param entry the entry, whose information is used to populate the specified
    * map.

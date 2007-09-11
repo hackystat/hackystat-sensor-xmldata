@@ -166,10 +166,9 @@ public class MigrationOption extends AbstractOption {
           for (Entry entry : sensor.getEntry()) {
             Map<String, String> keyValMap = new HashMap<String, String>();
             keyValMap.put("SensorDataType", sdtDir.getName());
-            // Creates a unique timestamp for each entry.
-            long uniqueTstamp = tstampSet.getUniqueTstamp(sensorDataFile.lastModified());
-            keyValMap.put("Timestamp", Tstamp.makeTimestamp(uniqueTstamp).toString());
-
+            keyValMap.put("Timestamp", OptionUtil.getCurrentTimestamp(true, tstampSet)
+                .toString());
+            
             // Add an entry for each key-value attribute in the data file.
             for (Map.Entry<QName, String> attribute : entry.getOtherAttributes().entrySet()) {
               this.addEntry(keyValMap, attribute, tstampSet);
@@ -228,12 +227,10 @@ public class MigrationOption extends AbstractOption {
     if ("tstamp".equalsIgnoreCase(entryName)) {
       entryName = "Timestamp";
       long timestamp = OptionUtil.getTimestampInMillis(entryValue);
-      entryValue = Tstamp.makeTimestamp(timestamp).toString();
-
-      // Create a unique tstamp if the option is set.
-      if (Boolean.TRUE.equals(this.getController().getOptionObject((Options.UNIQUE_TSTAMP)))) {
-        entryValue = Tstamp.makeTimestamp(tstampSet.getUniqueTstamp(timestamp)).toString();
-      }
+      Boolean isUnique = (Boolean) this.getController().getOptionObject(
+          Options.UNIQUE_TSTAMP);
+      entryValue = OptionUtil.massageTimestamp(isUnique, tstampSet, timestamp)
+          .toString();
       keyValMap.put(entryName, entryValue);
     }
 

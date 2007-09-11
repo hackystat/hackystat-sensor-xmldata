@@ -40,6 +40,7 @@ public class XmlDataController {
   public XmlDataController() {
     this.optionHandler = new OptionHandler(this);
     this.messageDelegate = new MessageDelegate(this);
+    this.optionMap.put(Options.UNIQUE_TSTAMP, Boolean.FALSE);
   }
 
   /**

@@ -19,7 +19,6 @@ import org.hackystat.sensor.xmldata.jaxb.XmlData;
 import org.hackystat.sensorshell.SensorProperties;
 import org.hackystat.sensorshell.SensorPropertiesException;
 import org.hackystat.sensorshell.SensorShell;
-import org.hackystat.utilities.tstamp.Tstamp;
 import org.hackystat.utilities.tstamp.TstampSet;
 import org.xml.sax.SAXException;
 
@@ -92,8 +91,7 @@ public class FileOption extends AbstractOption {
       SensorShell shell = new SensorShell(properties, false, "XmlData", true);
 
       // Do not execute if the host cannot be reached. This check will exist
-      // until
-      // offline data storage is implemented.
+      // until offline data storage is implemented.
       if (!shell.ping()) {
         String msg = "The host, " + this.getController().getHost()
             + ", could not be reached.  No data will be sent.";
@@ -127,10 +125,8 @@ public class FileOption extends AbstractOption {
             keyValMap.put("Tool", entry.getTool());
             keyValMap.put("Resource", entry.getResource());
             keyValMap.put("SensorDataType", (String) sdtName);
-
-            // Creates a unique timestamp for each entry.
-            long uniqueTstamp = tstampSet.getUniqueTstamp(file.lastModified());
-            keyValMap.put("Timestamp", Tstamp.makeTimestamp(uniqueTstamp).toString());
+            keyValMap.put("Timestamp", OptionUtil.getCurrentTimestamp(true, tstampSet)
+                .toString());
 
             // Next, add the optional attributes.
             Map<QName, String> map = entry.getOtherAttributes();
@@ -141,14 +137,10 @@ public class FileOption extends AbstractOption {
               // If entries contain tstamps, override the current tstamp.
               if ("Timestamp".equals(entryName)) {
                 long timestamp = OptionUtil.getTimestampInMillis(entryValue);
-                entryValue = Tstamp.makeTimestamp(timestamp).toString();
-
-                // Create a unique tstamp if the option is set.
-                if (Boolean.TRUE.equals(this.getController().getOptionObject(
-                    (Options.UNIQUE_TSTAMP)))) {
-                  entryValue = Tstamp.makeTimestamp(tstampSet.getUniqueTstamp(timestamp))
-                      .toString();
-                }
+                Boolean isUnique = (Boolean) this.getController().getOptionObject(
+                    Options.UNIQUE_TSTAMP);
+                entryValue = OptionUtil.massageTimestamp(isUnique, tstampSet, timestamp)
+                    .toString();
               }
               keyValMap.put(entryName, entryValue);
             }

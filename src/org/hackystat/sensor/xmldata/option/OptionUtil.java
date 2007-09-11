@@ -2,8 +2,14 @@ package org.hackystat.sensor.xmldata.option;
 
 import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Locale;
 import java.util.Map;
+
+import javax.xml.datatype.XMLGregorianCalendar;
+
+import org.hackystat.utilities.tstamp.Tstamp;
+import org.hackystat.utilities.tstamp.TstampSet;
 
 /**
  * The option utility class that contains methods used by multiple options.
@@ -91,5 +97,39 @@ public class OptionUtil {
     catch (NullPointerException npe) {
       return false;
     }
+  }
+
+  /**
+   * Returns the current timestamp based on the specified parameters.
+   * @param isUnique if this is true, a unique timestamp, based on the specified
+   * tstampSet, is returned.
+   * @param tstampSet the set of timestamps that is managed to ensure that a
+   * unique timestamp is generated.
+   * @return the XmlGregorianCalendar instance representing the current
+   * timestamp.
+   */
+  public static XMLGregorianCalendar getCurrentTimestamp(boolean isUnique, TstampSet tstampSet) {
+    if (isUnique) {
+      return Tstamp.makeTimestamp(tstampSet.getUniqueTstamp(new Date().getTime()));
+    }
+    return Tstamp.makeTimestamp();
+  }
+
+  /**
+   * "Massages" the specified timestamp by using the specified parameters.
+   * @param isUnique if this is true, the specified timestamp is changed to be
+   * unique based on the specified tstampSet.
+   * @param tstampSet the set of timestamps that is managed to ensure that a
+   * unique timestamp is generated.
+   * @param timestamp the timestamp to massage.
+   * @return the XmlGregorianCalendar instance representing the current
+   * timestamp.
+   */
+  public static XMLGregorianCalendar massageTimestamp(Boolean isUnique, TstampSet tstampSet,
+      long timestamp) {
+    if (isUnique) {
+      return Tstamp.makeTimestamp(tstampSet.getUniqueTstamp(timestamp));
+    }
+    return Tstamp.makeTimestamp(timestamp);
   }
 }

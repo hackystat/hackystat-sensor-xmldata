@@ -44,13 +44,15 @@ public class OptionUtil {
 
   /**
    * Returns the long value of the specified timestamp string representation.
-   * This method expects the timstamp string to be a long or in the
+   * This method expects the timestamp string to be a long or in the
    * SimpleDateFormat: MM/dd/yyyy-hh:mm:ss. If the timestamp does not fit either
    * specification, a runtime exception is thrown.
    * @param timestamp the specified string representation of a timestamp.
    * @return the long value of the specified string timestamp.
+   * @throws Exception thrown if the specified timestamp string is not in a
+   * valid SimpleDateFormat.
    */
-  public static long getTimestampInMillis(String timestamp) {
+  public static long getTimestampInMillis(String timestamp) throws Exception {
     if (OptionUtil.isTimestampLong(timestamp)) {
       return Long.valueOf(timestamp);
     }
@@ -58,11 +60,9 @@ public class OptionUtil {
       SimpleDateFormat format = new SimpleDateFormat("MM/dd/yyyy-hh:mm:ss", Locale.US);
       return format.parse(timestamp, new ParsePosition(0)).getTime();
     }
-    else {
-      String msg = "The timestamp must either be specified as a "
-          + "long or in the format: MM/dd/yyyy-hh:mm:ss";
-      throw new IllegalArgumentException(msg);
-    }
+    String msg = "The timestamp must either be specified as a "
+        + "long or in the format: MM/dd/yyyy-hh:mm:ss";
+    throw new Exception(msg);
   }
 
   /**
@@ -71,7 +71,7 @@ public class OptionUtil {
    * @param timestamp the string to test.
    * @return true if the timestamp is a long, false if not.
    */
-  public static boolean isTimestampLong(String timestamp) {
+  private static boolean isTimestampLong(String timestamp) {
     try {
       Long.valueOf(timestamp);
       return true;
@@ -88,7 +88,7 @@ public class OptionUtil {
    * @return true if the timestamp is in the specified SimpleDateFormat, false
    * if not.
    */
-  public static boolean isTimestampSimpleDate(String timestamp) {
+  private static boolean isTimestampSimpleDate(String timestamp) {
     try {
       SimpleDateFormat format = new SimpleDateFormat("MM/dd/yyyy-hh:mm:ss", Locale.US);
       format.parse(timestamp, new ParsePosition(0)).getTime();

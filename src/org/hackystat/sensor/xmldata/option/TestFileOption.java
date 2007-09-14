@@ -18,7 +18,8 @@ public class TestFileOption {
   @Test
   public void testNoFileArguments() {
     XmlDataController controller = new XmlDataController();
-    Option fileOption = FileOption.createOption(controller, new ArrayList<String>());
+    Option fileOption = OptionFactory.getInstance(controller, FileOption.OPTION_NAME,
+        new ArrayList<String>());
     Assert.assertFalse("A file option should have at least 1 file argument.", fileOption
         .isValid());
   }
@@ -30,7 +31,8 @@ public class TestFileOption {
     List<String> parameters = new ArrayList<String>();
     String testPackage = "src/org/hackystat/sensor/xmldata/testdataset/";
     parameters.add(new File("") + testPackage + "testdata.xml");
-    Option fileOption = FileOption.createOption(controller, parameters);
+    Option fileOption = OptionFactory.getInstance(controller, FileOption.OPTION_NAME,
+        parameters);
     Assert.assertTrue("A file option with one file should be valid.", fileOption.isValid());
   }
 
@@ -42,7 +44,8 @@ public class TestFileOption {
     String testPackage = "src/org/hackystat/sensor/xmldata/testdataset/";
     parameters.add(new File("") + testPackage + "testdata.xml");
     parameters.add(new File("") + testPackage + "testdata2.xml");
-    Option fileOption = FileOption.createOption(controller, parameters);
+    Option fileOption = OptionFactory.getInstance(controller, FileOption.OPTION_NAME,
+        parameters);
     Assert.assertTrue("A file option with more than one file should be valid.", fileOption
         .isValid());
   }
@@ -53,7 +56,8 @@ public class TestFileOption {
     XmlDataController controller = new XmlDataController();
     List<String> parameters = new ArrayList<String>();
     parameters.add("Test.xml");
-    Option fileOption = FileOption.createOption(controller, parameters);
+    Option fileOption = OptionFactory.getInstance(controller, FileOption.OPTION_NAME,
+        parameters);
     Assert.assertFalse("A non-existant file should invalidate this option.", fileOption
         .isValid());
   }

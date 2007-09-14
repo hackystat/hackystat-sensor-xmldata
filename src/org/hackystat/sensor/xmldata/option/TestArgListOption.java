@@ -25,7 +25,8 @@ public class TestArgListOption {
     List<String> parameters = new ArrayList<String>();
     String testPackage = "src/org/hackystat/sensor/xmldata/testdataset/";
     parameters.add(new File("") + testPackage + "testArgList.txt");
-    Option option = ArgListOption.createOption(controller, parameters);
+    Option option = OptionFactory.getInstance(controller, ArgListOption.OPTION_NAME,
+        parameters);
     Assert.assertTrue("ArgList accept only 1 argument.", option.isValid());
     option.process();
 

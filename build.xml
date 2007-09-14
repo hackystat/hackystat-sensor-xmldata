@@ -32,6 +32,14 @@
   <available file="${env.HACKYSTAT_SENSORSHELL_HOME}/sensorshell.jar" type="file" property="hackystat.sensorshell.available"/>
   <fail message="This package requires the Hackystat SensorShell to be installed and HACKYSTAT_SENSORSHELL_HOME defined" unless="hackystat.sensorshell.available"/>   
         
+  <!-- Make sure that Hackystat Utilities libraries are available . --> 
+  <available file="${env.HACKYSTAT_UTILITIES_HOME}/stacktrace.lib.jar" type="file" property="hackystat.utilities.available"/>
+  <fail message="This package requires the Hackystat Utilities to be installed and HACKYSTAT_UTILITIES_HOME defined" unless="hackystat.utilities.available"/>   
+
+  <!-- Make sure that the JAXB library is available (by default in Java 6, through manual installation in Java 5. --> 
+  <available classname="javax.xml.bind.JAXBContext" property="jaxb.available"/>
+  <fail message="This package requires JAXB to be installed" unless="jaxb.available"/>
+	
   <!-- Basic properties for this system. --> 
   <property name="system.name" value="hackystat-sensor-xmldata" />
   <property name="majorVersionNumber" value="8" />

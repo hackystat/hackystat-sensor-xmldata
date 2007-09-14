@@ -23,7 +23,7 @@ public class TestSdtOption {
     // Tests a valid sdt option.
     List<String> arguments = new ArrayList<String>();
     arguments.add("DevEvent");
-    Option sdtOption = SdtOption.createOption(controller, arguments);
+    Option sdtOption = OptionFactory.getInstance(controller, SdtOption.OPTION_NAME, arguments);
     Assert.assertTrue("SdtOptions accept only 1 argument.", sdtOption.isValid());
 
     // Tests an invalid sdt option.

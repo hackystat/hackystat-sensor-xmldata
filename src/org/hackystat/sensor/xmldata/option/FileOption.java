@@ -132,7 +132,7 @@ public class FileOption extends AbstractOption {
             Map<QName, String> map = entry.getOtherAttributes();
             for (Map.Entry<QName, String> attributeEntry : map.entrySet()) {
               String entryName = attributeEntry.getKey().toString();
-              String entryValue = attributeEntry.getValue().toString();
+              String entryValue = attributeEntry.getValue();
 
               // If entries contain tstamps, override the current tstamp.
               if ("Timestamp".equals(entryName)) {

@@ -168,7 +168,7 @@ public class MigrationOption extends AbstractOption {
             keyValMap.put("SensorDataType", sdtDir.getName());
             keyValMap.put("Timestamp", OptionUtil.getCurrentTimestamp(true, tstampSet)
                 .toString());
-            
+
             // Add an entry for each key-value attribute in the data file.
             for (Map.Entry<QName, String> attribute : entry.getOtherAttributes().entrySet()) {
               this.addEntry(keyValMap, attribute, tstampSet);
@@ -220,37 +220,36 @@ public class MigrationOption extends AbstractOption {
    */
   private void addEntry(Map<String, String> keyValMap, Map.Entry<QName, String> entry,
       TstampSet tstampSet) {
-    String entryName = entry.getKey().toString();
-    String entryValue = entry.getValue();
+    try {
+      String entryName = entry.getKey().toString();
+      String entryValue = entry.getValue();
 
-    // Handles the timestamp attribute and it's uniqueness.
-    if ("tstamp".equalsIgnoreCase(entryName)) {
-      entryName = "Timestamp";
-      long timestamp = OptionUtil.getTimestampInMillis(entryValue);
-      Boolean isUnique = (Boolean) this.getController().getOptionObject(
-          Options.UNIQUE_TSTAMP);
-      entryValue = OptionUtil.massageTimestamp(isUnique, tstampSet, timestamp)
-          .toString();
-      keyValMap.put(entryName, entryValue);
-    }
+      // Handles the timestamp attribute and it's uniqueness.
+      if ("tstamp".equalsIgnoreCase(entryName)) {
+        entryName = "Timestamp";
+        long timestamp = OptionUtil.getTimestampInMillis(entryValue);
+        Boolean isUnique = (Boolean) this.getController().getOptionObject(
+            Options.UNIQUE_TSTAMP);
+        entryValue = OptionUtil.massageTimestamp(isUnique, tstampSet, timestamp).toString();
+        keyValMap.put(entryName, entryValue);
+      }
 
-    // Converts the file attribute to resource.
-    else if ("file".equalsIgnoreCase(entryName) || "path".equalsIgnoreCase(entryName)) {
-      keyValMap.put("Resource", entryValue);
-    }
+      // Converts the file attribute to resource.
+      else if ("file".equalsIgnoreCase(entryName) || "path".equalsIgnoreCase(entryName)) {
+        keyValMap.put("Resource", entryValue);
+      }
 
-    // Converts a pMap encoded string to key-value pairs.
-    else if ("pMap".equalsIgnoreCase(entryName)) {
-      try {
+      // Converts a pMap encoded string to key-value pairs.
+      else if ("pMap".equalsIgnoreCase(entryName)) {
         SensorDataPropertyMap pMap = new SensorDataPropertyMap(entryValue);
         for (Object key : pMap.keySet()) {
           String keyName = (String) key;
           keyValMap.put(keyName, pMap.get(keyName));
         }
       }
-      catch (Exception e) {
-        this.getController().fireMessage(e.getMessage());
-      }
+    }
+    catch (Exception e) {
+      this.getController().fireMessage(e.getMessage());
     }
   }
 }

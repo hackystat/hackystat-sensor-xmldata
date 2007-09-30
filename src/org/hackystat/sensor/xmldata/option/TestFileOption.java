@@ -30,7 +30,8 @@ public class TestFileOption {
     XmlDataController controller = new XmlDataController();
     List<String> parameters = new ArrayList<String>();
     String testPackage = "src/org/hackystat/sensor/xmldata/testdataset/";
-    parameters.add(new File("") + testPackage + "testdata.xml");
+    File testFile = new File(System.getProperty("user.dir"), testPackage + "testdata.xml");
+    parameters.add(testFile.toString());
     Option fileOption = OptionFactory.getInstance(controller, FileOption.OPTION_NAME,
         parameters);
     Assert.assertTrue("A file option with one file should be valid.", fileOption.isValid());
@@ -42,8 +43,10 @@ public class TestFileOption {
     XmlDataController controller = new XmlDataController();
     List<String> parameters = new ArrayList<String>();
     String testPackage = "src/org/hackystat/sensor/xmldata/testdataset/";
-    parameters.add(new File("") + testPackage + "testdata.xml");
-    parameters.add(new File("") + testPackage + "testdata2.xml");
+    File testFile1 = new File(System.getProperty("user.dir"), testPackage + "testdata.xml");
+    File testFile2 = new File(System.getProperty("user.dir"), testPackage + "testdata2.xml");
+    parameters.add(testFile1.toString());
+    parameters.add(testFile2.toString());
     Option fileOption = OptionFactory.getInstance(controller, FileOption.OPTION_NAME,
         parameters);
     Assert.assertTrue("A file option with more than one file should be valid.", fileOption

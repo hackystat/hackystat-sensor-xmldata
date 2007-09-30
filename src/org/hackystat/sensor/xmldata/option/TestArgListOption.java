@@ -24,7 +24,9 @@ public class TestArgListOption {
     // Tests a valid argList parameter count, but invalid file.
     List<String> parameters = new ArrayList<String>();
     String testPackage = "src/org/hackystat/sensor/xmldata/testdataset/";
-    parameters.add(new File("") + testPackage + "testArgList.txt");
+    File testArgList = new File(System.getProperty("user.dir"), testPackage + "testArgList.txt");
+    //parameters.add(new File("") + testPackage + "testArgList.txt");
+    parameters.add(testArgList.toString());
     Option option = OptionFactory.getInstance(controller, ArgListOption.OPTION_NAME,
         parameters);
     Assert.assertTrue("ArgList accept only 1 argument.", option.isValid());

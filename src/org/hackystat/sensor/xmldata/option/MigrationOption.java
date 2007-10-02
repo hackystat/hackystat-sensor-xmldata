@@ -16,6 +16,7 @@ import org.hackystat.sensor.xmldata.XmlDataController;
 import org.hackystat.sensor.xmldata.jaxb.v7.Entry;
 import org.hackystat.sensor.xmldata.jaxb.v7.Sensor;
 import org.hackystat.sensor.xmldata.util.SensorDataPropertyMap;
+import org.hackystat.sensorshell.MultiSensorShell;
 import org.hackystat.sensorshell.SensorProperties;
 import org.hackystat.sensorshell.SensorShell;
 import org.hackystat.utilities.tstamp.Tstamp;
@@ -140,12 +141,10 @@ public class MigrationOption extends AbstractOption {
    */
   @Override
   public void execute() {
-    SensorShell shell = new SensorShell(this.properties, false, "XmlData", true);
-    TstampSet tstampSet = new TstampSet();
-    int totalEntriesSent = 0;
-
     // Iterates over each file in the version 7 data directory.
     try {
+      MultiSensorShell shell = new MultiSensorShell(this.properties, "XmlData");
+      TstampSet tstampSet = new TstampSet();
       JAXBContext context = JAXBContext
           .newInstance(org.hackystat.sensor.xmldata.jaxb.v7.ObjectFactory.class);
       Unmarshaller unmarshaller = context.createUnmarshaller();
@@ -177,18 +176,15 @@ public class MigrationOption extends AbstractOption {
             shell.add(keyValMap);
             this.getController().fireVerboseMessage(OptionUtil.getMapVerboseString(keyValMap));
             entriesAdded++;
-
-            // Clears the buffer by sending the data after n-entries.
-            if (entriesAdded >= 250) {
-              totalEntriesSent += shell.send();
-              entriesAdded = 0;
-            }
           }
         }
       }
+      this.getController().fireMessage(
+          entriesAdded + " entries sent to " + this.getController().getHost());
+      shell.quit();
     }
     catch (JAXBException e) {
-      String msg = "There was a problem unmarshalling the data.  The v7 data file(s) "
+      String msg = "There was a problem unmarshalling the data. The v7 data file(s) "
           + "may not conform to the xmldata schema.";
       this.getController().fireMessage(msg, e.toString());
     }
@@ -197,15 +193,10 @@ public class MigrationOption extends AbstractOption {
       this.getController().fireMessage(msg, e.toString());
     }
     catch (Exception e) {
-      String msg = "The v7 data file(s) failed to load.  Please make sure the "
+      String msg = "The v7 data file(s) failed to load. Please make sure the "
           + "specified directory has version 7 data.";
       this.getController().fireMessage(msg, e.toString());
     }
-
-    totalEntriesSent += shell.send();
-    this.getController().fireMessage(
-        totalEntriesSent + " entries sent to " + this.getController().getHost());
-    shell.quit();
   }
 
   /**

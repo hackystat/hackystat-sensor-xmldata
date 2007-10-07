@@ -5,16 +5,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
 import javax.xml.namespace.QName;
-import javax.xml.validation.Schema;
-import javax.xml.validation.SchemaFactory;
 
 import org.hackystat.sensor.xmldata.XmlDataController;
 import org.hackystat.sensor.xmldata.jaxb.Entries;
 import org.hackystat.sensor.xmldata.jaxb.Entry;
+import org.hackystat.sensor.xmldata.jaxb.ObjectFactory;
 import org.hackystat.sensor.xmldata.jaxb.XmlData;
 import org.hackystat.sensorshell.SensorProperties;
 import org.hackystat.sensorshell.SensorPropertiesException;
@@ -90,31 +88,16 @@ public class FileOption extends AbstractOption {
       SensorProperties properties = new SensorProperties();
       SensorShell shell = new SensorShell(properties, false, "XmlData", true);
 
-      // Do not execute if the host cannot be reached. This check will exist
-      // until offline data storage is implemented.
-      if (!shell.ping()) {
-        String msg = "The host, " + this.getController().getHost()
-            + ", could not be reached.  No data will be sent.";
-        this.getController().fireMessage(msg);
-        return;
-      }
-
+      int entriesAdded = 0;
       for (String filePath : this.getParameters()) {
         this.getController().fireVerboseMessage("Sending data from: " + filePath);
         // First, let's unmarshall the current file.
+        Unmarshaller unmarshaller = OptionUtil.createUnmarshaller(ObjectFactory.class,
+            "xmldata.xsd");
         File file = new File(filePath);
-        JAXBContext context = JAXBContext
-            .newInstance(org.hackystat.sensor.xmldata.jaxb.ObjectFactory.class);
-        Unmarshaller unmarshaller = context.createUnmarshaller();
-
-        // Adds schema validation to the unmarshalled file.
-        SchemaFactory schemaFactory = SchemaFactory
-            .newInstance("http://www.w3.org/2001/XMLSchema");
-        Schema schema = schemaFactory.newSchema(new File("xml/schema/xmldata.xsd"));
-        unmarshaller.setSchema(schema);
-
         XmlData xmlData = (XmlData) unmarshaller.unmarshal(file);
         Entries entries = xmlData.getEntries();
+
         // Only send data if the sdt is set or all entries have sdt attributes.
         TstampSet tstampSet = new TstampSet();
         Object sdtName = this.getController().getOptionObject(Options.SDT);
@@ -147,6 +130,7 @@ public class FileOption extends AbstractOption {
             // Finally, add the mapping and send the data.
             this.getController().fireVerboseMessage(OptionUtil.getMapVerboseString(keyValMap));
             shell.add(keyValMap);
+            entriesAdded++;
           }
         }
         else {
@@ -155,8 +139,9 @@ public class FileOption extends AbstractOption {
           throw new Exception(msg);
         }
       }
-      this.getController().fireMessage(
-          shell.send() + " entries sent to " + this.getController().getHost());
+
+      // Fires the send message and quits the sensorshell.
+      OptionUtil.fireSendMessage(this.getController(), shell, entriesAdded);
       shell.quit();
     }
     catch (JAXBException e) {

@@ -1,15 +1,24 @@
 package org.hackystat.sensor.xmldata.option;
 
+import java.io.File;
 import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 import java.util.Map;
 
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Unmarshaller;
 import javax.xml.datatype.XMLGregorianCalendar;
+import javax.xml.validation.Schema;
+import javax.xml.validation.SchemaFactory;
 
+import org.hackystat.sensor.xmldata.XmlDataController;
+import org.hackystat.sensorshell.Shell;
 import org.hackystat.utilities.tstamp.Tstamp;
 import org.hackystat.utilities.tstamp.TstampSet;
+import org.xml.sax.SAXException;
 
 /**
  * The option utility class that contains methods used by multiple options.
@@ -131,5 +140,55 @@ public class OptionUtil {
       return Tstamp.makeTimestamp(tstampSet.getUniqueTstamp(timestamp));
     }
     return Tstamp.makeTimestamp(timestamp);
+  }
+
+  /**
+   * The helper method that returns an unmarshaller that is created using the
+   * specified JAXB context class and schema file. The schema file name is the
+   * name of a file that is relative to the '[top-level dir]/xml/schema/'
+   * directory.
+   * @param contextClass the specified context class used to build the
+   * unmarshaller.
+   * @param schemaFileName the schema file that adds schema validation to the
+   * unmarshaller.
+   * @return the unmarshaller instance.
+   * @throws JAXBException thrown if there is a problem creating the
+   * unmarshaller with the specified context class.
+   * @throws SAXException thrown if there is a problem adding schema validation
+   * with the specified schema file.
+   */
+  public static Unmarshaller createUnmarshaller(Class<?> contextClass, String schemaFileName)
+      throws JAXBException, SAXException {
+    JAXBContext context = JAXBContext.newInstance(contextClass);
+    Unmarshaller unmarshaller = context.createUnmarshaller();
+
+    // Adds schema validation to the unmarshalled file.
+    SchemaFactory schemaFactory = SchemaFactory
+        .newInstance("http://www.w3.org/2001/XMLSchema");
+    Schema schema = schemaFactory.newSchema(new File("xml/schema/" + schemaFileName));
+    unmarshaller.setSchema(schema);
+    return unmarshaller;
+  }
+
+  /**
+   * The helper method that fires a message to the specified controller based on
+   * the connectivity of the sensorshell to a Hackystat server. If the server
+   * exists, a normal message is sent. If the server does not exist, a message
+   * informing the user of offline storage is sent. This method should be used
+   * by all options that send data.
+   * @param controller the controller that the message is fired to.
+   * @param shell the shell used to test the connectivity of the Hackystat
+   * server.
+   * @param entriesAdded the number of entries added to the specified shell.
+   */
+  public static void fireSendMessage(XmlDataController controller, Shell shell,
+      int entriesAdded) {
+    if (shell.ping()) {
+      controller.fireMessage(entriesAdded + " entries sent to " + controller.getHost());
+    }
+    else {
+      controller.fireMessage("Server not available. Storing " + entriesAdded
+          + " data entries offline.");
+    }
   }
 }

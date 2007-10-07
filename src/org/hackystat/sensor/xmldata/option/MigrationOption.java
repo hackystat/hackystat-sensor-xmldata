@@ -5,15 +5,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
 import javax.xml.namespace.QName;
-import javax.xml.validation.Schema;
-import javax.xml.validation.SchemaFactory;
 
 import org.hackystat.sensor.xmldata.XmlDataController;
 import org.hackystat.sensor.xmldata.jaxb.v7.Entry;
+import org.hackystat.sensor.xmldata.jaxb.v7.ObjectFactory;
 import org.hackystat.sensor.xmldata.jaxb.v7.Sensor;
 import org.hackystat.sensor.xmldata.util.SensorDataPropertyMap;
 import org.hackystat.sensorshell.MultiSensorShell;
@@ -141,20 +139,13 @@ public class MigrationOption extends AbstractOption {
    */
   @Override
   public void execute() {
-    // Iterates over each file in the version 7 data directory.
     try {
       MultiSensorShell shell = new MultiSensorShell(this.properties, "XmlData");
       TstampSet tstampSet = new TstampSet();
-      JAXBContext context = JAXBContext
-          .newInstance(org.hackystat.sensor.xmldata.jaxb.v7.ObjectFactory.class);
-      Unmarshaller unmarshaller = context.createUnmarshaller();
+      Unmarshaller unmarshaller = OptionUtil.createUnmarshaller(ObjectFactory.class,
+          "v7data.xsd");
 
-      // Adds schema validation to the unmarshalled file.
-      SchemaFactory schemaFactory = SchemaFactory
-          .newInstance("http://www.w3.org/2001/XMLSchema");
-      Schema schema = schemaFactory.newSchema(new File("xml/schema/v7data.xsd"));
-      unmarshaller.setSchema(schema);
-
+      // Iterates over each file in the version 7 data directory.
       int entriesAdded = 0;
       for (File sdtDir : this.v7DataDir.listFiles()) {
         for (File sensorDataFile : sdtDir.listFiles()) {
@@ -179,8 +170,9 @@ public class MigrationOption extends AbstractOption {
           }
         }
       }
-      this.getController().fireMessage(
-          entriesAdded + " entries sent to " + this.getController().getHost());
+
+      // Fires the send message and quits the sensorshell.
+      OptionUtil.fireSendMessage(this.getController(), shell, entriesAdded);
       shell.quit();
     }
     catch (JAXBException e) {

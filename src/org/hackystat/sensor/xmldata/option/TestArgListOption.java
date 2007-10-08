@@ -34,13 +34,13 @@ public class TestArgListOption {
 
     // Tests passing invalid amount of parameters.
     parameters = new ArrayList<String>();
-    option = ArgListOption.createOption(controller, parameters);
+    option = new ArgListOption(controller, parameters);
     Assert.assertFalse("ArgList accept only 1 argument.", option.isValid());
 
     // Tests passing an invalid file.
     parameters = new ArrayList<String>();
     parameters.add("Foo.xml");
-    option = ArgListOption.createOption(controller, parameters);
+    option = new ArgListOption(controller, parameters);
     Assert.assertFalse("An invalid file should invalid this option.", option.isValid());
   }
 }

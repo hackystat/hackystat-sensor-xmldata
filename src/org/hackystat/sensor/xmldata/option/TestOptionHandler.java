@@ -33,7 +33,7 @@ public class TestOptionHandler {
     // Tests if a valid sdt option is validated.
     List<String> parameters = new ArrayList<String>();
     parameters.add("DevEvent");
-    Option sdtOption = SdtOption.createOption(controller, parameters);
+    Option sdtOption = new SdtOption(controller, parameters);
     this.handler.addOption(sdtOption);
     Assert.assertTrue("The sdt option was not validated.", this.handler.isOptionsValid());
 
@@ -44,7 +44,7 @@ public class TestOptionHandler {
     // Tests if an invalid file option is validated.
     parameters = new ArrayList<String>();
     parameters.add("FooPath");
-    Option fileOption = FileOption.createOption(controller, parameters);
+    Option fileOption = new FileOption(controller, parameters);
     this.handler.addOption(fileOption);
     Assert.assertFalse("The file option was validated.", this.handler.isOptionsValid());
   }
@@ -56,12 +56,12 @@ public class TestOptionHandler {
     Assert.assertFalse("No options returned true.", this.handler.hasRequiredOptions());
 
     // Then, test if only the sdt options fails.
-    Option sdtOption = SdtOption.createOption(controller, new ArrayList<String>());
+    Option sdtOption = new SdtOption(controller, new ArrayList<String>());
     this.handler.addOption(sdtOption);
     Assert.assertFalse("Only an sdt option returned true.", this.handler.hasRequiredOptions());
 
     // Finally, test if all of the required attributes passes.
-    Option fileOption = FileOption.createOption(controller, new ArrayList<String>());
+    Option fileOption = new FileOption(controller, new ArrayList<String>());
     this.handler.addOption(fileOption);
     Assert.assertTrue("All the correct options returned false.", this.handler
         .hasRequiredOptions());

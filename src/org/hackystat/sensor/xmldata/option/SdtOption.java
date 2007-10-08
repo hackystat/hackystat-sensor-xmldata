@@ -15,25 +15,12 @@ public class SdtOption extends AbstractOption {
   public static final String OPTION_NAME = "-sdt";
 
   /**
-   * Constructs this option with the specified controller, name, and parameters.
-   * @param controller the specified controller.
-   * @param name the specified name.
-   * @param parameters the specified parameters.
-   */
-  private SdtOption(XmlDataController controller, String name, List<String> parameters) {
-    super(controller, name, parameters);
-  }
-
-  /**
-   * Static factory method that creates an option with the specified controller
-   * and parameters. The name of this option is set to "-sdt".
+   * Creates this option with the specified controller and parameters.
    * @param controller the specified controller.
    * @param parameters the specified parameters.
-   * @return the option instance.
    */
-  public static Option createOption(XmlDataController controller, List<String> parameters) {
-    Option option = new SdtOption(controller, OPTION_NAME, parameters);
-    return option;
+  public SdtOption(XmlDataController controller, List<String> parameters) {
+    super(controller, OPTION_NAME, parameters);
   }
 
   /** Processes this option by setting the sdt name found in this option. */

@@ -32,26 +32,12 @@ public class FileOption extends AbstractOption {
   public static final String OPTION_NAME = "-file";
 
   /**
-   * Private constructor that creates this option with the specified controller,
-   * name, and parameters.
-   * @param controller the specified controller.
-   * @param name the specified name.
-   * @param parameters the specified parameters.
-   */
-  private FileOption(XmlDataController controller, String name, List<String> parameters) {
-    super(controller, name, parameters);
-  }
-
-  /**
-   * Constructs this option with the specified controller and parameters.
-   * "-file" is used as the name of this option.
+   * Creates this option with the specified controller and parameters.
    * @param controller the specified controller.
    * @param parameters the specified parameters.
-   * @return the option instance.
    */
-  public static Option createOption(XmlDataController controller, List<String> parameters) {
-    Option option = new FileOption(controller, OPTION_NAME, parameters);
-    return option;
+  public FileOption(XmlDataController controller, List<String> parameters) {
+    super(controller, OPTION_NAME, parameters);
   }
 
   /**

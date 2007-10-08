@@ -28,22 +28,22 @@ public class OptionFactory {
       List<String> parameters) {
 
     if (SdtOption.OPTION_NAME.equals(optionName)) {
-      return SdtOption.createOption(controller, parameters);
+      return new SdtOption(controller, parameters);
     }
     else if (FileOption.OPTION_NAME.equals(optionName)) {
-      return FileOption.createOption(controller, parameters);
+      return new FileOption(controller, parameters);
     }
     else if (VerboseOption.OPTION_NAME.equals(optionName)) {
       return new VerboseOption(controller, parameters);
     }
     else if (ArgListOption.OPTION_NAME.equals(optionName)) {
-      return ArgListOption.createOption(controller, parameters);
+      return new ArgListOption(controller, parameters);
     }
     else if (UniqueTstampOption.OPTION_NAME.equals(optionName)) {
       return new UniqueTstampOption(controller, parameters);
     }
     else if (MigrationOption.OPTION_NAME.equals(optionName)) {
-      return MigrationOption.createOption(controller, parameters);
+      return new MigrationOption(controller, parameters);
     }
     else if (MultiShellOption.OPTION_NAME.equals(optionName)) {
       return new MultiShellOption(controller, parameters);

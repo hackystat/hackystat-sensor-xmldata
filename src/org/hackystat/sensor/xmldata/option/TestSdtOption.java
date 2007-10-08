@@ -27,7 +27,7 @@ public class TestSdtOption {
     Assert.assertTrue("SdtOptions accept only 1 argument.", sdtOption.isValid());
 
     // Tests an invalid sdt option.
-    sdtOption = SdtOption.createOption(controller, new ArrayList<String>());
+    sdtOption = new SdtOption(controller, new ArrayList<String>());
     Assert.assertFalse("SdtOptions must have 1 argument.", sdtOption.isValid());
   }
 }

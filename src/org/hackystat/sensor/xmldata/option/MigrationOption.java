@@ -14,9 +14,9 @@ import org.hackystat.sensor.xmldata.jaxb.v7.Entry;
 import org.hackystat.sensor.xmldata.jaxb.v7.ObjectFactory;
 import org.hackystat.sensor.xmldata.jaxb.v7.Sensor;
 import org.hackystat.sensor.xmldata.util.SensorDataPropertyMap;
-import org.hackystat.sensorshell.MultiSensorShell;
 import org.hackystat.sensorshell.SensorProperties;
 import org.hackystat.sensorshell.SensorShell;
+import org.hackystat.sensorshell.Shell;
 import org.hackystat.utilities.tstamp.Tstamp;
 import org.hackystat.utilities.tstamp.TstampSet;
 import org.xml.sax.SAXException;
@@ -140,13 +140,14 @@ public class MigrationOption extends AbstractOption {
   @Override
   public void execute() {
     try {
-      MultiSensorShell shell = new MultiSensorShell(this.properties, "XmlData");
-      TstampSet tstampSet = new TstampSet();
+      // First, lets create a Shell and an Unmarshaller.
+      Shell shell = OptionUtil.createShell(this.properties, this.getController());
       Unmarshaller unmarshaller = OptionUtil.createUnmarshaller(ObjectFactory.class,
           "v7data.xsd");
 
-      // Iterates over each file in the version 7 data directory.
+      // Then iterate over each file in the version 7 data directory.
       int entriesAdded = 0;
+      TstampSet tstampSet = new TstampSet();
       for (File sdtDir : this.v7DataDir.listFiles()) {
         for (File sensorDataFile : sdtDir.listFiles()) {
           this.getController().fireMessage(

@@ -16,7 +16,7 @@ import org.hackystat.sensor.xmldata.jaxb.ObjectFactory;
 import org.hackystat.sensor.xmldata.jaxb.XmlData;
 import org.hackystat.sensorshell.SensorProperties;
 import org.hackystat.sensorshell.SensorPropertiesException;
-import org.hackystat.sensorshell.SensorShell;
+import org.hackystat.sensorshell.Shell;
 import org.hackystat.utilities.tstamp.TstampSet;
 import org.xml.sax.SAXException;
 
@@ -85,20 +85,19 @@ public class FileOption extends AbstractOption {
    */
   public void execute() {
     try {
-      SensorProperties properties = new SensorProperties();
-      SensorShell shell = new SensorShell(properties, false, "XmlData", true);
+      // First, lets get the correct shell instance.
+      Shell shell = OptionUtil.createShell(new SensorProperties(), this.getController());
 
+      // Then, send data from each file.
       int entriesAdded = 0;
       for (String filePath : this.getParameters()) {
         this.getController().fireVerboseMessage("Sending data from: " + filePath);
-        // First, let's unmarshall the current file.
         Unmarshaller unmarshaller = OptionUtil.createUnmarshaller(ObjectFactory.class,
             "xmldata.xsd");
-        File file = new File(filePath);
-        XmlData xmlData = (XmlData) unmarshaller.unmarshal(file);
+        XmlData xmlData = (XmlData) unmarshaller.unmarshal(new File(filePath));
         Entries entries = xmlData.getEntries();
 
-        // Only send data if the sdt is set or all entries have sdt attributes.
+        // Only send data if the SDT is set or all entries have SDT attributes.
         TstampSet tstampSet = new TstampSet();
         Object sdtName = this.getController().getOptionObject(Options.SDT);
         if (sdtName != null || this.hasSdtAttributes(entries.getEntry())) {

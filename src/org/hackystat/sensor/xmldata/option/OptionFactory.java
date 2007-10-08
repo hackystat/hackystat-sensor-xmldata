@@ -34,16 +34,19 @@ public class OptionFactory {
       return FileOption.createOption(controller, parameters);
     }
     else if (VerboseOption.OPTION_NAME.equals(optionName)) {
-      return VerboseOption.createOption(controller);
+      return new VerboseOption(controller, parameters);
     }
     else if (ArgListOption.OPTION_NAME.equals(optionName)) {
       return ArgListOption.createOption(controller, parameters);
     }
     else if (UniqueTstampOption.OPTION_NAME.equals(optionName)) {
-      return UniqueTstampOption.createOption(controller);
+      return new UniqueTstampOption(controller, parameters);
     }
     else if (MigrationOption.OPTION_NAME.equals(optionName)) {
       return MigrationOption.createOption(controller, parameters);
+    }
+    else if (MultiShellOption.OPTION_NAME.equals(optionName)) {
+      return new MultiShellOption(controller, parameters);
     }
     else {
       controller.fireMessage("The '" + optionName + "' option is not supported.");

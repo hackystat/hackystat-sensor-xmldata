@@ -1,6 +1,5 @@
 package org.hackystat.sensor.xmldata.option;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.hackystat.sensor.xmldata.XmlDataController;
@@ -18,25 +17,13 @@ public class UniqueTstampOption extends AbstractOption {
   public static final String OPTION_NAME = "-uniqueTimestamps";
 
   /**
-   * Private constructor that creates this option with the specified controller,
-   * option name, and the specified list of parameters.
+   * Creates this option with the specified controller and the specified list of
+   * parameters.
    * @param controller the specified controller.
-   * @param name the specified name.
    * @param parameters the specified list of parameters.
    */
-  private UniqueTstampOption(XmlDataController controller, String name, List<String> parameters) {
-    super(controller, name, parameters);
-  }
-
-  /**
-   * Static factory method that creates this option with the specified
-   * controller, "-uniqueTimestamps" as an option name, and no parameters.
-   * @param controller the specified controller.
-   * @return the option instance.
-   */
-  public static Option createOption(XmlDataController controller) {
-    Option option = new UniqueTstampOption(controller, OPTION_NAME, new ArrayList<String>());
-    return option;
+  public UniqueTstampOption(XmlDataController controller, List<String> parameters) {
+    super(controller, OPTION_NAME, parameters);
   }
 
   /** Processes this option by setting the unique timestamps mode to true. */
@@ -48,11 +35,16 @@ public class UniqueTstampOption extends AbstractOption {
   }
 
   /**
-   * Always returns true because this options does not have an parameters.
-   * @return always returns true.
+   * Returns true if the list of parameters contains no parameters.
+   * @return true if this option has no parameters, false if not.
    */
   @Override
   public boolean isValid() {
+    if (!this.getParameters().isEmpty()) {
+      String msg = "The " + OPTION_NAME + " option does not accept parameters.  ";
+      this.getController().fireMessage(msg);
+      return false;
+    }
     return true;
   }
 }

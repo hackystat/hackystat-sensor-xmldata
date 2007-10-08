@@ -19,8 +19,13 @@ public enum Options {
    */
   SDT,
   /**
-   * The options set when specifying unique timestamps found in the sensor data
+   * The option set when specifying unique timestamps found in the sensor data
    * file. The object associated with this option is a boolean.
    */
-  UNIQUE_TSTAMP;
+  UNIQUE_TSTAMP,
+  /**
+   * The option set when the user requests to send data using muliple
+   * sensorshell instances. This allows speedier data sending.
+   */
+  MULTI_SHELL;
 }

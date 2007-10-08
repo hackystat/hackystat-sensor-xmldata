@@ -1,9 +1,15 @@
 package org.hackystat.sensor.xmldata.option;
 
+import java.util.ArrayList;
 import java.util.Date;
 
 import javax.xml.datatype.XMLGregorianCalendar;
 
+import org.hackystat.sensor.xmldata.XmlDataController;
+import org.hackystat.sensorshell.MultiSensorShell;
+import org.hackystat.sensorshell.SensorProperties;
+import org.hackystat.sensorshell.SensorShell;
+import org.hackystat.sensorshell.Shell;
 import org.hackystat.utilities.tstamp.Tstamp;
 import org.hackystat.utilities.tstamp.TstampSet;
 import org.junit.Assert;
@@ -76,5 +82,31 @@ public class OptionUtilTest {
     TstampSet tstampSet = new TstampSet();
     Assert.assertNotSame("The returned calendar instance is incorrect.", tstampSet
         .getUniqueTstamp(timestamp), OptionUtil.massageTimestamp(true, tstampSet, timestamp));
+  }
+
+  /** Tests if the correct sensorshell instance is returned. */
+  @Test
+  public void testCreateShell() {
+    try {
+      // First, create the controller used to determine which shell to use.
+      XmlDataController controller = new XmlDataController();
+      Option option = OptionFactory.getInstance(controller, MultiShellOption.OPTION_NAME,
+          new ArrayList<String>());
+
+      // Tests if a normal SensorShell is used.
+      Shell shell = OptionUtil.createShell(new SensorProperties(), controller);
+      Assert.assertTrue("The returned shell is not a SensorShell instance.",
+          shell instanceof SensorShell);
+
+      // Tests if a MultiSensorShell is used when the option is set.
+      option.process();
+      shell = OptionUtil.createShell(new SensorProperties(), controller);
+      Assert.assertTrue("The returned shell is not a MultiSensorShell instance.",
+          shell instanceof MultiSensorShell);
+    }
+    catch (Exception e) {
+      e.printStackTrace();
+      Assert.fail("Failed to create a Shell instance.");
+    }
   }
 }

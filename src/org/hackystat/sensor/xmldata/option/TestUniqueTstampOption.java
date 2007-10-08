@@ -1,6 +1,7 @@
 package org.hackystat.sensor.xmldata.option;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.hackystat.sensor.xmldata.XmlDataController;
 import org.junit.Assert;
@@ -36,11 +37,16 @@ public class TestUniqueTstampOption {
   }
 
   /**
-   * Tests if the isValid method always returns true because this option does
-   * not have any parameters.
+   * Tests if the isValid method always returns true when no arguments are
+   * specified.
    */
   @Test
   public void testIsValid() {
-    Assert.assertTrue("This option always returns true.", this.uniqueOption.isValid());
+    List<String> parameters = new ArrayList<String>();
+    parameters.add("true");
+    Option incorrectOption = new UniqueTstampOption(this.controller, parameters);
+    Assert.assertFalse("The incorrect option is not valid.", incorrectOption.isValid());
+    Assert.assertTrue("The correct option with no parameters returned false.",
+        this.uniqueOption.isValid());
   }
 }

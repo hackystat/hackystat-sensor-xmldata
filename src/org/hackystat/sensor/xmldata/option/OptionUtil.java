@@ -15,6 +15,9 @@ import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
 
 import org.hackystat.sensor.xmldata.XmlDataController;
+import org.hackystat.sensorshell.MultiSensorShell;
+import org.hackystat.sensorshell.SensorProperties;
+import org.hackystat.sensorshell.SensorShell;
 import org.hackystat.sensorshell.Shell;
 import org.hackystat.utilities.tstamp.Tstamp;
 import org.hackystat.utilities.tstamp.TstampSet;
@@ -190,5 +193,25 @@ public class OptionUtil {
       controller.fireMessage("Server not available. Storing " + entriesAdded
           + " data entries offline.");
     }
+  }
+
+  /**
+   * Creates a Shell instance based on the information found in the specified
+   * controller. This method encapsulates the selection of which shell to use
+   * based on the options specified to the controller.
+   * @param properties the properties used to create the shell instance.
+   * @param controller the controller that contains the information used to
+   * determine which shell to use.
+   * @return the Shell instance.
+   * @throws Exception thrown if there is a problem instantiating a
+   * MultiSensorShell instance.
+   */
+  public static Shell createShell(SensorProperties properties, XmlDataController controller)
+      throws Exception {
+    Boolean isMultiShell = (Boolean) controller.getOptionObject(Options.MULTI_SHELL);
+    if (isMultiShell != null && isMultiShell) {
+      return new MultiSensorShell(properties, "XmlData");
+    }
+    return new SensorShell(properties, false, "XmlData", true);
   }
 }

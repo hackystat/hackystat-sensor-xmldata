@@ -1,6 +1,5 @@
 package org.hackystat.sensor.xmldata.option;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.hackystat.sensor.xmldata.XmlDataController;
@@ -16,25 +15,13 @@ public class VerboseOption extends AbstractOption {
   public static final String OPTION_NAME = "-verbose";
 
   /**
-   * Private constructor that creates this option with the specified controller,
-   * option name, and the specified list of parameters.
+   * Creates this option with the specified controller and the specified list of
+   * parameters.
    * @param controller the specified controller.
-   * @param name the specified name.
    * @param parameters the specified list of parameters.
    */
-  private VerboseOption(XmlDataController controller, String name, List<String> parameters) {
-    super(controller, name, parameters);
-  }
-
-  /**
-   * Static factory method that creates this option with the specified
-   * controller, "-verbose" as an option name, and no parameters.
-   * @param controller the specified controller.
-   * @return the option instance.
-   */
-  public static Option createOption(XmlDataController controller) {
-    Option option = new VerboseOption(controller, OPTION_NAME, new ArrayList<String>());
-    return option;
+  public VerboseOption(XmlDataController controller, List<String> parameters) {
+    super(controller, OPTION_NAME, parameters);
   }
 
   /** Processes this option by setting the verbose mode to true. */
@@ -46,11 +33,17 @@ public class VerboseOption extends AbstractOption {
   }
 
   /**
-   * Always returns true because this options does not have an parameters.
-   * @return always returns true.
+   * Returns true if this option is valid. This option is valid if no parameters
+   * are specified.
+   * @return true if this argument has not parameters.
    */
   @Override
   public boolean isValid() {
+    if (!this.getParameters().isEmpty()) {
+      String msg = "The " + OPTION_NAME + " option does not accept arguments.  ";
+      this.getController().fireMessage(msg);
+      return false;
+    }
     return true;
   }
 }

@@ -43,13 +43,14 @@ public class ArgListOption extends AbstractOption {
       this.getController().fireMessage(msg);
       return false;
     }
-    else if (!new File(this.getParameters().get(0)).exists()) {
-      String msg = "The specified file, " + this.getParameters().get(0) + ", does "
-          + "not exist.";
-      this.getController().fireMessage(msg);
-      return false;
+    else {
+      File paramFile = new File(this.getParameters().get(0));
+      if (!paramFile.exists()) {
+        String msg = "The specified file, " + this.getParameters().get(0) + ", does not exist.";
+        this.getController().fireMessage(msg);
+        return false;
+      }
     }
-
     return true;
   }
 

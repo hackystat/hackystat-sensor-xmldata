@@ -1,6 +1,7 @@
 package org.hackystat.sensor.xmldata.option;
 
-import java.io.File;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -159,16 +160,24 @@ public class OptionUtil {
    * unmarshaller with the specified context class.
    * @throws SAXException thrown if there is a problem adding schema validation
    * with the specified schema file.
+   * @throws MalformedURLException thrown if there is a problem finding the xsd
+   * schema directory.
    */
   public static Unmarshaller createUnmarshaller(Class<?> contextClass, String schemaFileName)
-      throws JAXBException, SAXException {
+      throws JAXBException, SAXException, MalformedURLException {
     JAXBContext context = JAXBContext.newInstance(contextClass);
     Unmarshaller unmarshaller = context.createUnmarshaller();
+
+    // Retrieves the url of the schema files.
+    String classJar = OptionUtil.class.getResource("").toString();
+    int index = classJar.indexOf('!');
+    String jarString = classJar.substring(0, index + 1);
+    URL jarUrl = new URL(jarString + "/xml/schema/" + schemaFileName);
 
     // Adds schema validation to the unmarshalled file.
     SchemaFactory schemaFactory = SchemaFactory
         .newInstance("http://www.w3.org/2001/XMLSchema");
-    Schema schema = schemaFactory.newSchema(new File("xml/schema/" + schemaFileName));
+    Schema schema = schemaFactory.newSchema(jarUrl);
     unmarshaller.setSchema(schema);
     return unmarshaller;
   }

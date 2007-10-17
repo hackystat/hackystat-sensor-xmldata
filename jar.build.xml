@@ -9,7 +9,12 @@
   <target name="jar" depends="compile" 
      description="Create xmldata-cli.jar.">
 	
-     <unjar src="${env.HACKYSTAT_SENSORSHELL_HOME}/sensorshell.jar" dest="${build.classes.dir}"/>
+     <unjar src="${env.HACK|YSTAT_SENSORSHELL_HOME}/sensorshell.jar" dest="${build.classes.dir}"/>
+  	
+  	<!-- Copies the xsd schema files. -->
+  	 <copy todir="${build.classes.dir}/xml" >
+  	 	<fileset dir="${basedir}/xml" />
+  	 </copy>
      <jar destfile="${basedir}/xmldata-cli.jar" basedir="${build.classes.dir}" >
        <manifest>
          <attribute name="Main-Class" value="org.hackystat.sensor.xmldata.XmlDataCliSensor"/>

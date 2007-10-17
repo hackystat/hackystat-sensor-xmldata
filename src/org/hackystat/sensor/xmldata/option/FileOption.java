@@ -73,7 +73,7 @@ public class FileOption extends AbstractOption {
     try {
       // First, lets get the correct shell instance.
       Shell shell = OptionUtil.createShell(new SensorProperties(), this.getController());
-
+      
       // Then, send data from each file.
       int entriesAdded = 0;
       for (String filePath : this.getParameters()) {

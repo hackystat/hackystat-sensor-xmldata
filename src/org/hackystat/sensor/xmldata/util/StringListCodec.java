@@ -142,7 +142,7 @@ public class StringListCodec {
       numFields = Integer.parseInt(newEncodedString.substring(0, NUM_STRINGS_FIELD_LENGTH));
     }
     catch (Exception e) {
-      throw new StringListCodecException("Error decoding numFields: " + newEncodedString);
+      throw new StringListCodecException("Error decoding numFields: " + newEncodedString, e);
     }
     // Make an array list to hold this number of elements.
     ArrayList<String> stringList = new ArrayList<String>(numFields);

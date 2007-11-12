@@ -47,9 +47,9 @@ public class SensorDataPropertyMap {
   public SensorDataPropertyMap(String encodedMap) throws Exception {
     try {
       List<String> propertyList = StringListCodec.decode(encodedMap);
-      for (Iterator i = propertyList.iterator(); i.hasNext();) {
-        String propertyName = (String) i.next();
-        String propertyValue = (String) i.next();
+      for (Iterator<String> i = propertyList.iterator(); i.hasNext();) {
+        String propertyName = i.next();
+        String propertyValue = i.next();
         propertyMap.put(propertyName, propertyValue);
       }
     }
@@ -170,7 +170,7 @@ public class SensorDataPropertyMap {
    * Returns a set containing the keys associated with this property map.
    * @return The keyset.
    */
-  public Set keySet() {
+  public Set<String> keySet() {
     return this.propertyMap.keySet();
   }
 

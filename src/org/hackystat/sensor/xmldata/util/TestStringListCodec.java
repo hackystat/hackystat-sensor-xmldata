@@ -32,9 +32,9 @@ public class TestStringListCodec extends TestCase {
     ArrayList<String> decodedList2 = StringListCodec.decode(encoded2);
     assertEquals("Testing empty list item", originalList2, decodedList2);
 
-    ArrayList<String> emptyList = new ArrayList<String>();
+    List<String> emptyList = new ArrayList<String>();
     String encodedEmpty = StringListCodec.encode(emptyList);
-    ArrayList decodedEmpty = StringListCodec.decode(encodedEmpty);
+    List<String> decodedEmpty = StringListCodec.decode(encodedEmpty);
     assertEquals("Testing degenerate list", emptyList, decodedEmpty);
   }
   

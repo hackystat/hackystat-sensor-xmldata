@@ -25,7 +25,7 @@ public interface Option {
 
   /**
    * Processes the parameters found in this option. This method is called before
-   * execution and can be used to setup options values or perform pre-execution
+   * execution and can be used to setup option values or perform pre-execution
    * processing.
    */
   public void process();
@@ -37,7 +37,7 @@ public interface Option {
   public List<String> getParameters();
 
   /**
-   * Executes this option based on the option name and parameters.s
+   * Executes this option based on the option name and parameters.
    */
   public void execute();
 }

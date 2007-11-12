@@ -38,7 +38,7 @@ public class StringListCodec {
    * 
    * @author Philip Johnson
    */
-  private static class ThreadLocalDecimalFormat extends ThreadLocal {
+  private static class ThreadLocalDecimalFormat extends ThreadLocal<Object> {
     /**
      * The initialization function.
      * 

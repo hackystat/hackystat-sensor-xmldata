@@ -1,4 +1,5 @@
 <project name="build" default="compile">
+  <import file="antSensors.build.xml" />
   <description>
   The basic build file for the system. 
   </description>

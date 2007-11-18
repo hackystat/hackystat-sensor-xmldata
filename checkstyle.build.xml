@@ -31,17 +31,7 @@
         <path refid="compile.classpath"/>
       </classpath>   
     </checkstyle>
-  </target>
-  
-  <target name="checkstyle.sensor" description="Sends CodeIssue data to Hackystat using the Checkstyle Sensor.">
-    <!-- Define the checkstyle sensor taskdef, failing the build if the sensor is not installed. -->
-    <available classname="org.hackystat.sensor.checkstyle.CheckstyleSensor" property="checkstyle.sensor.available"/>
-    <fail unless="checkstyle.sensor.available" message="Error: Checkstyle sensor not installed."/>
-    <taskdef name="hacky-checkstyle" classname="org.hackystat.sensor.checkstyle.CheckstyleSensor"/>
-
-    <hacky-checkstyle verbose="${hackystat.verbose.mode}" >
-      <fileset file="${checkstyle.dir}/checkstyle.xml"/>
-    </hacky-checkstyle>
+	<checkstyle.sensor/>
   </target>
 </project>
 

@@ -71,6 +71,7 @@
     </emma>
     <!-- Now delete the instrumented .class files. -->
      <delete dir="${build.dir}/classes" />
+  	<emma.sensor />
   </target>
   
   <target name="emma.echo" unless="emma.disabled" description="Sends summary of Emma results to console">
@@ -86,19 +87,6 @@
        <fileset file="${emma.dir}/coverage.brief.txt"/>
      </concat>
   </target>
-
-  <target name="emma.sensor" unless="emma.disabled" description="Sends Emma coverage data to Hackystat using the Emma sensor.">
-    <!-- Define the emma sensor taskdef, failing the build if the sensor is not installed. -->
-    <available classname="org.hackystat.sensor.emma.EmmaSensor" property="emma.sensor.available"/>
-    <fail unless="emma.sensor.available" message="Error: Emma sensor not installed."/>
-    <taskdef name="hacky-emma" classname="org.hackystat.sensor.emma.EmmaSensor"/>
-    
-    <!-- Send Coverage data to Hackystat using the Emma sensor. --> 
-    <hacky-emma verbose="${hackystat.verbose.mode}" emmaReportXmlFile="${emma.dir}/coverage.xml">
-      <fileset dir="${src.dir}" includes="**/*.java" />
-    </hacky-emma>
-  </target>
-  
 </project>
 
 

@@ -35,22 +35,12 @@
       <formatter type="text" toConsole="true"/>
       <fileset dir="${src.dir}" includes="**/*.java" excludes="**/jaxb/**"/>
     </pmd>    
+  	<pmd.sensor />
+  	<antcall target="pmd.report" />
   </target>
 
   <target name="pmd.report" description="Generates HTML reports on the PMD output.">
     <xslt in="${pmd.dir}/pmd.xml" style="${env.PMD_HOME}/etc/xslt/pmd-report-per-class.xslt" out="${pmd.dir}/pmd-report-per-class.html" />
   </target>
-
-  <target name="pmd.sensor" description="Sends CodeIssue data to Hackystat using the PMD sensor.">
-    <!-- Define the pmd sensor taskdef, failing the build if the sensor is not installed. -->
-    <available classname="org.hackystat.sensor.pmd.PmdSensor" property="pmd.sensor.available"/>
-    <fail unless="pmd.sensor.available" message="Error: PMD sensor not installed."/>
-    <taskdef name="hacky-pmd" classname="org.hackystat.sensor.pmd.PmdSensor"/>
-
-    <hacky-pmd verbose="${hackystat.verbose.mode}">
-      <fileset file="${pmd.dir}/pmd.xml"/>
-    </hacky-pmd>
-  </target>  
-
 </project>
 

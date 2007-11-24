@@ -1,91 +1,91 @@
 <project name="sensors" default="">
 
-<macrodef name="check.antsensors">
-  <sequential>
-   <available file="${env.HACKYSTAT_ANTSENSORS_HOME}/antsensors.jar" type="file" property="hackystat.antsensors.available"/>
-   <fail unless="hackystat.antsensors.available" message="${env.HACKYSTAT_ANTSENSORS_HOME}/antsensors.jar could not be found." />
-  </sequential>
-</macrodef> 
-<taskdef resource="antlib.xml" classpath="${env.HACKYSTAT_ANTSENSORS_HOME}/antsensors.jar" />
+  <macrodef name="check.antsensors">
+    <sequential>
+      <available file="${env.HACKYSTAT_ANTSENSORS_HOME}/antsensors.jar" type="file" property="hackystat.antsensors.available" />
+      <fail unless="hackystat.antsensors.available" message="${env.HACKYSTAT_ANTSENSORS_HOME}/antsensors.jar could not be found." />
+    </sequential>
+  </macrodef>
+  <taskdef resource="antlib.xml" classpath="${env.HACKYSTAT_ANTSENSORS_HOME}/antsensors.jar" />
 
-<!-- Send Checkstyledata to hackystat using the Checkstyle sensor. -->
-<macrodef name="checkstyle.sensor">
-  <attribute name="checkstyle.dir" default="${checkstyle.dir}" />
-  <attribute name="verbose" default="true" />
-  <sequential>
-	<check.antsensors />    
-	<hacky-checkstyle verbose="@{verbose}">
-	  <fileset dir="@{checkstyle.dir}" includes="checkstyle.xml" />
-    </hacky-checkstyle>
-  </sequential>
-</macrodef>
+  <!-- Send Checkstyledata to hackystat using the Checkstyle sensor. -->
+  <macrodef name="checkstyle.sensor">
+    <attribute name="checkstyle.dir" default="${checkstyle.dir}" />
+    <attribute name="verbose" default="true" />
+    <sequential>
+      <check.antsensors />
+      <hacky-checkstyle verbose="@{verbose}">
+        <fileset dir="@{checkstyle.dir}" includes="checkstyle.xml" />
+      </hacky-checkstyle>
+    </sequential>
+  </macrodef>
 
-<!-- Send JUnit test data to hackystat using the JUnit sensor. -->
-<macrodef name="junit.sensor">
-  <attribute name="src.dir" default="${src.dir}" />
-  <attribute name="junit.dir" default="${junit.dir}" />
-  <attribute name="verbose" default="true" />
-  <sequential>
-	<check.antsensors />    
-	  <hacky-junit verbose="@{verbose}" sourcePath="@{src.dir}" >
-	    <fileset dir="@{junit.dir}" includes="TEST-*.xml"/>
-	  </hacky-junit>
-  </sequential>
-</macrodef>
+  <!-- Send JUnit test data to hackystat using the JUnit sensor. -->
+  <macrodef name="junit.sensor">
+    <attribute name="src.dir" default="${src.dir}" />
+    <attribute name="junit.dir" default="${junit.dir}" />
+    <attribute name="verbose" default="true" />
+    <sequential>
+      <check.antsensors />
+      <hacky-junit verbose="@{verbose}" sourcePath="@{src.dir}">
+        <fileset dir="@{junit.dir}" includes="TEST-*.xml" />
+      </hacky-junit>
+    </sequential>
+  </macrodef>
 
-<!-- Send Emma coverage data to hackystat using the Emma sensor. -->
-<macrodef name="emma.sensor">
-  <attribute name="src.dir" default="${src.dir}" />
-  <attribute name="emma.dir" default="${emma.dir}" />
-  <attribute name="verbose" default="true" />
-  <sequential>
-	<check.antsensors />    
-	<hacky-emma verbose="@{verbose}" emmaReportXmlFile="@{emma.dir}/coverage.xml">
-	  <fileset dir="@{src.dir}" includes="**/*.java" />
-	</hacky-emma>
-  </sequential>
-</macrodef>
+  <!-- Send Emma coverage data to hackystat using the Emma sensor. -->
+  <macrodef name="emma.sensor">
+    <attribute name="src.dir" default="${src.dir}" />
+    <attribute name="emma.dir" default="${emma.dir}" />
+    <attribute name="verbose" default="true" />
+    <sequential>
+      <check.antsensors />
+      <hacky-emma verbose="@{verbose}" emmaReportXmlFile="@{emma.dir}/coverage.xml">
+        <fileset dir="@{src.dir}" includes="**/*.java" />
+      </hacky-emma>
+    </sequential>
+  </macrodef>
 
-<!-- Send PMD coverage data to hackystat using the PMD sensor. -->
-<macrodef name="pmd.sensor">
-  <attribute name="src.dir" default="${src.dir}" />
-  <attribute name="pmd.dir" default="${pmd.dir}" />
-  <attribute name="verbose" default="true" />
-  <sequential>
-	<check.antsensors />    
-  	<hacky-pmd verbose="@{verbose}">
-      <fileset file="@{pmd.dir}/pmd.xml"/>
-      <sourcePath>
-        <fileset dir="@{src.dir}" includes="**/*.java" excludes="**/jaxb/**"/>
-      </sourcePath>
-  	</hacky-pmd>
-  </sequential>
-</macrodef>
+  <!-- Send PMD coverage data to hackystat using the PMD sensor. -->
+  <macrodef name="pmd.sensor">
+    <attribute name="src.dir" default="${src.dir}" />
+    <attribute name="pmd.dir" default="${pmd.dir}" />
+    <attribute name="verbose" default="true" />
+    <sequential>
+      <check.antsensors />
+      <hacky-pmd verbose="@{verbose}">
+        <fileset file="@{pmd.dir}/pmd.xml" />
+        <sourcePath>
+          <fileset dir="@{src.dir}" includes="**/*.java" excludes="**/jaxb/**" />
+        </sourcePath>
+      </hacky-pmd>
+    </sequential>
+  </macrodef>
 
-<!-- Send findbugs coverage data to hackystat using the findbugs sensor. -->
-<macrodef name="findbugs.sensor">
-  <attribute name="findbugs.dir" default="${findbugs.dir}" />
-  <attribute name="verbose" default="true" />
-  <sequential>
-	<check.antsensors />    
-	<hacky-findbugs verbose="@{verbose}">
-	  <fileset file="@{findbugs.dir}/findbugs.xml"/>
-    </hacky-findbugs>
-  </sequential>
-</macrodef>
+  <!-- Send findbugs coverage data to hackystat using the findbugs sensor. -->
+  <macrodef name="findbugs.sensor">
+    <attribute name="findbugs.dir" default="${findbugs.dir}" />
+    <attribute name="verbose" default="true" />
+    <sequential>
+      <check.antsensors />
+      <hacky-findbugs verbose="@{verbose}">
+        <fileset file="@{findbugs.dir}/findbugs.xml" />
+      </hacky-findbugs>
+    </sequential>
+  </macrodef>
 
-<!-- Send sclc data to hackystat using the SCLC sensor. -->
-<macrodef name="sclc.sensor">
-  <attribute name="sclc.dir" default="${sclc.dir}" />
-  <sequential>
-    <available file="${env.HACKYSTAT_XMLDATA_HOME}/xmldata-cli.jar" property="xmldata.available"/>
-    <fail unless="xmldata.available" message="Error: HACKYSTAT_XMLDATA_HOME not set or ${env.HACKYSTAT_XMLDATA_HOME}/xmldata-cli.jar not found."/>
-                
-    <!-- Invoke XmlData by executing the jar file and passing in command line args. -->
-    <java jar="${env.HACKYSTAT_XMLDATA_HOME}/xmldata-cli.jar" fork="true">
-      <arg line="-uniqueTimestamps -file @{sclc.dir}/transform-size.xml"/>
-    </java>
-  </sequential>
-</macrodef>
+  <!-- Send sclc data to hackystat using the SCLC sensor. -->
+  <macrodef name="sclc.sensor">
+    <attribute name="sclc.dir" default="${sclc.dir}" />
+    <sequential>
+      <available file="${env.HACKYSTAT_XMLDATA_HOME}/xmldata-cli.jar" property="xmldata.available" />
+      <fail unless="xmldata.available" message="Error: HACKYSTAT_XMLDATA_HOME not set or ${env.HACKYSTAT_XMLDATA_HOME}/xmldata-cli.jar not found." />
+
+      <!-- Invoke XmlData by executing the jar file and passing in command line args. -->
+      <java jar="${env.HACKYSTAT_XMLDATA_HOME}/xmldata-cli.jar" fork="true">
+        <arg line="-uniqueTimestamps -file @{sclc.dir}/transform-size.xml" />
+      </java>
+    </sequential>
+  </macrodef>
 
 </project>

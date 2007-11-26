@@ -7,7 +7,7 @@
   <property environment="env"/>
   <property name="findbugs.dir" location="${build.dir}/findbugs" />
 
-  <target name="findbugs" depends="findbugs.tool, findbugs.report" 
+  <target name="findbugs" depends="findbugs.tool, findbugs.report, findbugs.sensor" 
     description="Runs the FindBugs tool, report, and sensor."/>
 
   <target name="findbugs.tool" depends="compile" description="Runs FindBugs over the byte code to check for problems.">
@@ -36,13 +36,17 @@
       </sourcePath>
       <class location="${build.dir}/classes" />
     </findbugs>
-  	<findbugs.sensor />
   </target>
 
   <target name="findbugs.report" description="Generate an HTML report on FindBugs.">
     <xslt in="${findbugs.dir}/findbugs.xml" 
           style="${env.FINDBUGS_HOME}/src/xsl/default.xsl" 
           out="${findbugs.dir}/findbugs-default.html" />
+  </target>
+	
+  <target name="findbugs.sensor" description="Send hackystat data about this FindBugs invocation.">
+    <fileset id="findbugs.output.fileset" dir="${findbugs.dir}" includes="findbugs.xml" />
+    <hackystat.findbugs findbugs.output.fileset="findbugs.output.fileset" />
   </target>
 </project>
 

@@ -8,7 +8,7 @@
   <property name="emma.dir" location="${build.dir}/emma" />
   <property name="junit.dir" location="${build.dir}/junit" />
 
-  <target name="emma" depends="emma.tool" unless="emma.disabled"
+  <target name="emma" depends="emma.tool, emma.sensor" unless="emma.disabled"
     description="Runs Emma."/>
 
   <target name="emma.tool" depends="clean, compile" unless="emma.disabled"
@@ -71,7 +71,6 @@
     </emma>
     <!-- Now delete the instrumented .class files. -->
      <delete dir="${build.dir}/classes" />
-  	<emma.sensor />
   </target>
   
   <target name="emma.echo" unless="emma.disabled" description="Sends summary of Emma results to console">
@@ -86,6 +85,11 @@
        <header>Emma Coverage summary</header>
        <fileset file="${emma.dir}/coverage.brief.txt"/>
      </concat>
+  </target>
+
+  <target name="emma.sensor" description="Send hackystat data about this Emma invocation.">
+  	<fileset id="emma.fileset" dir="${src.dir}" includes="**/*.java" />
+    <hackystat.emma emma.report.file="${emma.dir}/coverage.xml" emma.fileset="emma.fileset" />
   </target>
 </project>
 

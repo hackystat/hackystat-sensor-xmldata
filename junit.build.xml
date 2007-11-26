@@ -6,7 +6,7 @@
   <import file="build.xml"/>
   <property name="junit.dir" location="${build.dir}/junit" />
 
-  <target name="junit" depends="junit.tool, junit.report" description="Runs JUnit, JunitReport">
+  <target name="junit" depends="junit.tool, junit.report, junit.sensor" description="Runs junit, junit.report, and junit.sensor">
      <fail if="junit.failed">JUnit test case(s) failed.</fail>
   </target>   
 
@@ -26,7 +26,6 @@
         <fileset dir="${src.dir}" includes="**/Test*.java"/>
       </batchtest>
     </junit>
-  	<junit.sensor />
   </target>  
 
   <target name="junit.report" description="Generates an HTML report for JUnit.">
@@ -35,6 +34,11 @@
       <fileset dir="${junit.dir}" includes="TEST-*.xml"/>
       <report format="frames" todir="${junit.dir}" />
     </junitreport>
+  </target>
+	
+  <target name="junit.sensor" description="Send hackystat data about this JUnit invocation.">
+  	<fileset id="junit.fileset" dir="${junit.dir}" includes="TEST-*.xml" />
+  	<hackystat.junit src.dir="${src.dir}" junit.fileset="junit.fileset" />
   </target>
 </project>
 

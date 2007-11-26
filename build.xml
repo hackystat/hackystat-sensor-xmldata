@@ -1,12 +1,14 @@
 <project name="build" default="compile">
-  <import file="antSensors.build.xml" />
   <description>
   The basic build file for the system. 
   </description>
   
   <!-- Always make environment variables available with the "env." prefix. --> 
   <property environment="env"/> 
-      
+	
+  <!-- Always make hackystat sensor definitions available. -->
+  <import file="hackystat.build.xml" />
+	
   <!-- Make sure we're running a Java 5 or better. --> 
   <condition property="java.5.available">  
     <or>

@@ -1,0 +1,36 @@
+<project name="sclc" default="sclc">
+  <description>
+    Runs sclc on system to generate information on size.
+    Invocation: ant -f sclc.build.xml
+  </description>
+
+  <import file="build.xml" />
+  <property name="sclc.dir" location="${build.dir}/sclc" />
+	
+  <target name="sclc" depends="sclc.tool, sclc.xslt, sclc.sensor" />
+	
+  <target name="sclc.tool"
+          depends="compile, clean"
+          description="Compute size data on the source code using SCLC.">
+    <!-- Check for the SCLC_HOME environment variable, failing the build if it can't be found. -->
+    <available file="${env.SCLC_HOME}/src/sclc" property="sclc.available" />
+    <fail unless="sclc.available"
+          message="Error: SCLC_HOME not set or file 'sclc' not found, indicating SCLC is not installed." />
+    <mkdir dir="${sclc.dir}" />
+
+    <!-- Run size data using SCLC.  Invoke Perl via the exec task to run SCLC. -->
+    <exec executable="perl" dir="${build.dir}">
+      <arg line="${env.SCLC_HOME}/src/sclc -default_exclude -ignore -xml_output ${sclc.dir}/size.xml -recurse ${basedir}" />
+    </exec>
+  </target>
+	
+  <target name="sclc.xslt" description="Runs XSL Transform over SCLC XML to make the XML compatible with XmlData.">
+    <!-- Transform SCLC v2.5 data to work with XmlData sensor for Hackystat v8. -->
+    <xslt in="${sclc.dir}/size.xml" out="${sclc.dir}/transform-size.xml" style="${lib.dir}/sclc/sclc.xsl"/>
+  </target>
+	
+  <target name="sclc.sensor" description="Send hackystat data about this SCLC invocation.">
+	<hackystat.sclc sclc.file="${sclc.dir}/transform-size.xml" />
+  </target>	
+</project>
+

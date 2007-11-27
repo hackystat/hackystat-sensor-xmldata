@@ -89,7 +89,7 @@
 
   <target name="emma.sensor" description="Send hackystat data about this Emma invocation.">
   	<fileset id="emma.fileset" dir="${src.dir}" includes="**/*.java" />
-    <hackystat.emma emma.report.file="${emma.dir}/coverage.xml" emma.fileset="emma.fileset" />
+    <hackystat.emma emma.output.file="${emma.dir}/coverage.xml" emma.fileset="emma.fileset" />
   </target>
 </project>
 

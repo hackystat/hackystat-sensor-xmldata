@@ -37,8 +37,8 @@
   </target>
 	
   <target name="junit.sensor" description="Send hackystat data about this JUnit invocation.">
-  	<fileset id="junit.fileset" dir="${junit.dir}" includes="TEST-*.xml" />
-  	<hackystat.junit src.dir="${src.dir}" junit.fileset="junit.fileset" />
+  	<fileset id="junit.output.fileset" dir="${junit.dir}" includes="TEST-*.xml" />
+  	<hackystat.junit src.dir="${src.dir}" junit.output.fileset="junit.output.fileset" />
   </target>
 </project>
 

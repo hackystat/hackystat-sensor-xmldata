@@ -23,12 +23,12 @@
   <!-- Send JUnit test data to hackystat using the JUnit sensor. -->
   <macrodef name="hackystat.junit">
     <attribute name="src.dir" />
-  	<attribute name="junit.fileset" />
+  	<attribute name="junit.output.fileset" />
     <attribute name="verbose" default="true" />
     <sequential>
       <check.antsensors />
       <hacky-junit verbose="@{verbose}" sourcePath="@{src.dir}">
-      	<fileset refid="@{junit.fileset}" />
+      	<fileset refid="@{junit.output.fileset}" />
       </hacky-junit>
     </sequential>
   </macrodef>
@@ -36,11 +36,11 @@
   <!-- Send Emma coverage data to hackystat using the Emma sensor. -->
   <macrodef name="hackystat.emma">
     <attribute name="emma.fileset" />
-    <attribute name="emma.report.file" />
+    <attribute name="emma.output.file" />
     <attribute name="verbose" default="true" />
     <sequential>
       <check.antsensors />
-      <hacky-emma verbose="@{verbose}" emmaReportXmlFile="@{emma.report.file}" >
+      <hacky-emma verbose="@{verbose}" emmaReportXmlFile="@{emma.output.file}" >
       	<fileset refid="@{emma.fileset}" />
       </hacky-emma>
     </sequential>

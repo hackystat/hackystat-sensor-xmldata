@@ -7,7 +7,7 @@ import javax.xml.datatype.XMLGregorianCalendar;
 
 import org.hackystat.sensor.xmldata.XmlDataController;
 import org.hackystat.sensorshell.MultiSensorShell;
-import org.hackystat.sensorshell.SensorProperties;
+import org.hackystat.sensorshell.SensorShellProperties;
 import org.hackystat.sensorshell.SensorShell;
 import org.hackystat.sensorshell.Shell;
 import org.hackystat.utilities.tstamp.Tstamp;
@@ -94,13 +94,13 @@ public class OptionUtilTest {
           new ArrayList<String>());
 
       // Tests if a normal SensorShell is used.
-      Shell shell = OptionUtil.createShell(new SensorProperties(), controller);
+      Shell shell = OptionUtil.createShell(new SensorShellProperties(), controller);
       Assert.assertTrue("The returned shell is not a SensorShell instance.",
           shell instanceof SensorShell);
 
       // Tests if a MultiSensorShell is used when the option is set.
       option.process();
-      shell = OptionUtil.createShell(new SensorProperties(), controller);
+      shell = OptionUtil.createShell(new SensorShellProperties(), controller);
       Assert.assertTrue("The returned shell is not a MultiSensorShell instance.",
           shell instanceof MultiSensorShell);
     }

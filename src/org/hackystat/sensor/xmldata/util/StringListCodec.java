@@ -44,6 +44,7 @@ public class StringListCodec {
      * 
      * @return The DecimalFormat instance for this thread.
      */
+    @Override
     public Object initialValue() {
       return NumberFormat.getInstance();
     }

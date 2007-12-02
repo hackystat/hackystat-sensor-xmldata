@@ -14,8 +14,8 @@ import org.hackystat.sensor.xmldata.jaxb.Entries;
 import org.hackystat.sensor.xmldata.jaxb.Entry;
 import org.hackystat.sensor.xmldata.jaxb.ObjectFactory;
 import org.hackystat.sensor.xmldata.jaxb.XmlData;
-import org.hackystat.sensorshell.SensorProperties;
-import org.hackystat.sensorshell.SensorPropertiesException;
+import org.hackystat.sensorshell.SensorShellProperties;
+import org.hackystat.sensorshell.SensorShellException;
 import org.hackystat.sensorshell.Shell;
 import org.hackystat.utilities.tstamp.TstampSet;
 import org.xml.sax.SAXException;
@@ -69,10 +69,11 @@ public class FileOption extends AbstractOption {
    * Executes this option by grabbing all information stored in the specified
    * files, and sending them to the sensorbase.
    */
+  @Override
   public void execute() {
     try {
       // First, lets get the correct shell instance.
-      Shell shell = OptionUtil.createShell(new SensorProperties(), this.getController());
+      Shell shell = OptionUtil.createShell(new SensorShellProperties(), this.getController());
       
       // Then, send data from each file.
       int entriesAdded = 0;
@@ -138,8 +139,8 @@ public class FileOption extends AbstractOption {
       String msg = "The specified file(s) could not be parsed.";
       this.getController().fireMessage(msg, e.toString());
     }
-    catch (SensorPropertiesException e) {
-      String msg = "The sensor.properties file in your userdir/.hackystat "
+    catch (SensorShellException e) {
+      String msg = "The sensorshell.properties file in your userdir/.hackystat "
           + "directory is invalid or does not exist.";
       this.getController().fireMessage(msg);
     }

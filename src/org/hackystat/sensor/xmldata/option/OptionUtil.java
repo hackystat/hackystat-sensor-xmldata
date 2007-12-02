@@ -7,6 +7,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Properties;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
@@ -16,8 +17,7 @@ import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
 
 import org.hackystat.sensor.xmldata.XmlDataController;
-import org.hackystat.sensorshell.MultiSensorShell;
-import org.hackystat.sensorshell.SensorProperties;
+import org.hackystat.sensorshell.SensorShellProperties;
 import org.hackystat.sensorshell.SensorShell;
 import org.hackystat.sensorshell.Shell;
 import org.hackystat.utilities.tstamp.Tstamp;
@@ -215,12 +215,15 @@ public class OptionUtil {
    * @throws Exception thrown if there is a problem instantiating a
    * MultiSensorShell instance.
    */
-  public static Shell createShell(SensorProperties properties, XmlDataController controller)
+  public static Shell createShell(SensorShellProperties properties, XmlDataController controller)
       throws Exception {
-    Boolean isMultiShell = (Boolean) controller.getOptionObject(Options.MULTI_SHELL);
-    if (isMultiShell != null && isMultiShell) {
-      return new MultiSensorShell(properties, "XmlData");
-    }
-    return new SensorShell(properties, false, "XmlData", true);
+    Boolean isMultiShellOption = (Boolean) controller.getOptionObject(Options.MULTI_SHELL);
+    boolean isMultiShell = (isMultiShellOption != null) && isMultiShellOption.booleanValue();
+    controller.fireMessage("MultiSensorShell " + ((isMultiShell) ? "is" : "is not") + " enabled.");
+    String multi = String.valueOf(isMultiShell);
+    Properties preferMultiShell = new Properties();
+    preferMultiShell.setProperty(SensorShellProperties.SENSORSHELL_MULTISHELL_ENABLED_KEY, multi);
+    SensorShellProperties newProps = new SensorShellProperties(properties, preferMultiShell);
+    return new SensorShell(newProps, false, "XmlData");
   }
 }

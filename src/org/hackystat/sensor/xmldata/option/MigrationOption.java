@@ -14,7 +14,8 @@ import org.hackystat.sensor.xmldata.jaxb.v7.Entry;
 import org.hackystat.sensor.xmldata.jaxb.v7.ObjectFactory;
 import org.hackystat.sensor.xmldata.jaxb.v7.Sensor;
 import org.hackystat.sensor.xmldata.util.SensorDataPropertyMap;
-import org.hackystat.sensorshell.SensorProperties;
+import org.hackystat.sensorshell.SensorShellException;
+import org.hackystat.sensorshell.SensorShellProperties;
 import org.hackystat.sensorshell.SensorShell;
 import org.hackystat.sensorshell.Shell;
 import org.hackystat.utilities.tstamp.Tstamp;
@@ -45,7 +46,7 @@ public class MigrationOption extends AbstractOption {
    * The sensor properties file containing the version 8 host and account
    * information.
    */
-  private SensorProperties properties = null;
+  private SensorShellProperties properties = null;
 
   /**
    * Creates this option with the specified controller and parameters.
@@ -90,9 +91,16 @@ public class MigrationOption extends AbstractOption {
     }
 
     // Verify that the version 8 host, account and password is valid.
-    SensorProperties props = new SensorProperties(this.getParameters().get(2), this
+    SensorShellProperties props;
+    try {
+      props = new SensorShellProperties(this.getParameters().get(2), this
         .getParameters().get(3), this.getParameters().get(4));
-    SensorShell shell = new SensorShell(props, false, "XmlData", true);
+    }
+    catch (SensorShellException e) {
+      this.getController().fireMessage("Error instantiating the SensorShell: " + e);
+      return false;
+    }
+    SensorShell shell = new SensorShell(props, false, "XmlData");
     if (!shell.ping()) {
       String msg = "The host, connection or account information is incorrect: Hackystat Host="
           + this.getParameters().get(2) + ", v8Account=" + this.getParameters().get(3)
@@ -105,7 +113,7 @@ public class MigrationOption extends AbstractOption {
 
   /** Sets the variables used by the execute method. */
   @Override
-  public void process() {
+  public void process()  {
     if (this.isValid()) {
       // Sets the version 7 information.
       File v7Dir = new File(this.getParameters().get(0));
@@ -113,8 +121,13 @@ public class MigrationOption extends AbstractOption {
       this.v7DataDir = new File(v7Dir.getAbsolutePath() + "/" + v7Account + "/data");
 
       // Sets the version 8 information.
-      this.properties = new SensorProperties(this.getParameters().get(2), this.getParameters()
+      try {
+      this. properties = new SensorShellProperties(this.getParameters().get(2), this.getParameters()
           .get(3), this.getParameters().get(4));
+      }
+      catch (SensorShellException e) {
+        this.getController().fireMessage("Error creating SensorShellProperties: " + e);
+      }
     }
   }
 

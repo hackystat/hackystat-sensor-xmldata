@@ -153,6 +153,7 @@ public class SensorDataPropertyMap {
    * required for sensor data transmission to occur correctly.
    * @return The contents of the property map in its encoded form.
    */
+  @Override
   public String toString() {
     // return this.propertyMap.toString();
     return this.encode();

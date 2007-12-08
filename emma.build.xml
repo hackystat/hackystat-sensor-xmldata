@@ -87,9 +87,9 @@
      </concat>
   </target>
 
-  <target name="emma.sensor" description="Send hackystat data about this Emma invocation.">
-  	<fileset id="emma.fileset" dir="${src.dir}" includes="**/*.java" />
-    <hackystat.emma emma.output.file="${emma.dir}/coverage.xml" emma.fileset="emma.fileset" />
+  <target name="emma.sensor" description="Send hackystat data about this Emma invocation." if="hackystat.enabled" unless="emma.disabled">
+    <fileset id="emma.fileset" dir="${src.dir}" includes="**/*.java" />
+    <hackystat.emma emma.output.file="${emma.dir}/coverage.xml" emma.fileset="emma.fileset" verbose="${hackystat.verbose.mode}" />
   </target>
 </project>
 

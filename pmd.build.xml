@@ -42,10 +42,10 @@
     <xslt in="${pmd.dir}/pmd.xml" style="${env.PMD_HOME}/etc/xslt/pmd-report-per-class.xslt" out="${pmd.dir}/pmd-report-per-class.html" />
   </target>
 	
-  <target name="pmd.sensor" description="Send hackystat data about this PMD invocation.">
-	<fileset id="pmd.output.fileset" dir="${pmd.dir}" includes="pmd.xml" />
-  	<fileset id="pmd.src.fileset" dir="${src.dir}" includes="**/*.java" excludes="**/jaxb/**" />
-	<hackystat.pmd pmd.output.fileset="pmd.output.fileset" pmd.src.fileset="pmd.src.fileset" />
-  </target>	
+  <target name="pmd.sensor" description="Send hackystat data about this PMD invocation." if="hackystat.enabled">
+    <fileset id="pmd.output.fileset" dir="${pmd.dir}" includes="pmd.xml" />
+    <fileset id="pmd.src.fileset" dir="${src.dir}" includes="**/*.java" excludes="**/jaxb/**" />
+    <hackystat.pmd pmd.output.fileset="pmd.output.fileset" pmd.src.fileset="pmd.src.fileset" verbose="${hackystat.verbose.mode}"/>
+  </target>
 </project>
 

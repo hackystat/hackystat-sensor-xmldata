@@ -35,10 +35,11 @@
     </checkstyle>
   </target>
 	
-  <target name="checkstyle.sensor" description="Send hackystat data about this Checkstyle invocation.">
-  	<fileset id="checkstyle.output.fileset" dir="${checkstyle.dir}" includes="checkstyle.xml" />
-	<hackystat.checkstyle checkstyle.output.fileset="checkstyle.output.fileset" />
+  <target name="checkstyle.sensor" description="Send hackystat data about this Checkstyle invocation." if="hackystat.enabled">
+    <fileset id="checkstyle.output.fileset" dir="${checkstyle.dir}" includes="checkstyle.xml" />
+    <hackystat.checkstyle checkstyle.output.fileset="checkstyle.output.fileset" verbose="${hackystat.verbose.mode}" />
   </target>
+
 </project>
 
 

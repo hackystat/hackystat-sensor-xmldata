@@ -7,7 +7,7 @@
   <import file="build.xml" />
   <property name="sclc.dir" location="${build.dir}/sclc" />
 	
-  <target name="sclc" depends="sclc.tool, sclc.xslt, sclc.sensor" />
+  <target name="sclc" depends="sclc.tool, sclc.sensor" />
 	
   <target name="sclc.tool"
           depends="compile, clean"
@@ -24,13 +24,9 @@
     </exec>
   </target>
 	
-  <target name="sclc.xslt" description="Runs XSL Transform over SCLC XML to make the XML compatible with XmlData.">
-    <!-- Transform SCLC v2.5 data to work with XmlData sensor for Hackystat v8. -->
-    <xslt in="${sclc.dir}/size.xml" out="${sclc.dir}/transform-size.xml" style="${lib.dir}/sclc/sclc.xsl"/>
+  <target name="sclc.sensor" description="Send hackystat data about this SCLC invocation." if="hackystat.enabled">
+    <xslt in="${sclc.dir}/size.xml" out="${sclc.dir}/transform-size.xml" style="${lib.dir}/sclc/sclc.xsl" />
+    <hackystat.sclc sclc.file="${sclc.dir}/transform-size.xml" />
   </target>
-	
-  <target name="sclc.sensor" description="Send hackystat data about this SCLC invocation.">
-	<hackystat.sclc sclc.file="${sclc.dir}/transform-size.xml" />
-  </target>	
 </project>
 

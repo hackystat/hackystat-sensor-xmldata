@@ -20,7 +20,7 @@
 
     <!-- Run size data using SCLC.  Invoke Perl via the exec task to run SCLC. -->
     <exec executable="perl" dir="${build.dir}">
-      <arg line="${env.SCLC_HOME}/src/sclc -default_exclude -ignore -xml_output ${sclc.dir}/size.xml -recurse ${basedir}" />
+      <arg line="${env.SCLC_HOME}/src/sclc -default_exclude -ignore -xml_output ${sclc.dir}/size.xml -recurse ${basedir}/src" />
     </exec>
   </target>
 	

@@ -27,5 +27,10 @@ public enum Options {
    * The option set when the user requests to send data using muliple
    * sensorshell instances. This allows speedier data sending.
    */
-  MULTI_SHELL;
+  MULTI_SHELL,
+  /**
+   * The option set when the user requests to send data as a batch, which means
+   * that all data instances have the same runtime.
+   */
+  SET_RUNTIME;
 }

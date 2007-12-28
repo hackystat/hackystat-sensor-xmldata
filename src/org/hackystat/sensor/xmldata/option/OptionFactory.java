@@ -48,6 +48,9 @@ public class OptionFactory {
     else if (MultiShellOption.OPTION_NAME.equals(optionName)) {
       return new MultiShellOption(controller, parameters);
     }
+    else if (SetRuntimeOption.OPTION_NAME.equals(optionName)) {
+      return new SetRuntimeOption(controller, parameters);
+    }
     else {
       controller.fireMessage("The '" + optionName + "' option is not supported.");
     }

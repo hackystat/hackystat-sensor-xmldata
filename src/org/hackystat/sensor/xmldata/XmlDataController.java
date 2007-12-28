@@ -41,6 +41,7 @@ public class XmlDataController {
     this.optionHandler = new OptionHandler(this);
     this.messageDelegate = new MessageDelegate(this);
     this.optionMap.put(Options.UNIQUE_TSTAMP, Boolean.FALSE);
+    this.optionMap.put(Options.SET_RUNTIME, Boolean.FALSE);
   }
 
   /**

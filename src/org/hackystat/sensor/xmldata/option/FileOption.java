@@ -7,6 +7,7 @@ import java.util.Map;
 
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
+import javax.xml.datatype.XMLGregorianCalendar;
 import javax.xml.namespace.QName;
 
 import org.hackystat.sensor.xmldata.XmlDataController;
@@ -14,9 +15,10 @@ import org.hackystat.sensor.xmldata.jaxb.Entries;
 import org.hackystat.sensor.xmldata.jaxb.Entry;
 import org.hackystat.sensor.xmldata.jaxb.ObjectFactory;
 import org.hackystat.sensor.xmldata.jaxb.XmlData;
-import org.hackystat.sensorshell.SensorShellProperties;
 import org.hackystat.sensorshell.SensorShellException;
+import org.hackystat.sensorshell.SensorShellProperties;
 import org.hackystat.sensorshell.Shell;
+import org.hackystat.utilities.tstamp.Tstamp;
 import org.hackystat.utilities.tstamp.TstampSet;
 import org.xml.sax.SAXException;
 
@@ -74,8 +76,9 @@ public class FileOption extends AbstractOption {
     try {
       // First, lets get the correct shell instance.
       Shell shell = OptionUtil.createShell(new SensorShellProperties(), this.getController());
-      
+
       // Then, send data from each file.
+      XMLGregorianCalendar runtime = Tstamp.makeTimestamp();
       int entriesAdded = 0;
       for (String filePath : this.getParameters()) {
         this.getController().fireVerboseMessage("Sending data from: " + filePath);
@@ -96,6 +99,11 @@ public class FileOption extends AbstractOption {
             keyValMap.put("SensorDataType", (String) sdtName);
             keyValMap.put("Timestamp", OptionUtil.getCurrentTimestamp(true, tstampSet)
                 .toString());
+
+            // If the SetRuntimeOption is set, use the same runtime.
+            if (Boolean.TRUE.equals(this.getController().getOptionObject(Options.SET_RUNTIME))) {
+              keyValMap.put("Runtime", runtime.toString());
+            }
 
             // Next, add the optional attributes.
             Map<QName, String> map = entry.getOtherAttributes();

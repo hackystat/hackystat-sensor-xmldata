@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="log.xsl"?>
+
+<build error="C:\hackystat-projects\hackystat-utilities\build.xml:73: Compile failed; see the compiler error output for details." time="0 seconds">
+	<task location="C:\hackystat-projects\hackystat-utilities\build.xml:2: " name="description" time="0 seconds" />
+	<task location="C:\hackystat-projects\hackystat-utilities\build.xml:7: " name="property" time="0 seconds" />
+	<task location="C:\hackystat-projects\hackystat-utilities\build.xml:10: " name="condition" time="0 seconds" />
+	<task location="C:\hackystat-projects\hackystat-utilities\build.xml:16: " name="fail" time="0 seconds" />
+	<task location="C:\hackystat-projects\hackystat-utilities\build.xml:19: " name="condition" time="0 seconds" />
+	<task location="C:\hackystat-projects\hackystat-utilities\build.xml:22: " name="fail" time="0 seconds" />
+	<task location="C:\hackystat-projects\hackystat-utilities\build.xml:26: " name="property" time="0 seconds" />
+	<task location="C:\hackystat-projects\hackystat-utilities\build.xml:27: " name="property" time="0 seconds" />
+	<task location="C:\hackystat-projects\hackystat-utilities\build.xml:28: " name="available" time="0 seconds" />
+	<task location="C:\hackystat-projects\hackystat-utilities\build.xml:29: " name="fail" time="0 seconds" />
+	<task location="C:\hackystat-projects\hackystat-utilities\build.xml:32: " name="property" time="0 seconds" />
+	<task location="C:\hackystat-projects\hackystat-utilities\build.xml:33: " name="property" time="0 seconds" />
+	<task location="C:\hackystat-projects\hackystat-utilities\build.xml:34: " name="property" time="0 seconds" />
+	<task location="C:\hackystat-projects\hackystat-utilities\build.xml:35: " name="tstamp" time="0 seconds" />
+	<task location="C:\hackystat-projects\hackystat-utilities\build.xml:38: " name="property" time="0 seconds" />
+	<task location="C:\hackystat-projects\hackystat-utilities\hackystat.build.xml:3: " name="macrodef" time="0 seconds" />
+	<task location="C:\hackystat-projects\hackystat-utilities\hackystat.build.xml:12: " name="macrodef" time="0 seconds" />
+	<task location="C:\hackystat-projects\hackystat-utilities\hackystat.build.xml:24: " name="macrodef" time="0 seconds" />
+	<task location="C:\hackystat-projects\hackystat-utilities\hackystat.build.xml:37: " name="macrodef" time="0 seconds" />
+	<task location="C:\hackystat-projects\hackystat-utilities\hackystat.build.xml:50: " name="macrodef" time="0 seconds" />
+	<task location="C:\hackystat-projects\hackystat-utilities\hackystat.build.xml:66: " name="macrodef" time="0 seconds" />
+	<task location="C:\hackystat-projects\hackystat-utilities\hackystat.build.xml:78: " name="macrodef" time="0 seconds" />
+	<task location="C:\hackystat-projects\hackystat-utilities\build.xml:41: " name="import" time="0 seconds" />
+	<task location="C:\hackystat-projects\hackystat-utilities\build.xml:42: " name="property" time="0 seconds" />
+	<task location="C:\hackystat-projects\hackystat-utilities\build.xml:43: " name="property" time="0 seconds" />
+	<task location="C:\hackystat-projects\hackystat-utilities\build.xml:45: " name="condition" time="0 seconds" />
+	<task location="C:\hackystat-projects\hackystat-utilities\build.xml:50: " name="property" time="0 seconds" />
+	<task location="C:\hackystat-projects\hackystat-utilities\build.xml:51: " name="property" time="0 seconds" />
+	<task location="C:\hackystat-projects\hackystat-utilities\build.xml:52: " name="property" time="0 seconds" />
+	<task location="C:\hackystat-projects\hackystat-utilities\build.xml:56: " name="property" time="0 seconds" />
+	<task location="C:\hackystat-projects\hackystat-utilities\build.xml:57: " name="property" time="0 seconds" />
+	<task location="C:\hackystat-projects\hackystat-utilities\build.xml:58: " name="available" time="0 seconds" />
+	<task location="C:\hackystat-projects\hackystat-utilities\build.xml:59: " name="fail" time="0 seconds" />
+	<task location="C:\hackystat-projects\hackystat-utilities\build.xml:62: " name="path" time="0 seconds" />
+	<target name="compile" time="0 seconds">
+		<task location="C:\hackystat-projects\hackystat-utilities\build.xml:72: " name="mkdir" time="0 seconds" />
+		<task location="C:\hackystat-projects\hackystat-utilities\build.xml:73: " name="javac" time="0 seconds">
+			<message priority="info"><![CDATA[Compiling 1 source file to C:\hackystat-projects\hackystat-utilities\build\classes]]></message>
+			<message priority="warn"><![CDATA[C:\hackystat-projects\hackystat-utilities\src\org\hackystat\utilities\home\HackystatUserHome.java:21: not a statement]]></message>
+			<message priority="warn"><![CDATA[    return new File(userHome);safasd]]></message>
+			<message priority="warn"><![CDATA[                              ^]]></message>
+			<message priority="warn"><![CDATA[C:\hackystat-projects\hackystat-utilities\src\org\hackystat\utilities\home\HackystatUserHome.java:21: ';' expected]]></message>
+			<message priority="warn"><![CDATA[    return new File(userHome);safasd]]></message>
+			<message priority="warn"><![CDATA[                                    ^]]></message>
+			<message priority="warn"><![CDATA[2 errors]]></message>
+		</task>
+	</target>
+	<stacktrace><![CDATA[C:\hackystat-projects\hackystat-utilities\build.xml:73: Compile failed; see the compiler error output for details.
+	at org.apache.tools.ant.taskdefs.Javac.compile(Javac.java:999)
+	at org.apache.tools.ant.taskdefs.Javac.execute(Javac.java:820)
+	at org.apache.tools.ant.UnknownElement.execute(UnknownElement.java:288)
+	at sun.reflect.GeneratedMethodAccessor2.invoke(Unknown Source)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:25)
+	at java.lang.reflect.Method.invoke(Method.java:597)
+	at org.apache.tools.ant.dispatch.DispatchUtils.execute(DispatchUtils.java:105)
+	at org.apache.tools.ant.Task.perform(Task.java:348)
+	at org.apache.tools.ant.Target.execute(Target.java:357)
+	at org.apache.tools.ant.Target.performTasks(Target.java:385)
+	at org.apache.tools.ant.Project.executeSortedTargets(Project.java:1329)
+	at org.apache.tools.ant.Project.executeTarget(Project.java:1298)
+	at org.apache.tools.ant.helper.DefaultExecutor.executeTargets(DefaultExecutor.java:41)
+	at org.apache.tools.ant.Project.executeTargets(Project.java:1181)
+	at org.apache.tools.ant.Main.runBuild(Main.java:698)
+	at org.apache.tools.ant.Main.startAnt(Main.java:199)
+	at org.apache.tools.ant.launch.Launcher.run(Launcher.java:257)
+	at org.apache.tools.ant.launch.Launcher.main(Launcher.java:104)
+]]></stacktrace>
+</build>

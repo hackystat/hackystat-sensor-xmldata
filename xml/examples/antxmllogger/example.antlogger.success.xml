@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="log.xsl"?>
+
+<build time="8 seconds">
+	<task location="C:\hackystat-projects\hackystat-utilities\dist.build.xml:2: " name="description" time="0 seconds" />
+	<task location="C:\hackystat-projects\hackystat-utilities\build.xml:2: " name="description" time="0 seconds" />
+	<task location="C:\hackystat-projects\hackystat-utilities\build.xml:7: " name="property" time="0 seconds" />
+	<task location="C:\hackystat-projects\hackystat-utilities\build.xml:10: " name="condition" time="0 seconds" />
+	<task location="C:\hackystat-projects\hackystat-utilities\build.xml:16: " name="fail" time="0 seconds" />
+	<task location="C:\hackystat-projects\hackystat-utilities\build.xml:19: " name="condition" time="0 seconds" />
+	<task location="C:\hackystat-projects\hackystat-utilities\build.xml:22: " name="fail" time="0 seconds" />
+	<task location="C:\hackystat-projects\hackystat-utilities\build.xml:26: " name="property" time="0 seconds" />
+	<task location="C:\hackystat-projects\hackystat-utilities\build.xml:27: " name="property" time="0 seconds" />
+	<task location="C:\hackystat-projects\hackystat-utilities\build.xml:28: " name="available" time="0 seconds" />
+	<task location="C:\hackystat-projects\hackystat-utilities\build.xml:29: " name="fail" time="0 seconds" />
+	<task location="C:\hackystat-projects\hackystat-utilities\build.xml:32: " name="property" time="0 seconds" />
+	<task location="C:\hackystat-projects\hackystat-utilities\build.xml:33: " name="property" time="0 seconds" />
+	<task location="C:\hackystat-projects\hackystat-utilities\build.xml:34: " name="property" time="0 seconds" />
+	<task location="C:\hackystat-projects\hackystat-utilities\build.xml:35: " name="tstamp" time="0 seconds" />
+	<task location="C:\hackystat-projects\hackystat-utilities\build.xml:38: " name="property" time="0 seconds" />
+	<task location="C:\hackystat-projects\hackystat-utilities\hackystat.build.xml:3: " name="macrodef" time="0 seconds" />
+	<task location="C:\hackystat-projects\hackystat-utilities\hackystat.build.xml:12: " name="macrodef" time="0 seconds" />
+	<task location="C:\hackystat-projects\hackystat-utilities\hackystat.build.xml:24: " name="macrodef" time="0 seconds" />
+	<task location="C:\hackystat-projects\hackystat-utilities\hackystat.build.xml:37: " name="macrodef" time="0 seconds" />
+	<task location="C:\hackystat-projects\hackystat-utilities\hackystat.build.xml:50: " name="macrodef" time="0 seconds" />
+	<task location="C:\hackystat-projects\hackystat-utilities\hackystat.build.xml:66: " name="macrodef" time="0 seconds" />
+	<task location="C:\hackystat-projects\hackystat-utilities\hackystat.build.xml:78: " name="macrodef" time="0 seconds" />
+	<task location="C:\hackystat-projects\hackystat-utilities\build.xml:41: " name="import" time="0 seconds" />
+	<task location="C:\hackystat-projects\hackystat-utilities\build.xml:42: " name="property" time="0 seconds" />
+	<task location="C:\hackystat-projects\hackystat-utilities\build.xml:43: " name="property" time="0 seconds" />
+	<task location="C:\hackystat-projects\hackystat-utilities\build.xml:45: " name="condition" time="0 seconds" />
+	<task location="C:\hackystat-projects\hackystat-utilities\build.xml:50: " name="property" time="0 seconds" />
+	<task location="C:\hackystat-projects\hackystat-utilities\build.xml:51: " name="property" time="0 seconds" />
+	<task location="C:\hackystat-projects\hackystat-utilities\build.xml:52: " name="property" time="0 seconds" />
+	<task location="C:\hackystat-projects\hackystat-utilities\build.xml:56: " name="property" time="0 seconds" />
+	<task location="C:\hackystat-projects\hackystat-utilities\build.xml:57: " name="property" time="0 seconds" />
+	<task location="C:\hackystat-projects\hackystat-utilities\build.xml:58: " name="available" time="0 seconds" />
+	<task location="C:\hackystat-projects\hackystat-utilities\build.xml:59: " name="fail" time="0 seconds" />
+	<task location="C:\hackystat-projects\hackystat-utilities\build.xml:62: " name="path" time="0 seconds" />
+	<task location="C:\hackystat-projects\hackystat-utilities\dist.build.xml:6: " name="import" time="0 seconds" />
+	<task location="C:\hackystat-projects\hackystat-utilities\jar.build.xml:2: " name="description" time="0 seconds" />
+	<task location="C:\hackystat-projects\hackystat-utilities\jar.build.xml:6: " name="import" time="0 seconds" />
+	<task location="C:\hackystat-projects\hackystat-utilities\jar.build.xml:7: " name="property" time="0 seconds" />
+	<task location="C:\hackystat-projects\hackystat-utilities\jar.build.xml:8: " name="property" time="0 seconds" />
+	<task location="C:\hackystat-projects\hackystat-utilities\dist.build.xml:7: " name="import" time="0 seconds" />
+	<target name="clean" time="1 second">
+		<task location="C:\hackystat-projects\hackystat-utilities\build.xml:81: " name="delete" time="0 seconds" />
+		<task location="C:\hackystat-projects\hackystat-utilities\build.xml:84: " name="delete" time="1 second">
+			<message priority="info"><![CDATA[Deleting directory C:\hackystat-projects\hackystat-utilities\build]]></message>
+		</task>
+		<task location="C:\hackystat-projects\hackystat-utilities\build.xml:85: " name="delete" time="0 seconds" />
+	</target>
+	<target name="compile" time="2 seconds">
+		<task location="C:\hackystat-projects\hackystat-utilities\build.xml:72: " name="mkdir" time="0 seconds">
+			<message priority="info"><![CDATA[Created dir: C:\hackystat-projects\hackystat-utilities\build\classes]]></message>
+		</task>
+		<task location="C:\hackystat-projects\hackystat-utilities\build.xml:73: " name="javac" time="2 seconds">
+			<message priority="info"><![CDATA[Compiling 39 source files to C:\hackystat-projects\hackystat-utilities\build\classes]]></message>
+		</task>
+	</target>
+	<target name="jar-home" time="0 seconds">
+		<task location="C:\hackystat-projects\hackystat-utilities\jar.build.xml:86: " name="mkdir" time="0 seconds">
+			<message priority="info"><![CDATA[Created dir: C:\hackystat-projects\hackystat-utilities\tmp-lib]]></message>
+		</task>
+		<task location="C:\hackystat-projects\hackystat-utilities\jar.build.xml:87: " name="copy" time="0 seconds">
+			<message priority="info"><![CDATA[Copying 2 files to C:\hackystat-projects\hackystat-utilities\tmp-lib]]></message>
+		</task>
+		<task location="C:\hackystat-projects\hackystat-utilities\jar.build.xml:92: " name="jar" time="0 seconds">
+			<message priority="info"><![CDATA[Building jar: C:\hackystat-projects\hackystat-utilities\hackystatuserhome.lib.jar]]></message>
+		</task>
+		<task location="C:\hackystat-projects\hackystat-utilities\jar.build.xml:99: " name="delete" time="0 seconds">
+			<message priority="info"><![CDATA[Deleting directory C:\hackystat-projects\hackystat-utilities\tmp-lib]]></message>
+		</task>
+	</target>
+	<target name="jar-hackystatlogger" time="0 seconds">
+		<task location="C:\hackystat-projects\hackystat-utilities\jar.build.xml:14: " name="mkdir" time="0 seconds">
+			<message priority="info"><![CDATA[Created dir: C:\hackystat-projects\hackystat-utilities\tmp-lib]]></message>
+		</task>
+		<task location="C:\hackystat-projects\hackystat-utilities\jar.build.xml:15: " name="copy" time="0 seconds">
+			<message priority="info"><![CDATA[Copying 4 files to C:\hackystat-projects\hackystat-utilities\tmp-lib]]></message>
+		</task>
+		<task location="C:\hackystat-projects\hackystat-utilities\jar.build.xml:20: " name="jar" time="0 seconds">
+			<message priority="info"><![CDATA[Building jar: C:\hackystat-projects\hackystat-utilities\hackystatlogger.lib.jar]]></message>
+		</task>
+		<task location="C:\hackystat-projects\hackystat-utilities\jar.build.xml:27: " name="delete" time="0 seconds">
+			<message priority="info"><![CDATA[Deleting directory C:\hackystat-projects\hackystat-utilities\tmp-lib]]></message>
+		</task>
+	</target>
+	<target name="jar-stacktrace" time="0 seconds">
+		<task location="C:\hackystat-projects\hackystat-utilities\jar.build.xml:32: " name="mkdir" time="0 seconds">
+			<message priority="info"><![CDATA[Created dir: C:\hackystat-projects\hackystat-utilities\tmp-lib]]></message>
+		</task>
+		<task location="C:\hackystat-projects\hackystat-utilities\jar.build.xml:33: " name="copy" time="0 seconds">
+			<message priority="info"><![CDATA[Copying 2 files to C:\hackystat-projects\hackystat-utilities\tmp-lib]]></message>
+		</task>
+		<task location="C:\hackystat-projects\hackystat-utilities\jar.build.xml:38: " name="jar" time="0 seconds">
+			<message priority="info"><![CDATA[Building jar: C:\hackystat-projects\hackystat-utilities\stacktrace.lib.jar]]></message>
+		</task>
+		<task location="C:\hackystat-projects\hackystat-utilities\jar.build.xml:45: " name="delete" time="0 seconds">
+			<message priority="info"><![CDATA[Deleting directory C:\hackystat-projects\hackystat-utilities\tmp-lib]]></message>
+		</task>
+	</target>
+	<target name="jar-tstamp" time="0 seconds">
+		<task location="C:\hackystat-projects\hackystat-utilities\jar.build.xml:50: " name="mkdir" time="0 seconds">
+			<message priority="info"><![CDATA[Created dir: C:\hackystat-projects\hackystat-utilities\tmp-lib]]></message>
+		</task>
+		<task location="C:\hackystat-projects\hackystat-utilities\jar.build.xml:51: " name="copy" time="0 seconds">
+			<message priority="info"><![CDATA[Copying 4 files to C:\hackystat-projects\hackystat-utilities\tmp-lib]]></message>
+		</task>
+		<task location="C:\hackystat-projects\hackystat-utilities\jar.build.xml:56: " name="jar" time="0 seconds">
+			<message priority="info"><![CDATA[Building jar: C:\hackystat-projects\hackystat-utilities\tstamp.lib.jar]]></message>
+		</task>
+		<task location="C:\hackystat-projects\hackystat-utilities\jar.build.xml:63: " name="delete" time="0 seconds">
+			<message priority="info"><![CDATA[Deleting directory C:\hackystat-projects\hackystat-utilities\tmp-lib]]></message>
+		</task>
+	</target>
+	<target name="jar-uricache" time="3 seconds">
+		<task location="C:\hackystat-projects\hackystat-utilities\jar.build.xml:104: " name="mkdir" time="0 seconds">
+			<message priority="info"><![CDATA[Created dir: C:\hackystat-projects\hackystat-utilities\tmp-lib]]></message>
+		</task>
+		<task location="C:\hackystat-projects\hackystat-utilities\jar.build.xml:105: " name="copy" time="0 seconds">
+			<message priority="info"><![CDATA[Copying 5 files to C:\hackystat-projects\hackystat-utilities\tmp-lib]]></message>
+		</task>
+		<task location="C:\hackystat-projects\hackystat-utilities\jar.build.xml:110: " name="unjar" time="0 seconds">
+			<message priority="info"><![CDATA[Expanding: C:\hackystat-projects\hackystat-utilities\lib\concurrent\concurrent.jar into C:\hackystat-projects\hackystat-utilities\tmp-lib]]></message>
+		</task>
+		<task location="C:\hackystat-projects\hackystat-utilities\jar.build.xml:111: " name="unjar" time="1 second">
+			<message priority="info"><![CDATA[Expanding: c:\java-tools\jcs-1.3\jcs-1.3.jar into C:\hackystat-projects\hackystat-utilities\tmp-lib]]></message>
+		</task>
+		<task location="C:\hackystat-projects\hackystat-utilities\jar.build.xml:112: " name="unjar" time="0 seconds">
+			<message priority="info"><![CDATA[Expanding: c:\java-tools\commons-logging-1.1\commons-logging-1.1.jar into C:\hackystat-projects\hackystat-utilities\tmp-lib]]></message>
+		</task>
+		<task location="C:\hackystat-projects\hackystat-utilities\jar.build.xml:113: " name="jar" time="0 seconds">
+			<message priority="info"><![CDATA[Building jar: C:\hackystat-projects\hackystat-utilities\uricache.lib.jar]]></message>
+		</task>
+		<task location="C:\hackystat-projects\hackystat-utilities\jar.build.xml:120: " name="delete" time="0 seconds">
+			<message priority="info"><![CDATA[Deleting directory C:\hackystat-projects\hackystat-utilities\tmp-lib]]></message>
+		</task>
+	</target>
+	<target name="jar-time" time="0 seconds">
+		<task location="C:\hackystat-projects\hackystat-utilities\jar.build.xml:68: " name="mkdir" time="0 seconds">
+			<message priority="info"><![CDATA[Created dir: C:\hackystat-projects\hackystat-utilities\tmp-lib]]></message>
+		</task>
+		<task location="C:\hackystat-projects\hackystat-utilities\jar.build.xml:69: " name="copy" time="0 seconds">
+			<message priority="info"><![CDATA[Copying 25 files to C:\hackystat-projects\hackystat-utilities\tmp-lib]]></message>
+		</task>
+		<task location="C:\hackystat-projects\hackystat-utilities\jar.build.xml:74: " name="jar" time="0 seconds">
+			<message priority="info"><![CDATA[Building jar: C:\hackystat-projects\hackystat-utilities\time.lib.jar]]></message>
+		</task>
+		<task location="C:\hackystat-projects\hackystat-utilities\jar.build.xml:81: " name="delete" time="0 seconds">
+			<message priority="info"><![CDATA[Deleting directory C:\hackystat-projects\hackystat-utilities\tmp-lib]]></message>
+		</task>
+	</target>
+	<target name="jar" time="0 seconds" />
+	<target name="dist" time="0 seconds">
+		<task location="C:\hackystat-projects\hackystat-utilities\dist.build.xml:11: " name="property" time="0 seconds" />
+		<task location="C:\hackystat-projects\hackystat-utilities\dist.build.xml:12: " name="property" time="0 seconds" />
+		<task location="C:\hackystat-projects\hackystat-utilities\dist.build.xml:13: " name="property" time="0 seconds" />
+		<task location="C:\hackystat-projects\hackystat-utilities\dist.build.xml:17: " name="mkdir" time="0 seconds">
+			<message priority="info"><![CDATA[Created dir: C:\hackystat-projects\hackystat-utilities\dist-tmp\hackystat-utilities-8.0.109]]></message>
+		</task>
+		<task location="C:\hackystat-projects\hackystat-utilities\dist.build.xml:18: " name="copy" time="0 seconds">
+			<message priority="info"><![CDATA[Copying 77 files to C:\hackystat-projects\hackystat-utilities\dist-tmp\hackystat-utilities-8.0.109]]></message>
+		</task>
+		<task location="C:\hackystat-projects\hackystat-utilities\dist.build.xml:23: " name="mkdir" time="0 seconds">
+			<message priority="info"><![CDATA[Created dir: C:\hackystat-projects\hackystat-utilities\build\dist]]></message>
+		</task>
+		<task location="C:\hackystat-projects\hackystat-utilities\dist.build.xml:24: " name="zip" time="0 seconds">
+			<message priority="info"><![CDATA[Building zip: C:\hackystat-projects\hackystat-utilities\build\dist\hackystat-utilities-8.0.109.zip]]></message>
+		</task>
+		<task location="C:\hackystat-projects\hackystat-utilities\dist.build.xml:25: " name="delete" time="0 seconds">
+			<message priority="info"><![CDATA[Deleting directory C:\hackystat-projects\hackystat-utilities\dist-tmp]]></message>
+		</task>
+	</target>
+</build>

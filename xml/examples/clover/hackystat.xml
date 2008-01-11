@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xmldata>
+<entry sdt="Coverage" tool="Clover" granularity="statement" fileName="/Users/johnson/svn-csdl/StackyHack/src/edu/hawaii/stack/ClearStack.java" covered="1" uncovered="1"/>
+<entry sdt="Coverage" tool="Clover" granularity="statement" fileName="/Users/johnson/svn-csdl/StackyHack/src/edu/hawaii/stack/EmptyStackException.java" covered="1" uncovered="0"/>
+<entry sdt="Coverage" tool="Clover" granularity="statement" fileName="/Users/johnson/svn-csdl/StackyHack/src/edu/hawaii/stack/TestStack.java" covered="13" uncovered="1"/>
+<entry sdt="Coverage" tool="Clover" granularity="statement" fileName="/Users/johnson/svn-csdl/StackyHack/src/edu/hawaii/stack/TestClearStack.java" covered="11" uncovered="0"/>
+<entry sdt="Coverage" tool="Clover" granularity="statement" fileName="/Users/johnson/svn-csdl/StackyHack/src/edu/hawaii/stack/Stack.java" covered="16" uncovered="3"/>
+</xmldata>

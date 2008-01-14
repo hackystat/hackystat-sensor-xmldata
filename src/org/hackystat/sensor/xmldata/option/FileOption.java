@@ -95,7 +95,7 @@ public class FileOption extends AbstractOption {
             // Then, lets set the "required" attributes.
             Map<String, String> keyValMap = new HashMap<String, String>();
             keyValMap.put("Tool", entry.getTool());
-            keyValMap.put("Resource", entry.getResource());
+            keyValMap.put("Resource", this.getResource(entry));
             keyValMap.put("SensorDataType", (String) sdtName);
             keyValMap.put("Timestamp", OptionUtil.getCurrentTimestamp(true, tstampSet)
                 .toString());
@@ -158,6 +158,20 @@ public class FileOption extends AbstractOption {
     }
   }
 
+  /**
+   * Returns the Resource value of the specified entry. This method is helpful
+   * when an option is specified that alters the resource associated with the
+   * Resource key.
+   * @param entry the entry whose Resource value is determined.
+   * @return the resource string value.
+   */
+  private String getResource(Entry entry) {
+    if (this.getController().getOptionObject(Options.RESOURCE) == null) {
+      return entry.getResource();
+    }
+    return this.getController().getOptionObject(Options.RESOURCE).toString();
+  }
+  
   /**
    * Returns true if the list of JAXB Entry object's each contain the sensor
    * data type attribute.

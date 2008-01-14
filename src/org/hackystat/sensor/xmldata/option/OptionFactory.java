@@ -51,6 +51,9 @@ public class OptionFactory {
     else if (SetRuntimeOption.OPTION_NAME.equals(optionName)) {
       return new SetRuntimeOption(controller, parameters);
     }
+    else if (ResourceOption.OPTION_NAME.equals(optionName)) {
+      return new ResourceOption(controller, parameters);
+    }
     else {
       controller.fireMessage("The '" + optionName + "' option is not supported.");
     }

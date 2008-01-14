@@ -32,5 +32,10 @@ public enum Options {
    * The option set when the user requests to send data as a batch, which means
    * that all data instances have the same runtime.
    */
-  SET_RUNTIME;
+  SET_RUNTIME,
+  /**
+   * The option set when all entries sent by this sensor belongs to the same
+   * specified resource.
+   */
+  RESOURCE;
 }

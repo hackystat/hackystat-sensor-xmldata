@@ -164,7 +164,7 @@ public class OptionUtil {
    * schema directory.
    */
   public static Unmarshaller createUnmarshaller(Class<?> contextClass, String schemaFileName)
-      throws JAXBException, SAXException, MalformedURLException {
+    throws JAXBException, SAXException, MalformedURLException {
     JAXBContext context = JAXBContext.newInstance(contextClass);
     Unmarshaller unmarshaller = context.createUnmarshaller();
 
@@ -206,8 +206,7 @@ public class OptionUtil {
 
   /**
    * Creates a Shell instance based on the information found in the specified
-   * controller. This method encapsulates the selection of which shell to use
-   * based on the options specified to the controller.
+   * controller.
    * @param properties the properties used to create the shell instance.
    * @param controller the controller that contains the information used to
    * determine which shell to use.
@@ -215,14 +214,16 @@ public class OptionUtil {
    * @throws Exception thrown if there is a problem instantiating a
    * MultiSensorShell instance.
    */
-  public static Shell createShell(SensorShellProperties properties, XmlDataController controller)
-      throws Exception {
+  public static Shell createShell(SensorShellProperties properties,
+      XmlDataController controller) throws Exception {
     Boolean isMultiShellOption = (Boolean) controller.getOptionObject(Options.MULTI_SHELL);
     boolean isMultiShell = (isMultiShellOption != null) && isMultiShellOption.booleanValue();
-    controller.fireMessage("MultiSensorShell " + ((isMultiShell) ? "is" : "is not") + " enabled.");
+    controller.fireMessage("MultiSensorShell " + ((isMultiShell) ? "is" : "is not")
+        + " enabled.");
     String multi = String.valueOf(isMultiShell);
     Properties preferMultiShell = new Properties();
-    preferMultiShell.setProperty(SensorShellProperties.SENSORSHELL_MULTISHELL_ENABLED_KEY, multi);
+    preferMultiShell.setProperty(SensorShellProperties.SENSORSHELL_MULTISHELL_ENABLED_KEY,
+        multi);
     SensorShellProperties newProps = new SensorShellProperties(properties, preferMultiShell);
     return new SensorShell(newProps, false, "XmlData");
   }

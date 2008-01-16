@@ -1,0 +1,16 @@
+<project name="ant.transform" default="ant.transform">
+
+<target name="ant.transform"
+   description="Transforms the XML file produced by Ant's XmlLogger into a format suitable for XmlDataSensor.">
+   <xslt style="AntToHackystat.xsl" force="true"
+         in="${basedir}/example.antlogger.failure.xml" out="${basedir}/hackystat.xml" />  
+   <!-- Print out the file for development purposes. -->
+   <concat>
+      <fileset file="${basedir}/hackystat.xml"/>
+   </concat>   
+ </target>
+
+</project>
+
+
+

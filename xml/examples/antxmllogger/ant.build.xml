@@ -1,14 +1,40 @@
-<project name="ant.transform" default="ant.transform">
+<project name="antlogger.sensor" default="antlogger.sensor">
+  <description>
+  This file implements an Ant sensor based upon the use of the Ant logger mechanism. Begin by 
+  running Ant to build your system with the XmlLogger enabled.  Have the output redirected into
+  a file named "antlogger.xml".  It should look like this:
+    ant -logger org.apache.tools.ant.XmlLogger -logfile antlogger.xml
+  Once this build has completed, you can send the data to Hackystat by invoking this file:
+    ant -f ant.build.xml
+  Note that the timestamp associated with the Build sensor data instance will be the time that
+  you invoked 'ant -f ant.build.xml', not the time you invoked your actual build.  
+  </description>
+  
+  <!-- The log file created from a prior run of Ant, to be used to generate a Build sensor data instance -->
+  <property name="logFile" location="${basedir}/antlogger.xml"/>
 
-<target name="ant.transform"
-   description="Transforms the XML file produced by Ant's XmlLogger into a format suitable for XmlDataSensor.">
-   <xslt style="AntToHackystat.xsl" force="true"
-         in="${basedir}/example.antlogger.failure.xml" out="${basedir}/hackystat.xml" />  
-   <!-- Print out the file for development purposes. -->
-   <concat>
-      <fileset file="${basedir}/hackystat.xml"/>
-   </concat>   
- </target>
+  <!-- Where to find the XSL file for converting logFile to dataFile. -->
+  <property name="xslFile" location="${basedir}/AntToHackystat.xsl"/>
+
+  <!-- The data file created by running XSLT on the logFile -->
+  <property name="dataFile" location="${basedir}/hackystat.xml"/>
+
+  <!-- The file/directory to be used as the value of the Resource field in the Build sensor data instance. -->
+  <property name="resourceFile" location="${basedir}"/>
+  
+  <target name="antlogger.sensor" description="Sends data to Hackystat via the XmlData sensor.">
+    <property environment="env"/> 
+    <available file="${env.HACKYSTAT_XMLDATA_HOME}/xmldata-cli.jar" property="xmldata.available"/>
+    <fail unless="xmldata.available" message="Error: ${env.HACKYSTAT_XMLDATA_HOME}/xmldata-cli.jar not found."/>
+
+    <!-- Transform the Ant logger file into a format acceptable to XmlDataSensor. -->
+    <xslt style="${xslFile}" force="true" in="${logFile}" out="${dataFile}" />
+
+    <!-- Invoke XmlData by executing the jar file and passing in command line args. -->
+    <java jar="${env.HACKYSTAT_XMLDATA_HOME}/xmldata-cli.jar" fork="true">
+      <arg line="-uniqueTimestamps -resource ${resourceFile} -file ${dataFile}"/>
+    </java>
+  </target>
 
 </project>
 

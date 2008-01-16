@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xmldata>
-<entry sdt="Build" tool="Ant" Target="compile" Result="Failure"/>
-</xmldata>
+<XmlData>
+<Entries>
+<Entry SensorDataType="Build" Tool="Ant" Target="dist" Result="Success" Resource="unknown"/>
+</Entries>
+</XmlData>

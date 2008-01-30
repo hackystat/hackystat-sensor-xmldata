@@ -1,0 +1,30 @@
+<project name="javancss" default="javancss">
+  <description>
+    Implements the JavaNCSS code counting tool and a Hackystat sensor for it.
+  </description>
+  
+  <import file="build.xml"/>
+  <property name="javancss.dir" location="${build.dir}/javancss" />
+
+  <target name="javancss" depends="compile" description="Generate JavaNCSS.">
+    <!-- Fail this target if JavaNCSS is not installed. -->
+    <available file="${env.JAVANCSS_HOME}/lib/javancss.jar" property="javancss.available"/>
+    <fail unless="javancss.available" message="Error: ${env.JAVANCSS_HOME}/lib/javancss.jar not found."/>
+     
+    <mkdir dir="${javancss.dir}" />
+    <taskdef name="javancss" classname="javancss.JavancssAntTask">
+      <classpath>
+        <pathelement location="${env.JAVANCSS_HOME}/lib/javancss.jar"/>
+        <pathelement location="${env.JAVANCSS_HOME}/lib/ccl.jar"/>
+        <pathelement location="${env.JAVANCSS_HOME}/lib/jhbasic.jar"/>
+      </classpath>
+    </taskdef>
+
+    <javancss srcdir="${src.dir}"
+              abortOnFail="false" 
+              includes="**/*.java"
+              generateReport="true"
+              outputfile="${javancss.dir}/javancss.xml"
+              format="xml"/>
+  </target>
+</project>

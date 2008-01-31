@@ -5,9 +5,14 @@ import java.util.List;
 import org.hackystat.sensor.xmldata.XmlDataController;
 
 /**
+ * The -multishell option is deprecated and scheduled for removal. The XmlSensor will use whatever
+ * setting is present in the SensorShellProperties file. 
+ * 
  * The options that is used to notify the data sending Options that a
  * MultiSensorShell instance should be used instead of a single-threaded
  * SensorShell.
+ * 
+ * 
  * @author aito
  * 
  */
@@ -44,6 +49,7 @@ public class MultiShellOption extends AbstractOption {
       this.getController().fireMessage(msg);
       return false;
     }
+    this.getController().fireMessage("-multishell option ignored. Using SensorShellProperties.");
     return true;
   }
 }

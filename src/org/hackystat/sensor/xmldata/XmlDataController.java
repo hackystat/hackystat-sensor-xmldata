@@ -166,8 +166,7 @@ public class XmlDataController {
       return properties.getSensorBaseHost();
     }
     catch (SensorShellException e) {
-      String msg = "The sensorshell.properties file in your userdir/.hackystat "
-          + "directory is invalid or does not exist.";
+      String msg = "Problem creating SensorShellProperties: " + e.getMessage();
       this.fireMessage(msg);
     }
     return "";

@@ -7,7 +7,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Properties;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
@@ -216,6 +215,8 @@ public class OptionUtil {
    */
   public static Shell createShell(SensorShellProperties properties,
       XmlDataController controller) throws Exception {
+    
+    /*  Ignore Multishell command line parameter; use whatever is in sensorshell.properties. 
     Boolean isMultiShellOption = (Boolean) controller.getOptionObject(Options.MULTI_SHELL);
     boolean isMultiShell = (isMultiShellOption != null) && isMultiShellOption.booleanValue();
     controller.fireMessage("MultiSensorShell " + ((isMultiShell) ? "is" : "is not")
@@ -225,6 +226,7 @@ public class OptionUtil {
     preferMultiShell.setProperty(SensorShellProperties.SENSORSHELL_MULTISHELL_ENABLED_KEY,
         multi);
     SensorShellProperties newProps = new SensorShellProperties(properties, preferMultiShell);
-    return new SensorShell(newProps, false, "XmlData");
+    */
+    return new SensorShell(new SensorShellProperties(), false, "XmlData");
   }
 }

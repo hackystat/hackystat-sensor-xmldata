@@ -35,7 +35,6 @@
       <formatter type="text" toConsole="true"/>
       <fileset dir="${src.dir}" includes="**/*.java" excludes="**/jaxb/**"/>
     </pmd>    
-  	<antcall target="pmd.report" />
   </target>
 
   <target name="pmd.report" description="Generates HTML reports on the PMD output.">

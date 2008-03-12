@@ -1,30 +1,39 @@
 <project name="javancss" default="javancss">
-  <description>
-    Implements the JavaNCSS code counting tool and a Hackystat sensor for it.
-  </description>
-  
-  <import file="build.xml"/>
-  <property name="javancss.dir" location="${build.dir}/javancss" />
+  <description>Runs javancss.   Invocation: ant -f javancss.build.xml</description>
 
-  <target name="javancss" depends="compile" description="Generate JavaNCSS.">
-    <!-- Fail this target if JavaNCSS is not installed. -->
-    <available file="${env.JAVANCSS_HOME}/lib/javancss.jar" property="javancss.available"/>
-    <fail unless="javancss.available" message="Error: ${env.JAVANCSS_HOME}/lib/javancss.jar not found."/>
-     
-    <mkdir dir="${javancss.dir}" />
+  <property environment="env" />
+  <import file="build.xml" />
+  <property name="javancss.version" value="28.49" />
+  <property name="javancss.jar" value="javancss.jar" />
+  <property name="javancss.dir" location="${build.dir}/javancss" />
+  <property name="javancss.failOnError" value="false" />
+
+  <target name="javancss" depends="javancss.tool,javancss.report, javancss.sensor" description="Runs the javancss tool" />
+
+  <target name="javancss.report" description="Converts xml output to html">
+    <xslt in="${javancss.dir}/javancss.xml" out="${javancss.dir}/javancss.html" style="${env.JAVANCSS_HOME}/xslt/javancss2html.xsl"/>
+  </target>
+  
+  <target name="javancss.tool" description="Runs javancss over the source code to check for problems.">
+    <!-- Fail this target if JAVANCSS is not installed. -->
+    <available file="${env.JAVANCSS_HOME}/lib/${javancss.jar}" property="javancss.available" />
+    <fail unless="javancss.available" message="Error: ${env.JAVANCSS_HOME}/lib/${javancss.jar} not found." />
     <taskdef name="javancss" classname="javancss.JavancssAntTask">
       <classpath>
-        <pathelement location="${env.JAVANCSS_HOME}/lib/javancss.jar"/>
-        <pathelement location="${env.JAVANCSS_HOME}/lib/ccl.jar"/>
-        <pathelement location="${env.JAVANCSS_HOME}/lib/jhbasic.jar"/>
+        <fileset dir="${env.JAVANCSS_HOME}/lib" includes="*.jar" />
       </classpath>
     </taskdef>
-
-    <javancss srcdir="${src.dir}"
-              abortOnFail="false" 
-              includes="**/*.java"
-              generateReport="true"
-              outputfile="${javancss.dir}/javancss.xml"
-              format="xml"/>
+    <!-- Run javancss -->
+    <mkdir dir="${javancss.dir}" />
+    <javancss srcdir="${basedir}/src" abortOnFail="${javancss.failOnError}" includes="**/*.java" generateReport="true" outputfile="${javancss.dir}/javancss.xml" format="xml">
+    </javancss>
   </target>
+  
+  <target name="javancss.sensor" unless="javancss.disabled" description="Sends JavaNCSS FileMetric data to Hackystat.">
+    <fileset id="javancss.sourcefiles" dir="${src.dir}" includes="**/*.java" />
+    <fileset id="javancss.datafiles" file="${javancss.dir}/javancss.xml" />
+    <hackystat.javancss javancss.datafiles.fileset="javancss.datafiles" javancss.sourcefiles.fileset="javancss.sourcefiles" verbose="${hackystat.verbose.mode}" />
+  </target>
+
 </project>
+

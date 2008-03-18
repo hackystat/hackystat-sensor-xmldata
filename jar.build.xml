@@ -3,27 +3,32 @@
   Provides the target for building Java5 and Java6 jar files of the SensorShell.
   </description>
 
-  <import file="build.xml"/>
+  <import file="build.xml" />
   <property name="build.classes.dir" location="${basedir}/build/classes" />
- 
-  <target name="jar" depends="compile" 
-     description="Create xmldata-cli.jar.">
-	
-     <unjar src="${env.HACKYSTAT_SENSORSHELL_HOME}/sensorshell.jar" dest="${build.classes.dir}"/>
-  	
-  	<!-- Copies the xsd schema files. -->
-  	 <copy todir="${build.classes.dir}/xml" >
-  	 	<fileset dir="${basedir}/xml" />
-  	 </copy>
-     <jar destfile="${basedir}/xmldata-cli.jar" basedir="${build.classes.dir}" >
-       <manifest>
-         <attribute name="Main-Class" value="org.hackystat.sensor.xmldata.XmlDataCliSensor"/>
-         <attribute name="Implementation-Title" value="XmlData CLI"/>
-         <attribute name="Implementation-Version" value="${version}"/>
-         <attribute name="Implementation-Vendor" value="Collaborative Software Development Laboratory, University of Hawaii"/>
-       </manifest>
-     </jar>
-   
-   </target>  
+  <property name="tmp.dir" location="${basedir}/tmp" />
+
+  <target name="jar" depends="compile" description="Create xmldata-cli.jar.">
+    <delete dir="${tmp.dir}" quiet="yes"/>
+      <mkdir dir="${tmp.dir}" />
+      <copy todir="${tmp.dir}">
+        <fileset dir="${basedir}/build/classes"/>
+      </copy>
+
+    <unjar src="${env.HACKYSTAT_SENSORSHELL_HOME}/sensorshell.jar" dest="${tmp.dir}" />
+
+    <!-- Copies the xsd schema files. -->
+    <copy todir="${tmp.dir}/xml">
+      <fileset dir="${basedir}/xml" />
+    </copy>
+    <jar destfile="${basedir}/xmldata-cli.jar" basedir="${tmp.dir}">
+      <manifest>
+        <attribute name="Main-Class" value="org.hackystat.sensor.xmldata.XmlDataCliSensor" />
+        <attribute name="Implementation-Title" value="XmlData CLI" />
+        <attribute name="Implementation-Version" value="${version}" />
+        <attribute name="Implementation-Vendor" value="Collaborative Software Development Laboratory, University of Hawaii" />
+      </manifest>
+    </jar>
+
+  </target>
 </project>
 

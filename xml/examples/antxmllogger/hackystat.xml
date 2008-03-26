@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <XmlData>
 <Entries>
-<Entry SensorDataType="Build" Tool="Ant" Target="dist" Result="Success" Resource="unknown"/>
+<Entry SensorDataType="Build" Tool="Ant" Target="dist" Result="Success" Resource="unknown" Type="LoggerBuild"/>
 </Entries>
 </XmlData>

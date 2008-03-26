@@ -13,10 +13,10 @@
 <xsl:template match="build">
  <xsl:choose>
     <xsl:when test="@error">
-      <Entry SensorDataType="Build" Tool="Ant" Target="{target[last()]/@name}" Result="Failure" Resource="unknown"/>
+      <Entry SensorDataType="Build" Tool="Ant" Target="{target[last()]/@name}" Result="Failure" Resource="unknown" Type="LoggerBuild"/>
     </xsl:when>
     <xsl:otherwise>
-      <Entry SensorDataType="Build" Tool="Ant" Target="{target[last()]/@name}" Result="Success" Resource="unknown" />
+      <Entry SensorDataType="Build" Tool="Ant" Target="{target[last()]/@name}" Result="Success" Resource="unknown" Type="LoggerBuild"/>
     </xsl:otherwise>
   </xsl:choose>
   

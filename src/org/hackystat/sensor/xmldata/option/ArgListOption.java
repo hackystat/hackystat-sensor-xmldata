@@ -58,8 +58,9 @@ public class ArgListOption extends AbstractOption {
   @Override
   public void execute() {
     List<String> arguments = new ArrayList<String>();
+    Reader fileReader = null;
     try {
-      Reader fileReader = new FileReader(this.getParameters().get(0));
+      fileReader = new FileReader(this.getParameters().get(0));
       BufferedReader bufferedReader = new BufferedReader(fileReader);
       String argumentLine = bufferedReader.readLine();
       String argumentString = "";
@@ -86,6 +87,14 @@ public class ArgListOption extends AbstractOption {
     catch (IOException e) {
       String msg = "The file, " + this.getParameters().get(0) + ", could not be accessed.";
       this.getController().fireMessage(msg, e.toString());
+    }
+    finally {
+      try {
+        fileReader.close();
+      }
+      catch (Exception e) {
+        throw new RuntimeException("Failed to clean up fileReader.", e);
+      }
     }
   }
 }

@@ -47,7 +47,7 @@ public abstract class AbstractOption implements Option {
    * Implements the process method to provide the default process behavior,
    * which is perform no parameter processing.
    */
-  public void process() {
+  public void process() { //NOPMD
     // Performs no processing.
   }
 
@@ -67,7 +67,7 @@ public abstract class AbstractOption implements Option {
    * Implements the execute method with the default execute behavior, which is
    * to do nothing.
    */
-  public void execute() {
+  public void execute() { //NOPMD
     // Does no execution.
   }
 }

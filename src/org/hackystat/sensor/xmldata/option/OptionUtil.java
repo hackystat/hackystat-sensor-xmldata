@@ -94,8 +94,8 @@ public class OptionUtil {
   }
 
   /**
-   * Returns true if the specified timestamp is in the SimpleDateFormat:
-   * MM/dd/yyyy-hh:mm:ss
+   * Returns true if the specified timestamp is in the SimpleDateFormat. 
+   * This should be: MM/dd/yyyy-hh:mm:ss.
    * @param timestamp the timestamp to test.
    * @return true if the timestamp is in the specified SimpleDateFormat, false
    * if not.

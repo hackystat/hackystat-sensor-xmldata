@@ -119,7 +119,7 @@ public class XmlDataController {
     this.processArguments();
   }
 
-  /** Executes all of the options specified by the user */
+  /** Executes all of the options specified by the user. */
   public void execute() {
     if (this.hasParsed && this.optionHandler.isOptionsValid()
         && this.optionHandler.hasRequiredOptions()) {

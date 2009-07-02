@@ -21,7 +21,7 @@ public class TestMultiShellOption {
 
   /** Sets each test case up. */
   @Before
-  public void setup() {
+  public void setUp() {
     this.controller = new XmlDataController();
     this.option = OptionFactory.getInstance(this.controller, MultiShellOption.OPTION_NAME,
         new ArrayList<String>());

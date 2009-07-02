@@ -20,7 +20,7 @@ public class TestSetRuntimeOption {
 
   /** Sets each test case up. */
   @Before
-  public void setup() {
+  public void setUp() {
     this.controller = new XmlDataController();
     this.runtimeOption = OptionFactory.getInstance(this.controller,
         SetRuntimeOption.OPTION_NAME, new ArrayList<String>());

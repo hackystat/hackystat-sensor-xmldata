@@ -20,7 +20,7 @@ public class TestUniqueTstampOption {
 
   /** Sets each test case up. */
   @Before
-  public void setup() {
+  public void setUp() {
     this.controller = new XmlDataController();
     this.uniqueOption = OptionFactory.getInstance(this.controller,
         UniqueTstampOption.OPTION_NAME, new ArrayList<String>());

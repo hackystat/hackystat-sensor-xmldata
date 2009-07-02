@@ -22,7 +22,7 @@ public class TestOptionHandler {
 
   /** Sets up each test case. */
   @Before
-  public void setup() {
+  public void setUp() {
     this.controller = new XmlDataController();
     this.handler = new OptionHandler(this.controller);
   }

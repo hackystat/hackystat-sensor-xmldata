@@ -20,7 +20,7 @@ public class TestVerboseOption {
 
   /** Sets each test case up. */
   @Before
-  public void setup() {
+  public void setUp() {
     this.controller = new XmlDataController();
     this.verboseOption = OptionFactory.getInstance(this.controller, VerboseOption.OPTION_NAME,
         new ArrayList<String>());

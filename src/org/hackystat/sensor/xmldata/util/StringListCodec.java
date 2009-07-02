@@ -133,7 +133,7 @@ public class StringListCodec {
    * @return A new list of strings.
    * @exception StringListCodecException If the passed encodedString is not encoded properly.
    */
-  public static ArrayList<String> decode(String encodedString) throws StringListCodecException {
+  public static List<String> decode(String encodedString) throws StringListCodecException {
     // replace all occurences of "\r", "\r\n" with "\n"
     String newEncodedString = encodedString.replaceAll("\r\n", "\n").replace('\r', '\n');
 

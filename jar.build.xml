@@ -1,26 +1,29 @@
-<project name="jar" default="jar">
+<project name="jar" default="publish" xmlns:ivy="antlib:org.apache.ivy.ant">
   <description>
-  Provides the target for building Java5 and Java6 jar files of the SensorShell.
+  Provides the target for building the jar file(s).
   </description>
 
   <import file="build.xml" />
   <property name="build.classes.dir" location="${basedir}/build/classes" />
   <property name="tmp.dir" location="${basedir}/tmp" />
+  <property name="build.jar.dir" location="${build.dir}/jar" />
+  <delete dir="${build.jar.dir}" quiet="true" />
 
   <target name="jar" depends="compile" description="Create xmldata-cli.jar.">
-    <delete dir="${tmp.dir}" quiet="yes"/>
-      <mkdir dir="${tmp.dir}" />
-      <copy todir="${tmp.dir}">
-        <fileset dir="${basedir}/build/classes"/>
-      </copy>
+    <delete dir="${tmp.dir}" quiet="yes" />
+    <mkdir dir="${tmp.dir}" />
+    <mkdir dir="${build.jar.dir}" />
+    <copy todir="${tmp.dir}">
+      <fileset dir="${basedir}/build/classes" />
+    </copy>
 
-    <unjar src="${env.HACKYSTAT_SENSORSHELL_HOME}/sensorshell.jar" dest="${tmp.dir}" />
+    <unjar src="${lib.dir}/hackystat-sensor-shell/sensorshell.jar" dest="${tmp.dir}" />
 
     <!-- Copies the xsd schema files. -->
     <copy todir="${tmp.dir}/xml">
       <fileset dir="${basedir}/xml" />
     </copy>
-    <jar destfile="${basedir}/xmldata-cli.jar" basedir="${tmp.dir}">
+    <jar destfile="${build.jar.dir}/xmldata-cli.jar" basedir="${tmp.dir}">
       <manifest>
         <attribute name="Main-Class" value="org.hackystat.sensor.xmldata.XmlDataCliSensor" />
         <attribute name="Implementation-Title" value="XmlData CLI" />
@@ -28,7 +31,19 @@
         <attribute name="Implementation-Vendor" value="Collaborative Software Development Laboratory, University of Hawaii" />
       </manifest>
     </jar>
+  </target>
 
+  <target name="publish" depends="jar" description="Publish this project in the local ivy repository">
+    <ivy:resolve />
+    <tstamp>
+      <format property="publication-revision" pattern="yyyy.MM.dd.HH.mm.ss" />
+    </tstamp>
+    <ivy:publish artifactspattern="${build.jar.dir}/[artifact].[ext]" resolver="local-repository" pubrevision="${publication-revision}" update="true" />
+  </target>
+
+  <target name="publish-all" description="Publish all dependent projects, then this one.">
+    <ant antfile="../hackystat-sensor-shell/jar.build.xml" target="publish-all" inheritAll="false" />
+    <antcall target="publish" />
   </target>
 </project>
 

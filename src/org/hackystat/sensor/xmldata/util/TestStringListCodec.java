@@ -23,13 +23,13 @@ public class TestStringListCodec extends TestCase {
     String[] stringList1 = {"abc", "defg"};
     List<String> originalList = Arrays.asList(stringList1);
     String encoded = StringListCodec.encode(originalList);
-    ArrayList<String> decodedList = StringListCodec.decode(encoded);
+    List<String> decodedList = StringListCodec.decode(encoded);
     assertEquals("Testing simple list", originalList, decodedList);
 
     String[] stringList2 = {"abc", "defg", "", "hijklmnop"};
     List<String> originalList2 = Arrays.asList(stringList2);
     String encoded2 = StringListCodec.encode(Arrays.asList(stringList2));
-    ArrayList<String> decodedList2 = StringListCodec.decode(encoded2);
+    List<String> decodedList2 = StringListCodec.decode(encoded2);
     assertEquals("Testing empty list item", originalList2, decodedList2);
 
     List<String> emptyList = new ArrayList<String>();
@@ -50,10 +50,10 @@ public class TestStringListCodec extends TestCase {
     original.add("\n22\n22\n");
     String encodedString = StringListCodec.encode(original);    
 
-    ArrayList<String> decoded = StringListCodec.decode(encodedString);     
-    assertEquals(original.size(), decoded.size());
-    assertEquals("\n00\n00\n", decoded.get(0));
-    assertEquals("\n11\n11\n", decoded.get(1));    
-    assertEquals("\n22\n22\n", decoded.get(2));    
+    List<String> decoded = StringListCodec.decode(encodedString);     
+    assertEquals("LineBreak Test 1", original.size(), decoded.size());
+    assertEquals("LineBreak Test 2", "\n00\n00\n", decoded.get(0));
+    assertEquals("LineBreak Test 3", "\n11\n11\n", decoded.get(1));    
+    assertEquals("LineBreak Test 4", "\n22\n22\n", decoded.get(2));    
   }
 }

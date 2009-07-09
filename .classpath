@@ -4,6 +4,10 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="var" path="ANT_HOME/lib/ant.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
-	<classpathentry kind="lib" path="lib/hackystat-sensor-shell/sensorshell.jar"/>
+	<classpathentry kind="lib" path="lib/hackystat-sensor-shell/sensorshell.jar" sourcepath="lib/hackystat-sensor-shell/hackystat-sensor-shell-source.zip">
+		<attributes>
+			<attribute name="javadoc_location" value="jar:platform:/resource/hackystat-sensor-xmldata/lib/hackystat-sensor-shell/hackystat-sensor-shell-javadoc.zip!/"/>
+		</attributes>
+	</classpathentry>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
